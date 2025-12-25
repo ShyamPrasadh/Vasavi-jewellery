@@ -170,12 +170,12 @@ export default function CalculatorPage() {
               {/* Right Column: VA Totals */}
               <div className="space-y-8 pl-8 flex flex-col justify-center">
                 <div className="text-center">
-                  <p className="text-gray-500 uppercase text-[10px] font-bold tracking-widest mb-1">Total VA (Amount)</p>
-                  <p className="text-3xl font-bold text-[#333333]">₹{calculations.vaAmount.toLocaleString()}</p>
-                </div>
-                <div className="text-center pt-4 border-t border-gray-100">
                   <p className="text-gray-500 uppercase text-[10px] font-bold tracking-widest mb-1">Overall VA %</p>
                   <p className="text-4xl font-bold text-[#D4AF37]">{calculations.vaPercent.toFixed(2)}%</p>
+                </div>
+                <div className="text-center pt-4 border-t border-gray-100">
+                  <p className="text-gray-500 uppercase text-[10px] font-bold tracking-widest mb-1">Total VA (Amount)</p>
+                  <p className="text-3xl font-bold text-[#333333]">₹{calculations.vaAmount.toLocaleString()}</p>
                 </div>
               </div>
             </div>
