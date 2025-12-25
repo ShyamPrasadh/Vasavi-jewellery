@@ -119,12 +119,12 @@ export default function CalculatorPage() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Detailed Breakup Card */}
-          <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
+          <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden flex flex-col h-full">
             <div className="bg-[#333333] text-white p-4 flex items-center gap-2">
               <CalcIcon size={20} />
               <h2 className="text-lg font-semibold uppercase tracking-wider">Detailed Breakup</h2>
             </div>
-            <div className="p-8 space-y-6">
+            <div className="p-7 pt-5 flex-1 flex flex-col justify-center space-y-6">
               <div className="flex justify-between items-center text-gray-600">
                 <span>Gold Value ({calculations.numWeight}g × ₹{calculations.numGoldRate})</span>
                 <span className="font-medium text-gray-900">₹{calculations.goldValue.toLocaleString()}</span>
@@ -145,19 +145,38 @@ export default function CalculatorPage() {
           </div>
 
           {/* VA Card */}
-          <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
+          <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden flex flex-col h-full">
             <div className="bg-[#D4AF37] text-white p-4 flex items-center gap-2">
               <Percent size={20} />
               <h2 className="text-lg font-semibold uppercase tracking-wider">Value Addition (VA)</h2>
             </div>
-            <div className="p-8 flex flex-col justify-center h-full space-y-8">
-              <div className="text-center space-y-2">
-                <p className="text-gray-500 uppercase text-xs font-bold tracking-widest">VA Amount (Waste + Lab)</p>
-                <p className="text-5xl font-bold text-[#333333]">₹{calculations.vaAmount.toLocaleString()}</p>
+            <div className="p-7 pt-5 flex-1 grid grid-cols-2 gap-0 items-center">
+              {/* Left Column: Wastage & Labour */}
+              <div className="space-y-8 pr-4 border-r border-gray-50">
+                <div className="text-center">
+                  <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-1">Waste (mg)</p>
+                  <p className="text-2xl font-black text-gray-800">
+                    {calculations.wasteGrams < 1
+                      ? `${calculations.wasteGrams.toFixed(3)}`
+                      : `${calculations.wasteGrams}g`}
+                  </p>
+                </div>
+                <div className="text-center pt-4 border-t border-gray-50">
+                  <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-1">Labour Charge</p>
+                  <p className="text-2xl font-black text-gray-800">₹{calculations.labCharge.toLocaleString()}</p>
+                </div>
               </div>
-              <div className="text-center space-y-2 pt-4">
-                <p className="text-gray-500 uppercase text-xs font-bold tracking-widest">VA Percentage</p>
-                <p className="text-4xl font-bold text-[#D4AF37]">{calculations.vaPercent.toFixed(2)}%</p>
+
+              {/* Right Column: VA Totals */}
+              <div className="space-y-8 pl-8 flex flex-col justify-center">
+                <div className="text-center">
+                  <p className="text-gray-500 uppercase text-[10px] font-bold tracking-widest mb-1">Total VA (Amount)</p>
+                  <p className="text-3xl font-bold text-[#333333]">₹{calculations.vaAmount.toLocaleString()}</p>
+                </div>
+                <div className="text-center pt-4 border-t border-gray-100">
+                  <p className="text-gray-500 uppercase text-[10px] font-bold tracking-widest mb-1">Overall VA %</p>
+                  <p className="text-4xl font-bold text-[#D4AF37]">{calculations.vaPercent.toFixed(2)}%</p>
+                </div>
               </div>
             </div>
           </div>

@@ -71,7 +71,9 @@ export default function ReferenceTablePage() {
                                     <td className="p-6 border-b border-gray-100 border-r border-gray-100 text-center">
                                         {row['Ring/Earring'] ? (
                                             <span className="inline-flex flex-col items-center">
-                                                <span className="font-black text-gray-900 text-lg">{row['Ring/Earring'].waste}g</span>
+                                                <span className="font-black text-gray-900 text-lg">
+                                                    {row['Ring/Earring'].waste < 1 ? row['Ring/Earring'].waste.toFixed(3) : row['Ring/Earring'].waste + 'g'}
+                                                </span>
                                                 <span className="text-[10px] bg-[#333333] text-white px-2 py-0.5 rounded-full font-bold mt-1">₹{row['Ring/Earring'].lab} LAB</span>
                                             </span>
                                         ) : <span className="text-gray-200">─</span>}
@@ -79,7 +81,9 @@ export default function ReferenceTablePage() {
                                     <td className="p-6 border-b border-gray-100 border-r border-gray-100 text-center">
                                         {row['Chain'] ? (
                                             <span className="inline-flex flex-col items-center">
-                                                <span className="font-black text-gray-900 text-lg">{row['Chain'].waste}g</span>
+                                                <span className="font-black text-gray-900 text-lg">
+                                                    {row['Chain'].waste < 1 ? row['Chain'].waste.toFixed(3) : row['Chain'].waste + 'g'}
+                                                </span>
                                                 <span className="text-[10px] bg-[#333333] text-white px-2 py-0.5 rounded-full font-bold mt-1">₹{row['Chain'].lab} LAB</span>
                                             </span>
                                         ) : <span className="text-gray-200">─</span>}
@@ -87,7 +91,9 @@ export default function ReferenceTablePage() {
                                     <td className="p-6 border-b border-gray-100 text-center">
                                         {row['Haram/Necklace'] ? (
                                             <span className="inline-flex flex-col items-center">
-                                                <span className="font-black text-gray-900 text-lg">{row['Haram/Necklace'].waste}g</span>
+                                                <span className="font-black text-gray-900 text-lg">
+                                                    {row['Haram/Necklace'].waste < 1 ? row['Haram/Necklace'].waste.toFixed(3) : row['Haram/Necklace'].waste + 'g'}
+                                                </span>
                                                 <span className="text-[10px] bg-[#333333] text-white px-2 py-0.5 rounded-full font-bold mt-1">₹{row['Haram/Necklace'].lab} LAB</span>
                                             </span>
                                         ) : <span className="text-gray-200">─</span>}
