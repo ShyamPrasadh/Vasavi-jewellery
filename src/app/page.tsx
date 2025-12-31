@@ -112,7 +112,7 @@ export default function CalculatorPage() {
               {isSyncing && <RefreshCcw size={12} className="animate-spin text-[#D4AF37]" />}
             </div>
             <div className="relative">
-              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 font-bold">₹</span>
+              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 font-bold">₹</span>
               <input
                 type="text"
                 inputMode="decimal"
@@ -121,7 +121,7 @@ export default function CalculatorPage() {
                   const val = e.target.value;
                   if (val === '' || /^\d*\.?\d*$/.test(val)) setGoldRate(val);
                 }}
-                className="w-full pl-7 md:pl-8 p-2 md:p-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#D4AF37] focus:border-transparent outline-none transition-all font-bold text-lg md:text-xl text-gray-800"
+                className="w-full pl-10 p-2 md:p-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#D4AF37] focus:border-transparent outline-none transition-all font-bold text-lg md:text-xl text-gray-800"
               />
             </div>
           </div>

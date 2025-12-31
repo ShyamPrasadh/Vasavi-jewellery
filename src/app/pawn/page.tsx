@@ -6,25 +6,49 @@ import { Calculator as CalcIcon, Calendar, TrendingUp, Wallet } from 'lucide-rea
 
 export default function PawnCalculatorPage() {
     const [principal, setPrincipal] = useState<string>('10000');
-    const [months, setMonths] = useState<string>('1');
+    const [startDate, setStartDate] = useState<string>(new Date().toISOString().split('T')[0]);
     const [interestRate, setInterestRate] = useState<string>('2'); // 2% per month
 
     const calculations = useMemo(() => {
         const p = parseFloat(principal) || 0;
-        const m = parseFloat(months) || 0;
         const r = parseFloat(interestRate) || 0;
+
+        const start = new Date(startDate);
+        const today = new Date();
+
+        // Calculate difference in months and days
+        let yearDiff = today.getFullYear() - start.getFullYear();
+        let monthDiff = today.getMonth() - start.getMonth();
+        let dayDiff = today.getDate() - start.getDate();
+
+        let totalMonths = (yearDiff * 12) + monthDiff;
+
+        // If today's day is less than start day, we haven't completed the current month
+        // But usually interest is charged for the partial month. 
+        // Let's calculate precise months (e.g. 1.5 months)
+        if (dayDiff < 0) {
+            // Get days in the previous month to calculate the fraction
+            const prevMonth = new Date(today.getFullYear(), today.getMonth(), 0).getDate();
+            totalMonths -= 1;
+            dayDiff = prevMonth + dayDiff;
+        }
+
+        const fractionalMonths = totalMonths + (dayDiff / 30); // Approximate 30 days per month
+        const m = Math.max(0, fractionalMonths);
 
         const interestAmount = (p * r * m) / 100;
         const totalAmount = p + interestAmount;
 
         return {
             principal: p,
-            months: m,
+            months: totalMonths,
+            days: dayDiff,
+            displayMonths: m.toFixed(2),
             interestRate: r,
             interestAmount,
             totalAmount,
         };
-    }, [principal, months, interestRate]);
+    }, [principal, startDate, interestRate]);
 
     return (
         <main className="min-h-screen bg-gray-50 pb-12">
@@ -46,7 +70,7 @@ export default function PawnCalculatorPage() {
                     <div className="bg-white p-4 md:p-6 rounded-xl shadow-sm border border-gray-100 border-t-4 border-t-[#D4AF37]">
                         <label className="block text-sm font-bold text-gray-500 uppercase tracking-wider mb-2">Principal Amount</label>
                         <div className="relative">
-                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 font-bold">₹</span>
+                            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 font-bold">₹</span>
                             <input
                                 type="text"
                                 inputMode="decimal"
@@ -55,23 +79,19 @@ export default function PawnCalculatorPage() {
                                     const val = e.target.value;
                                     if (val === '' || /^\d*\.?\d*$/.test(val)) setPrincipal(val);
                                 }}
-                                className="w-full pl-8 p-2 md:p-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#D4AF37] focus:border-transparent outline-none transition-all font-bold text-lg md:text-xl text-gray-800"
+                                className="w-full pl-10 p-2 md:p-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#D4AF37] focus:border-transparent outline-none transition-all font-bold text-lg md:text-xl text-gray-800"
                             />
                         </div>
                     </div>
 
-                    {/* Duration (Months) */}
+                    {/* Start Date */}
                     <div className="bg-white p-4 md:p-6 rounded-xl shadow-sm border border-gray-100 border-t-4 border-t-[#333333]">
-                        <label className="block text-sm font-bold text-gray-500 uppercase tracking-wider mb-2">Duration (Months)</label>
+                        <label className="block text-sm font-bold text-gray-500 uppercase tracking-wider mb-2">Pawn Date (Start)</label>
                         <input
-                            type="text"
-                            inputMode="decimal"
-                            value={months}
-                            onChange={(e) => {
-                                const val = e.target.value;
-                                if (val === '' || /^\d*\.?\d*$/.test(val)) setMonths(val);
-                            }}
-                            className="w-full p-2 md:p-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#D4AF37] focus:border-transparent outline-none transition-all font-bold text-lg md:text-xl text-gray-800"
+                            type="date"
+                            value={startDate}
+                            onChange={(e) => setStartDate(e.target.value)}
+                            className="w-full p-2 md:p-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#D4AF37] focus:border-transparent outline-none transition-all font-bold text-lg md:text-xl text-gray-800 cursor-pointer"
                         />
                     </div>
 
@@ -114,7 +134,10 @@ export default function PawnCalculatorPage() {
                                     <Calendar size={16} className="text-gray-400" />
                                     <span>Duration</span>
                                 </div>
-                                <span className="font-medium text-gray-900">{calculations.months} Months</span>
+                                <div className="text-right">
+                                    <span className="font-medium text-gray-900 block">{calculations.months} Months, {calculations.days} Days</span>
+                                    <span className="text-xs text-gray-400">({calculations.displayMonths} total months)</span>
+                                </div>
                             </div>
                             <div className="flex justify-between items-center text-gray-600 pb-4 border-b border-gray-50">
                                 <div className="flex items-center gap-2">
@@ -125,7 +148,7 @@ export default function PawnCalculatorPage() {
                             </div>
                             <div className="flex justify-between items-center pt-2">
                                 <span className="text-xl font-bold text-gray-900">Total Interest</span>
-                                <span className="text-2xl font-bold text-[#D4AF37]">₹{calculations.interestAmount.toLocaleString()}</span>
+                                <span className="text-2xl font-bold text-[#D4AF37]">₹{Math.round(calculations.interestAmount).toLocaleString()}</span>
                             </div>
                         </div>
                     </div>
@@ -147,7 +170,7 @@ export default function PawnCalculatorPage() {
                                     </div>
                                     <div>
                                         <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-1">Interest</p>
-                                        <p className="text-lg font-bold text-[#D4AF37]">₹{calculations.interestAmount.toLocaleString()}</p>
+                                        <p className="text-lg font-bold text-[#D4AF37]">₹{Math.round(calculations.interestAmount).toLocaleString()}</p>
                                     </div>
                                 </div>
                             </div>
