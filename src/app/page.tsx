@@ -67,6 +67,16 @@ export default function CalculatorPage() {
       <Header rates={rates} />
 
       <div className="max-w-5xl mx-auto px-4 mt-8">
+        {/* Navigation Tabs */}
+        <div className="flex gap-2 mb-8 bg-white p-1 rounded-xl shadow-sm border border-gray-100 w-fit mx-auto">
+          <div className="px-6 py-2 rounded-lg text-sm font-bold bg-[#D4AF37] text-white shadow-md">
+            Gold Calculator
+          </div>
+          <Link href="/pawn" className="px-6 py-2 rounded-lg text-sm font-bold text-gray-500 hover:text-gray-700 transition-all">
+            Pawn Interest
+          </Link>
+        </div>
+
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 mb-8">
           <div className="col-span-2 md:col-span-1 bg-white p-4 md:p-6 rounded-xl shadow-sm border border-gray-100 border-t-4 border-t-[#D4AF37]">
             <label className="block text-sm font-bold text-gray-500 uppercase tracking-wider mb-2">Product Name</label>
