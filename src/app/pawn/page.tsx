@@ -417,7 +417,7 @@ export default function PawnCalculatorPage() {
                         </div>
 
                         {/* Printable Content */}
-                        <div className="p-8 md:p-12 overflow-y-auto print:overflow-visible print:p-0" id="printable-area">
+                        <div className="px-8 py-4 md:px-12 md:py-6 overflow-y-auto print:overflow-visible print:p-0" id="printable-area">
                             <h1 className="hidden print:block text-3xl font-serif-gold text-[#D4AF37] text-center mb-10">
                                 Sri Vasavi Jewellery
                             </h1>
