@@ -200,7 +200,7 @@ export default function CalculatorPage() {
         </div>
 
         <p className="mt-8 text-center text-xs text-gray-400 font-medium uppercase tracking-[0.3em] opacity-50">
-          Professional Jewellery Management System v2.0
+          Sri Vasavi Jewellery
         </p>
       </div>
     </main>

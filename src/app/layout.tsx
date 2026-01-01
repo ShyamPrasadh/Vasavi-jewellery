@@ -2,14 +2,14 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Sri Vasavi Jewellery - Smart Price Calculator",
+  title: "Sri Vasavi Jewellery",
   description: "Calculate accurate gold jewellery prices with wastage and making charges.",
   icons: {
     icon: "/logo.png",
     apple: "/logo.png",
   },
   openGraph: {
-    title: "Sri Vasavi Jewellery - Smart Price Calculator",
+    title: "Sri Vasavi Jewellery",
     description: "Calculate accurate gold jewellery prices with wastage and making charges.",
     images: [
       {

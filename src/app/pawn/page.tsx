@@ -16,7 +16,6 @@ export default function PawnCalculatorPage() {
     const [interestRate, setInterestRate] = useState<string>('2'); // 2% per month
     const [extraCash, setExtraCash] = useState<ExtraCash[]>([]);
     const [showPrintModal, setShowPrintModal] = useState(false);
-    const printRef = useRef<HTMLDivElement>(null);
 
     const addExtraCash = () => {
         setExtraCash([...extraCash, {
@@ -94,6 +93,26 @@ export default function PawnCalculatorPage() {
             dayDiff = prevMonth + dayDiff;
         }
 
+        // Combine all entries for the print table
+        const allEntries = [
+            {
+                date: startDate,
+                amount: baseP,
+                rate: r,
+                months: baseMonths,
+                interest: baseInterest,
+                label: 'Initial Principal'
+            },
+            ...extraBreakdown.map(e => ({
+                date: e.date,
+                amount: e.amount,
+                rate: r,
+                months: e.months,
+                interest: e.interest,
+                label: 'Extra Cash'
+            }))
+        ];
+
         return {
             basePrincipal: baseP,
             baseInterest,
@@ -106,6 +125,7 @@ export default function PawnCalculatorPage() {
             interestRate: r,
             interestAmount: totalInterest,
             totalAmount,
+            allEntries,
             todayDate: today.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }),
             startDateFormatted: start.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })
         };
@@ -378,7 +398,7 @@ export default function PawnCalculatorPage() {
                                     <Info size={14} className="text-[#D4AF37]" />
                                 </div>
                                 <p className="text-[11px] text-gray-600 leading-relaxed font-medium">
-                                    Interest is calculated at <span className="font-bold text-gray-900">{calculations.interestRate}% per month</span>.
+                                    Interest is calculated at <span className="font-bold text-gray-700">{calculations.interestRate}% per month</span>.
                                 </p>
                             </div>
                         </div>
@@ -386,14 +406,14 @@ export default function PawnCalculatorPage() {
                 </div>
 
                 <p className="mt-12 text-center text-[10px] text-gray-300 font-black uppercase tracking-[0.4em] print:hidden">
-                    Sri Vasavi Jewellery • Professional Pawn System v1.2
+                    Sri Vasavi Jewellery
                 </p>
             </div>
 
             {/* Print Modal / View */}
             {showPrintModal && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm print:static print:bg-white print:p-0">
-                    <div className="bg-white w-full max-w-2xl rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh] print:shadow-none print:max-h-none print:rounded-none">
+                    <div className="bg-white w-full max-w-3xl rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh] print:shadow-none print:max-h-none print:rounded-none">
                         {/* Modal Header */}
                         <div className="p-6 border-b border-gray-100 flex justify-between items-center print:hidden">
                             <h3 className="text-lg font-bold text-gray-800">Print Preview</h3>
@@ -417,60 +437,42 @@ export default function PawnCalculatorPage() {
                         {/* Printable Content */}
                         <div className="p-12 overflow-y-auto print:overflow-visible print:p-0" id="printable-area">
                             <div className="text-center mb-10">
-                                <h1 className="text-3xl font-serif-gold text-[#D4AF37] mb-2">Sri Vasavi Jewellery</h1>
-                                <p className="text-[10px] text-gray-400 uppercase tracking-[0.3em] font-bold">Smart Price Calculator • Pawn Receipt</p>
-                                <div className="w-24 h-1 bg-[#D4AF37] mx-auto mt-4 rounded-full"></div>
                             </div>
 
-                            <div className="grid grid-cols-2 gap-8 mb-10">
+                            <div className="flex justify-between items-center mb-10">
                                 <div>
                                     <p className="text-[9px] text-gray-400 font-black uppercase tracking-widest mb-1">Date of Calculation</p>
                                     <p className="text-sm font-bold text-gray-800">{calculations.todayDate}</p>
                                 </div>
-                                <div className="text-right">
-                                    <p className="text-[9px] text-gray-400 font-black uppercase tracking-widest mb-1">Pawn Start Date</p>
-                                    <p className="text-sm font-bold text-gray-800">{calculations.startDateFormatted}</p>
-                                </div>
                             </div>
 
-                            <div className="space-y-6 mb-10">
-                                <div className="flex justify-between items-center py-3 border-b border-gray-100">
-                                    <span className="text-sm text-gray-600">Initial Principal Amount</span>
-                                    <span className="text-sm font-bold text-gray-900">₹{calculations.basePrincipal.toLocaleString()}</span>
-                                </div>
-                                <div className="flex justify-between items-center py-3 border-b border-gray-100">
-                                    <span className="text-sm text-gray-600">Interest Rate (Monthly)</span>
-                                    <span className="text-sm font-bold text-gray-900">{calculations.interestRate}%</span>
-                                </div>
-                                <div className="flex justify-between items-center py-3 border-b border-gray-100">
-                                    <span className="text-sm text-gray-600">Total Duration</span>
-                                    <span className="text-sm font-bold text-gray-900">{calculations.months} Months, {calculations.days} Days</span>
-                                </div>
-                            </div>
-
-                            {calculations.extraBreakdown.length > 0 && (
-                                <div className="mb-10">
-                                    <h4 className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-4">Additional Cash History</h4>
-                                    <table className="w-full text-left text-sm">
-                                        <thead>
-                                            <tr className="text-[10px] text-gray-400 uppercase tracking-widest border-b border-gray-100">
-                                                <th className="pb-2 font-black">Date</th>
-                                                <th className="pb-2 font-black">Amount</th>
-                                                <th className="pb-2 font-black text-right">Interest</th>
+                            <div className="mb-10">
+                                <h4 className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-4">Principal Breakdown</h4>
+                                <table className="w-full text-left text-sm border-collapse">
+                                    <thead>
+                                        <tr className="text-[10px] text-gray-400 uppercase tracking-widest border-b border-gray-100 bg-gray-50/50">
+                                            <th className="p-3 font-black">Date Added</th>
+                                            <th className="p-3 font-black">Principal Amount</th>
+                                            <th className="p-3 font-black">Rate (%)</th>
+                                            <th className="p-3 font-black">Duration (Mos)</th>
+                                            <th className="p-3 font-black text-right">Interest Amount</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody className="divide-y divide-gray-50">
+                                        {calculations.allEntries.map((entry, idx) => (
+                                            <tr key={idx}>
+                                                <td className="p-3 text-gray-600 font-medium">
+                                                    {new Date(entry.date).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
+                                                </td>
+                                                <td className="p-3 font-bold text-gray-800">₹{entry.amount.toLocaleString()}</td>
+                                                <td className="p-3 text-gray-600">{entry.rate}%</td>
+                                                <td className="p-3 text-gray-600">{entry.months.toFixed(2)}</td>
+                                                <td className="p-3 font-bold text-[#D4AF37] text-right">₹{Math.round(entry.interest).toLocaleString()}</td>
                                             </tr>
-                                        </thead>
-                                        <tbody className="divide-y divide-gray-50">
-                                            {calculations.extraBreakdown.map((extra, idx) => (
-                                                <tr key={idx}>
-                                                    <td className="py-3 text-gray-600">{new Date(extra.date).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}</td>
-                                                    <td className="py-3 font-bold text-gray-800">₹{extra.amount.toLocaleString()}</td>
-                                                    <td className="py-3 font-bold text-[#D4AF37] text-right">₹{Math.round(extra.interest).toLocaleString()}</td>
-                                                </tr>
-                                            ))}
-                                        </tbody>
-                                    </table>
-                                </div>
-                            )}
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
 
                             <div className="bg-gray-50 p-8 rounded-3xl border border-gray-100">
                                 <div className="flex justify-between items-center mb-4">
@@ -496,7 +498,14 @@ export default function PawnCalculatorPage() {
             )}
 
             <style jsx global>{`
+                @page {
+                    margin: 0;
+                }
                 @media print {
+                    body {
+                        margin: 0;
+                        -webkit-print-color-adjust: exact;
+                    }
                     body * {
                         visibility: hidden;
                     }
@@ -508,7 +517,8 @@ export default function PawnCalculatorPage() {
                         left: 0;
                         top: 0;
                         width: 100%;
-                        padding: 0 !important;
+                        padding: 20mm !important;
+                        margin: 0 !important;
                     }
                     .print\\:hidden {
                         display: none !important;
