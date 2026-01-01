@@ -69,10 +69,10 @@ export default function CalculatorPage() {
       <div className="max-w-5xl mx-auto px-4 mt-8">
         {/* Navigation Tabs */}
         <div className="flex gap-2 mb-10 bg-white p-1.5 rounded-2xl shadow-sm border border-gray-100 w-fit mx-auto">
-          <div className="px-8 py-2.5 rounded-xl text-sm font-bold bg-[#630d0d] text-white shadow-lg shadow-red-900/20">
+          <div className="px-8 py-2.5 rounded-xl text-sm font-bold bg-[#D4AF37] text-white shadow-lg shadow-amber-200/50">
             Gold Calculator
           </div>
-          <Link href="/pawn" className="px-8 py-2.5 rounded-xl text-sm font-bold text-gray-400 hover:text-[#630d0d] transition-all">
+          <Link href="/pawn" className="px-8 py-2.5 rounded-xl text-sm font-bold text-gray-400 hover:text-[#D4AF37] transition-all">
             Pawn Interest
           </Link>
         </div>
@@ -80,13 +80,13 @@ export default function CalculatorPage() {
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 mb-10">
           {/* Product Name Card */}
           <div className="col-span-2 md:col-span-1 bg-white p-6 rounded-3xl shadow-sm border border-gray-100 relative overflow-hidden group">
-            <div className="absolute top-0 left-0 w-1 h-full bg-[#630d0d]"></div>
+            <div className="absolute top-0 left-0 w-1 h-full bg-[#D4AF37]"></div>
             <label className="block text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-3">Product Name</label>
             <div className="relative">
               <select
                 value={product}
                 onChange={(e) => setProduct(e.target.value as ProductType)}
-                className="w-full py-2 bg-transparent border-b-2 border-gray-100 focus:border-[#630d0d] outline-none transition-all font-bold text-lg text-gray-800 appearance-none cursor-pointer"
+                className="w-full py-2 bg-transparent border-b-2 border-gray-100 focus:border-[#D4AF37] outline-none transition-all font-bold text-lg text-gray-800 appearance-none cursor-pointer"
               >
                 {['Ring', 'Earring', 'Chain', 'Haram', 'Necklace', 'Coin'].map((item) => (
                   <option key={item} value={item}>{item}</option>
@@ -120,7 +120,7 @@ export default function CalculatorPage() {
 
           {/* Gold Rate Card */}
           <div className="col-span-1 md:col-span-1 bg-white p-6 rounded-3xl shadow-sm border border-gray-100 relative overflow-hidden group">
-            <div className="absolute top-0 left-0 w-1 h-full bg-[#630d0d]"></div>
+            <div className="absolute top-0 left-0 w-1 h-full bg-[#D4AF37]"></div>
             <div className="flex justify-between items-center mb-3">
               <label className="block text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">Gold Rate (22KT)</label>
               {isSyncing && <RefreshCcw size={12} className="animate-spin text-[#D4AF37]" />}
@@ -135,7 +135,7 @@ export default function CalculatorPage() {
                   const val = e.target.value;
                   if (val === '' || /^\d*\.?\d*$/.test(val)) setGoldRate(val);
                 }}
-                className="w-full pl-8 py-2 bg-transparent border-b-2 border-gray-100 focus:border-[#630d0d] outline-none transition-all font-bold text-2xl text-gray-800"
+                className="w-full pl-8 py-2 bg-transparent border-b-2 border-gray-100 focus:border-[#D4AF37] outline-none transition-all font-bold text-2xl text-gray-800"
               />
             </div>
           </div>
@@ -163,7 +163,7 @@ export default function CalculatorPage() {
               </div>
               <div className="flex justify-between items-center pt-2">
                 <span className="text-sm font-black text-gray-800 uppercase tracking-widest">Total Amount</span>
-                <span className="text-4xl font-black text-[#630d0d]">₹{Math.round(calculations.totalAmount).toLocaleString()}</span>
+                <span className="text-4xl font-black text-[#D4AF37]">₹{Math.round(calculations.totalAmount).toLocaleString()}</span>
               </div>
             </div>
           </div>
@@ -199,7 +199,7 @@ export default function CalculatorPage() {
                 </div>
                 <div className="text-center">
                   <p className="text-gray-400 uppercase text-[10px] font-black tracking-widest mb-2">Total VA Amount</p>
-                  <p className="text-3xl font-black text-[#630d0d]">₹{calculations.vaAmount.toLocaleString()}</p>
+                  <p className="text-3xl font-black text-[#D4AF37]">₹{calculations.vaAmount.toLocaleString()}</p>
                 </div>
               </div>
             </div>
@@ -207,7 +207,7 @@ export default function CalculatorPage() {
         </div>
 
         <div className="mt-16 text-center">
-          <Link href="/table" className="inline-flex items-center gap-4 bg-[#630d0d] text-white px-10 py-5 rounded-2xl hover:bg-black hover:scale-105 transform transition-all shadow-2xl shadow-red-900/30 font-black uppercase tracking-[0.2em] text-xs">
+          <Link href="/table" className="inline-flex items-center gap-4 bg-[#333333] text-white px-10 py-5 rounded-2xl hover:bg-black hover:scale-105 transform transition-all shadow-2xl shadow-gray-200 font-black uppercase tracking-[0.2em] text-xs">
             <Table size={18} className="text-[#D4AF37]" />
             View Reference Rate Table
           </Link>
