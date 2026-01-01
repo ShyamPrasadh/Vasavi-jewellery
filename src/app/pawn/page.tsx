@@ -422,14 +422,14 @@ export default function PawnCalculatorPage() {
                                 Sri Vasavi Jewellery
                             </h1>
 
-                            <div className="flex justify-between items-center mb-10">
+                            <div className="flex justify-between items-center mb-6">
                                 <div>
                                     <p className="text-[9px] text-gray-400 font-black uppercase tracking-widest mb-1">Date of Calculation</p>
                                     <p className="text-sm font-bold text-gray-800">{calculations.todayDate}</p>
                                 </div>
                             </div>
 
-                            <div className="mb-10">
+                            <div className="mb-6">
                                 <h4 className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-4">Principal Breakdown</h4>
                                 <table className="w-full text-left text-sm border-collapse">
                                     <thead>
