@@ -1,8 +1,8 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useRef } from 'react';
 import Header from '../components/Header';
-import { Calculator as CalcIcon, Calendar, TrendingUp, Wallet, Plus, Trash2, Info, ChevronRight } from 'lucide-react';
+import { Calculator as CalcIcon, Calendar, TrendingUp, Wallet, Plus, Trash2, Info, Printer, Download, X } from 'lucide-react';
 
 interface ExtraCash {
     id: string;
@@ -15,6 +15,8 @@ export default function PawnCalculatorPage() {
     const [startDate, setStartDate] = useState<string>(new Date().toISOString().split('T')[0]);
     const [interestRate, setInterestRate] = useState<string>('2'); // 2% per month
     const [extraCash, setExtraCash] = useState<ExtraCash[]>([]);
+    const [showPrintModal, setShowPrintModal] = useState(false);
+    const printRef = useRef<HTMLDivElement>(null);
 
     const addExtraCash = () => {
         setExtraCash([...extraCash, {
@@ -104,16 +106,24 @@ export default function PawnCalculatorPage() {
             interestRate: r,
             interestAmount: totalInterest,
             totalAmount,
+            todayDate: today.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }),
+            startDateFormatted: start.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })
         };
     }, [principal, startDate, interestRate, extraCash]);
 
-    return (
-        <main className="min-h-screen bg-[#FDFCFB] pb-12">
-            <Header />
+    const handlePrint = () => {
+        window.print();
+    };
 
-            <div className="max-w-5xl mx-auto px-4 mt-8">
+    return (
+        <main className="min-h-screen bg-[#FDFCFB] pb-12 print:bg-white print:pb-0">
+            <div className="print:hidden">
+                <Header />
+            </div>
+
+            <div className="max-w-5xl mx-auto px-4 mt-8 print:mt-0 print:px-0">
                 {/* Navigation Tabs */}
-                <div className="flex gap-2 mb-10 bg-white p-1.5 rounded-2xl shadow-sm border border-gray-100 w-fit mx-auto">
+                <div className="flex gap-2 mb-10 bg-white p-1.5 rounded-2xl shadow-sm border border-gray-100 w-fit mx-auto print:hidden">
                     <a href="/" className="px-8 py-2.5 rounded-xl text-sm font-bold text-gray-400 hover:text-gray-600 transition-all">
                         Gold Calculator
                     </a>
@@ -122,7 +132,7 @@ export default function PawnCalculatorPage() {
                     </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10 print:hidden">
                     {/* Principal Amount */}
                     <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 relative overflow-hidden group">
                         <div className="absolute top-0 left-0 w-1 h-full bg-[#D4AF37]"></div>
@@ -180,7 +190,7 @@ export default function PawnCalculatorPage() {
                 </div>
 
                 {/* Extra Cash Section */}
-                <div className="mb-10 bg-white p-8 rounded-3xl shadow-sm border border-gray-100">
+                <div className="mb-10 bg-white p-8 rounded-3xl shadow-sm border border-gray-100 print:hidden">
                     <div className="flex justify-between items-center mb-8">
                         <div>
                             <h3 className="text-xl font-bold text-gray-800 flex items-center gap-3">
@@ -263,7 +273,7 @@ export default function PawnCalculatorPage() {
                     )}
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-10 print:hidden">
                     {/* Interest Breakup Card */}
                     <div className="bg-white rounded-3xl shadow-xl shadow-gray-200/50 border border-gray-100 overflow-hidden flex flex-col h-full">
                         <div className="bg-[#333333] text-white p-6 flex items-center justify-between">
@@ -353,23 +363,158 @@ export default function PawnCalculatorPage() {
                                 </div>
                             </div>
 
-                            <div className="mt-8 p-5 bg-amber-50/50 rounded-2xl border border-amber-100/50 w-full flex items-start gap-4 text-left">
+                            <div className="mt-8 flex gap-4 w-full">
+                                <button
+                                    onClick={() => setShowPrintModal(true)}
+                                    className="flex-1 bg-[#333333] text-white py-4 rounded-2xl font-bold uppercase tracking-widest text-xs flex items-center justify-center gap-2 hover:bg-black transition-all shadow-lg shadow-gray-200"
+                                >
+                                    <Printer size={16} />
+                                    View & Print
+                                </button>
+                            </div>
+
+                            <div className="mt-6 p-5 bg-amber-50/50 rounded-2xl border border-amber-100/50 w-full flex items-start gap-4 text-left">
                                 <div className="p-1.5 bg-white rounded-lg shadow-sm">
                                     <Info size={14} className="text-[#D4AF37]" />
                                 </div>
                                 <p className="text-[11px] text-gray-600 leading-relaxed font-medium">
                                     Interest is calculated at <span className="font-bold text-gray-900">{calculations.interestRate}% per month</span>.
-                                    Extra cash entries accrue interest from their respective addition dates to today.
                                 </p>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <p className="mt-12 text-center text-[10px] text-gray-300 font-black uppercase tracking-[0.4em]">
+                <p className="mt-12 text-center text-[10px] text-gray-300 font-black uppercase tracking-[0.4em] print:hidden">
                     Sri Vasavi Jewellery • Professional Pawn System v1.2
                 </p>
             </div>
+
+            {/* Print Modal / View */}
+            {showPrintModal && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm print:static print:bg-white print:p-0">
+                    <div className="bg-white w-full max-w-2xl rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh] print:shadow-none print:max-h-none print:rounded-none">
+                        {/* Modal Header */}
+                        <div className="p-6 border-b border-gray-100 flex justify-between items-center print:hidden">
+                            <h3 className="text-lg font-bold text-gray-800">Print Preview</h3>
+                            <div className="flex gap-3">
+                                <button
+                                    onClick={handlePrint}
+                                    className="bg-[#D4AF37] text-white px-6 py-2 rounded-xl text-xs font-bold uppercase tracking-widest flex items-center gap-2 hover:bg-[#B8860B]"
+                                >
+                                    <Download size={14} />
+                                    Download / Print
+                                </button>
+                                <button
+                                    onClick={() => setShowPrintModal(false)}
+                                    className="p-2 text-gray-400 hover:bg-gray-100 rounded-xl transition-all"
+                                >
+                                    <X size={20} />
+                                </button>
+                            </div>
+                        </div>
+
+                        {/* Printable Content */}
+                        <div className="p-12 overflow-y-auto print:overflow-visible print:p-0" id="printable-area">
+                            <div className="text-center mb-10">
+                                <h1 className="text-3xl font-serif-gold text-[#D4AF37] mb-2">Sri Vasavi Jewellery</h1>
+                                <p className="text-[10px] text-gray-400 uppercase tracking-[0.3em] font-bold">Smart Price Calculator • Pawn Receipt</p>
+                                <div className="w-24 h-1 bg-[#D4AF37] mx-auto mt-4 rounded-full"></div>
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-8 mb-10">
+                                <div>
+                                    <p className="text-[9px] text-gray-400 font-black uppercase tracking-widest mb-1">Date of Calculation</p>
+                                    <p className="text-sm font-bold text-gray-800">{calculations.todayDate}</p>
+                                </div>
+                                <div className="text-right">
+                                    <p className="text-[9px] text-gray-400 font-black uppercase tracking-widest mb-1">Pawn Start Date</p>
+                                    <p className="text-sm font-bold text-gray-800">{calculations.startDateFormatted}</p>
+                                </div>
+                            </div>
+
+                            <div className="space-y-6 mb-10">
+                                <div className="flex justify-between items-center py-3 border-b border-gray-100">
+                                    <span className="text-sm text-gray-600">Initial Principal Amount</span>
+                                    <span className="text-sm font-bold text-gray-900">₹{calculations.basePrincipal.toLocaleString()}</span>
+                                </div>
+                                <div className="flex justify-between items-center py-3 border-b border-gray-100">
+                                    <span className="text-sm text-gray-600">Interest Rate (Monthly)</span>
+                                    <span className="text-sm font-bold text-gray-900">{calculations.interestRate}%</span>
+                                </div>
+                                <div className="flex justify-between items-center py-3 border-b border-gray-100">
+                                    <span className="text-sm text-gray-600">Total Duration</span>
+                                    <span className="text-sm font-bold text-gray-900">{calculations.months} Months, {calculations.days} Days</span>
+                                </div>
+                            </div>
+
+                            {calculations.extraBreakdown.length > 0 && (
+                                <div className="mb-10">
+                                    <h4 className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-4">Additional Cash History</h4>
+                                    <table className="w-full text-left text-sm">
+                                        <thead>
+                                            <tr className="text-[10px] text-gray-400 uppercase tracking-widest border-b border-gray-100">
+                                                <th className="pb-2 font-black">Date</th>
+                                                <th className="pb-2 font-black">Amount</th>
+                                                <th className="pb-2 font-black text-right">Interest</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody className="divide-y divide-gray-50">
+                                            {calculations.extraBreakdown.map((extra, idx) => (
+                                                <tr key={idx}>
+                                                    <td className="py-3 text-gray-600">{new Date(extra.date).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}</td>
+                                                    <td className="py-3 font-bold text-gray-800">₹{extra.amount.toLocaleString()}</td>
+                                                    <td className="py-3 font-bold text-[#D4AF37] text-right">₹{Math.round(extra.interest).toLocaleString()}</td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            )}
+
+                            <div className="bg-gray-50 p-8 rounded-3xl border border-gray-100">
+                                <div className="flex justify-between items-center mb-4">
+                                    <span className="text-sm font-bold text-gray-500 uppercase tracking-widest">Total Principal</span>
+                                    <span className="text-lg font-bold text-gray-900">₹{calculations.totalPrincipal.toLocaleString()}</span>
+                                </div>
+                                <div className="flex justify-between items-center mb-6">
+                                    <span className="text-sm font-bold text-gray-500 uppercase tracking-widest">Total Interest</span>
+                                    <span className="text-lg font-bold text-[#D4AF37]">₹{Math.round(calculations.interestAmount).toLocaleString()}</span>
+                                </div>
+                                <div className="pt-6 border-t-2 border-dashed border-gray-200 flex justify-between items-center">
+                                    <span className="text-base font-black text-gray-800 uppercase tracking-widest">Total Payable</span>
+                                    <span className="text-3xl font-black text-[#D4AF37]">₹{Math.round(calculations.totalAmount).toLocaleString()}</span>
+                                </div>
+                            </div>
+
+                            <div className="mt-12 text-center">
+                                <p className="text-[9px] text-gray-400 italic">This is a computer-generated calculation summary for Sri Vasavi Jewellery.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            <style jsx global>{`
+                @media print {
+                    body * {
+                        visibility: hidden;
+                    }
+                    #printable-area, #printable-area * {
+                        visibility: visible;
+                    }
+                    #printable-area {
+                        position: absolute;
+                        left: 0;
+                        top: 0;
+                        width: 100%;
+                        padding: 0 !important;
+                    }
+                    .print\\:hidden {
+                        display: none !important;
+                    }
+                }
+            `}</style>
         </main>
     );
 }
