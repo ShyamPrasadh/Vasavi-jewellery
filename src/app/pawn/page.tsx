@@ -296,60 +296,44 @@ export default function PawnCalculatorPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-10 print:hidden">
                     {/* Interest Breakup Card */}
                     <div className="bg-white rounded-3xl shadow-xl shadow-gray-200/50 border border-gray-100 overflow-hidden flex flex-col h-full">
-                        <div className="bg-[#333333] text-white p-6 flex items-center justify-between">
-                            <div className="flex items-center gap-3">
-                                <div className="p-2 bg-white/10 rounded-lg">
-                                    <CalcIcon size={20} />
-                                </div>
-                                <h2 className="text-lg font-bold uppercase tracking-widest">Interest Breakup</h2>
+                        <div className="bg-[#333333] text-white p-4 flex items-center justify-between">
+                            <div className="flex items-center gap-2">
+                                <CalcIcon size={20} />
+                                <h2 className="text-lg font-semibold uppercase tracking-wider">Interest Breakup</h2>
                             </div>
                         </div>
-                        <div className="p-8 flex-1 flex flex-col space-y-6">
-                            {/* Initial Principal Breakdown */}
-                            <div className="bg-gray-50/50 p-5 rounded-2xl border border-gray-100">
-                                <div className="flex justify-between items-center mb-3">
-                                    <div className="flex items-center gap-2">
-                                        <Wallet size={14} className="text-gray-400" />
-                                        <span className="text-xs font-bold text-gray-500 uppercase tracking-wider">Initial Principal</span>
-                                    </div>
-                                    <span className="text-base font-bold text-gray-800">₹{calculations.basePrincipal.toLocaleString()}</span>
-                                </div>
-                                <div className="flex justify-between items-center">
-                                    <div className="flex items-center gap-2">
-                                        <Calendar size={14} className="text-gray-400" />
-                                        <span className="text-xs text-gray-500">{calculations.months}m {calculations.days}d duration</span>
-                                    </div>
-                                    <span className="text-base font-bold text-[#D4AF37]">₹{Math.round(calculations.baseInterest).toLocaleString()}</span>
-                                </div>
+                        <div className="p-6 flex-1 flex flex-col">
+                            <div className="overflow-x-auto">
+                                <table className="w-full text-left text-sm border-collapse">
+                                    <thead>
+                                        <tr className="text-[10px] text-gray-400 uppercase tracking-widest border-b border-gray-100">
+                                            <th className="pb-3 font-black">Principal</th>
+                                            <th className="pb-3 font-black">Rate</th>
+                                            <th className="pb-3 font-black">Duration</th>
+                                            <th className="pb-3 font-black text-right">Interest</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody className="divide-y divide-gray-50">
+                                        {calculations.allEntries.map((entry, idx) => (
+                                            <tr key={idx} className="group/row">
+                                                <td className="py-4 font-bold text-gray-800">₹{entry.amount.toLocaleString()}</td>
+                                                <td className="py-4 text-gray-500 font-medium">{entry.rate}%</td>
+                                                <td className="py-4 text-gray-500 font-medium">{entry.months.toFixed(2)}m</td>
+                                                <td className="py-4 font-bold text-[#D4AF37] text-right">₹{Math.round(entry.interest).toLocaleString()}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
                             </div>
 
-                            {/* Extra Cash Summary */}
-                            {calculations.extraBreakdown.length > 0 && (
-                                <div className="space-y-4">
-                                    <div className="flex items-center gap-2 px-1">
-                                        <div className="h-px flex-1 bg-gray-100"></div>
-                                        <span className="text-[10px] font-black text-gray-300 uppercase tracking-[0.3em]">Extra Cash Totals</span>
-                                        <div className="h-px flex-1 bg-gray-100"></div>
-                                    </div>
-                                    <div className="flex justify-between items-center px-2">
-                                        <span className="text-xs font-bold text-gray-500">Total Extra Principal</span>
-                                        <span className="text-sm font-bold text-gray-700">₹{calculations.totalExtraPrincipal.toLocaleString()}</span>
-                                    </div>
-                                    <div className="flex justify-between items-center px-2">
-                                        <span className="text-xs font-bold text-gray-500">Total Extra Interest</span>
-                                        <span className="text-sm font-bold text-[#D4AF37]">₹{Math.round(calculations.totalExtraInterest).toLocaleString()}</span>
-                                    </div>
-                                </div>
-                            )}
-
                             <div className="pt-6 mt-auto border-t-2 border-dashed border-gray-100">
-                                <div className="flex justify-between items-center mb-3">
-                                    <span className="text-sm font-bold text-gray-400 uppercase tracking-widest">Total Principal</span>
-                                    <span className="text-xl font-black text-gray-900">₹{calculations.totalPrincipal.toLocaleString()}</span>
+                                <div className="flex justify-between items-center mb-2">
+                                    <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Total Principal</span>
+                                    <span className="text-lg font-black text-gray-900">₹{calculations.totalPrincipal.toLocaleString()}</span>
                                 </div>
                                 <div className="flex justify-between items-center">
-                                    <span className="text-sm font-bold text-gray-400 uppercase tracking-widest">Total Interest</span>
-                                    <span className="text-3xl font-black text-[#D4AF37]">₹{Math.round(calculations.interestAmount).toLocaleString()}</span>
+                                    <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Total Interest</span>
+                                    <span className="text-2xl font-black text-[#D4AF37]">₹{Math.round(calculations.interestAmount).toLocaleString()}</span>
                                 </div>
                             </div>
                         </div>
@@ -357,18 +341,16 @@ export default function PawnCalculatorPage() {
 
                     {/* Total Payable Card */}
                     <div className="bg-white rounded-3xl shadow-xl shadow-amber-100/50 border border-gray-100 overflow-hidden flex flex-col h-full">
-                        <div className="bg-gradient-to-r from-[#D4AF37] to-[#B8860B] text-white p-6 flex items-center gap-3">
-                            <div className="p-2 bg-white/20 rounded-lg">
-                                <TrendingUp size={20} />
-                            </div>
-                            <h2 className="text-lg font-bold uppercase tracking-widest">Total Payable</h2>
+                        <div className="bg-gradient-to-r from-[#D4AF37] to-[#B8860B] text-white p-4 flex items-center gap-2">
+                            <TrendingUp size={20} />
+                            <h2 className="text-lg font-semibold uppercase tracking-wider">Total Payable</h2>
                         </div>
                         <div className="p-8 flex-1 flex flex-col items-center justify-center text-center">
-                            <div className="mb-8">
-                                <p className="text-gray-400 uppercase text-[10px] font-black tracking-[0.2em] mb-3">Final Settlement Amount</p>
+                            <div className="mb-6">
+                                <p className="text-gray-400 uppercase text-[10px] font-black tracking-[0.2em] mb-2">Final Settlement Amount</p>
                                 <div className="relative inline-block">
-                                    <p className="text-6xl font-black text-gray-800 tracking-tighter">₹{Math.round(calculations.totalAmount).toLocaleString()}</p>
-                                    <div className="absolute -bottom-2 left-0 w-full h-1.5 bg-[#D4AF37]/20 rounded-full"></div>
+                                    <p className="text-4xl font-black text-gray-800 tracking-tighter">₹{Math.round(calculations.totalAmount).toLocaleString()}</p>
+                                    <div className="absolute -bottom-1 left-0 w-full h-1 bg-[#D4AF37]/20 rounded-full"></div>
                                 </div>
                             </div>
 
@@ -475,18 +457,18 @@ export default function PawnCalculatorPage() {
                                 </table>
                             </div>
 
-                            <div className="bg-gray-50 p-8 rounded-3xl border border-gray-100">
+                            <div className="bg-gray-50 p-6 rounded-2xl border border-gray-100">
+                                <div className="flex justify-between items-center mb-3">
+                                    <span className="text-xs font-bold text-gray-500 uppercase tracking-widest">Total Principal</span>
+                                    <span className="text-base font-bold text-gray-900">₹{calculations.totalPrincipal.toLocaleString()}</span>
+                                </div>
                                 <div className="flex justify-between items-center mb-4">
-                                    <span className="text-sm font-bold text-gray-500 uppercase tracking-widest">Total Principal</span>
-                                    <span className="text-lg font-bold text-gray-900">₹{calculations.totalPrincipal.toLocaleString()}</span>
+                                    <span className="text-xs font-bold text-gray-500 uppercase tracking-widest">Total Interest</span>
+                                    <span className="text-base font-bold text-[#D4AF37]">₹{Math.round(calculations.interestAmount).toLocaleString()}</span>
                                 </div>
-                                <div className="flex justify-between items-center mb-6">
-                                    <span className="text-sm font-bold text-gray-500 uppercase tracking-widest">Total Interest</span>
-                                    <span className="text-lg font-bold text-[#D4AF37]">₹{Math.round(calculations.interestAmount).toLocaleString()}</span>
-                                </div>
-                                <div className="pt-6 border-t-2 border-dashed border-gray-200 flex justify-between items-center">
-                                    <span className="text-base font-black text-gray-800 uppercase tracking-widest">Total Payable</span>
-                                    <span className="text-3xl font-black text-[#D4AF37]">₹{Math.round(calculations.totalAmount).toLocaleString()}</span>
+                                <div className="pt-4 border-t border-dashed border-gray-200 flex justify-between items-center">
+                                    <span className="text-sm font-black text-gray-800 uppercase tracking-widest">Total Payable</span>
+                                    <span className="text-xl font-black text-[#D4AF37]">₹{Math.round(calculations.totalAmount).toLocaleString()}</span>
                                 </div>
                             </div>
 
