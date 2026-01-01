@@ -2,16 +2,21 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #333333;
+  --background: #FDFCFB;
+  --foreground: #1a1a1a;
   --gold: #D4AF37;
+  --gold-light: #F4E4BC;
   --gold-dark: #B8860B;
+  --maroon: #630d0d;
+  --maroon-light: #8a1a1a;
+  --maroon-dark: #4a0808;
 }
 
 body {
   color: var(--foreground);
   background: var(--background);
   font-family: 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
 
 .font-serif-gold {
