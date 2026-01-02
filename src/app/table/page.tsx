@@ -44,11 +44,11 @@ export default function ReferenceTablePage() {
                     <table className="w-full text-left border-collapse">
                         <thead>
                             <tr className="bg-[#333333] text-white">
-                                <th className="p-6 font-black uppercase text-xs tracking-[0.2em] border-r border-gray-700">Weight</th>
-                                <th className="p-6 font-black uppercase text-xs tracking-[0.2em] border-r border-gray-700">Coin (Lab)</th>
-                                <th className="p-6 font-black uppercase text-xs tracking-[0.2em] border-r border-gray-700 text-center">Ring/Earring (W/L)</th>
-                                <th className="p-6 font-black uppercase text-xs tracking-[0.2em] border-r border-gray-700 text-center">Chain (W/L)</th>
-                                <th className="p-6 font-black uppercase text-xs tracking-[0.2em] text-center">Haram/Necklace (W/L)</th>
+                                <th className="p-3 md:p-6 font-black uppercase text-xs tracking-[0.2em] border-r border-gray-700 sticky left-0 z-20 bg-[#333333]">Weight</th>
+                                <th className="p-3 md:p-6 font-black uppercase text-xs tracking-[0.2em] border-r border-gray-700">Coin (Lab)</th>
+                                <th className="p-3 md:p-6 font-black uppercase text-xs tracking-[0.2em] border-r border-gray-700 text-center">Ring/Earring (W/L)</th>
+                                <th className="p-3 md:p-6 font-black uppercase text-xs tracking-[0.2em] border-r border-gray-700 text-center">Chain (W/L)</th>
+                                <th className="p-3 md:p-6 font-black uppercase text-xs tracking-[0.2em] text-center">Haram/Necklace (W/L)</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -57,8 +57,8 @@ export default function ReferenceTablePage() {
                                     key={row.weight}
                                     className={`${index % 2 === 0 ? 'bg-white' : 'bg-gray-50/50'} hover:bg-gold/5 transition-colors`}
                                 >
-                                    <td className="p-6 border-b border-gray-100 font-black text-lg border-r border-gray-100 bg-[#333333]/[0.02]">{row.weight}g</td>
-                                    <td className="p-6 border-b border-gray-100 font-bold text-[#D4AF37] border-r border-gray-100">
+                                    <td className={`p-3 md:p-6 border-b border-gray-100 font-black text-lg border-r border-gray-100 sticky left-0 z-10 ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}`}>{row.weight}g</td>
+                                    <td className="p-3 md:p-6 border-b border-gray-100 font-bold text-[#D4AF37] border-r border-gray-100">
                                         {row.Coin ? (
                                             <span className="flex flex-col">
                                                 <span className="text-xl">₹{row.Coin.lab}</span>
@@ -68,7 +68,7 @@ export default function ReferenceTablePage() {
                                             <span className="text-xs text-gray-300">₹{(row.weight * 100).toLocaleString()} (Calc)</span>
                                         )}
                                     </td>
-                                    <td className="p-6 border-b border-gray-100 border-r border-gray-100 text-center">
+                                    <td className="p-3 md:p-6 border-b border-gray-100 border-r border-gray-100 text-center">
                                         {row['Ring/Earring'] ? (
                                             <span className="inline-flex flex-col items-center">
                                                 <span className="font-black text-gray-900 text-lg">
@@ -78,7 +78,7 @@ export default function ReferenceTablePage() {
                                             </span>
                                         ) : <span className="text-gray-200">─</span>}
                                     </td>
-                                    <td className="p-6 border-b border-gray-100 border-r border-gray-100 text-center">
+                                    <td className="p-3 md:p-6 border-b border-gray-100 border-r border-gray-100 text-center">
                                         {row['Chain'] ? (
                                             <span className="inline-flex flex-col items-center">
                                                 <span className="font-black text-gray-900 text-lg">
@@ -88,7 +88,7 @@ export default function ReferenceTablePage() {
                                             </span>
                                         ) : <span className="text-gray-200">─</span>}
                                     </td>
-                                    <td className="p-6 border-b border-gray-100 text-center">
+                                    <td className="p-3 md:p-6 border-b border-gray-100 text-center">
                                         {row['Haram/Necklace'] ? (
                                             <span className="inline-flex flex-col items-center">
                                                 <span className="font-black text-gray-900 text-lg">
