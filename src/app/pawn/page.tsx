@@ -1,7 +1,8 @@
 'use client';
 
-import { useState, useMemo, useRef } from 'react';
+import { useState, useMemo } from 'react';
 import Header from '../components/Header';
+import CustomDatePicker from '../components/CustomDatePicker';
 import { Calculator as CalcIcon, Calendar, TrendingUp, Wallet, Plus, Trash2, Info, Printer, Download, X, Percent } from 'lucide-react';
 import Link from 'next/link';
 
@@ -135,10 +136,9 @@ export default function PawnCalculatorPage() {
                     </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 mb-10">
                     {/* Principal Amount Card */}
-                    {/* Principal Amount Card */}
-                    <div className="bg-white p-5 rounded-3xl shadow-sm border border-gray-100 relative overflow-hidden group">
+                    <div className="col-span-2 md:col-span-1 bg-white p-5 rounded-3xl shadow-sm border border-gray-100 relative overflow-hidden group">
                         <div className="absolute top-0 left-0 w-1 h-full bg-[#D4AF37]"></div>
                         <label className="block text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-3">Principal Amount</label>
                         <div className="relative">
@@ -157,22 +157,24 @@ export default function PawnCalculatorPage() {
                     </div>
 
                     {/* Pawn Date Card */}
-                    {/* Pawn Date Card */}
-                    <div className="bg-white p-5 rounded-3xl shadow-sm border border-gray-100 relative overflow-hidden group">
-                        <div className="absolute top-0 left-0 w-1 h-full bg-[#D4AF37]"></div>
+                    <div className="bg-white p-5 rounded-3xl shadow-sm border border-gray-100 relative group">
+                        <div className="absolute inset-0 rounded-3xl overflow-hidden pointer-events-none">
+                            <div className="absolute top-0 left-0 w-1 h-full bg-[#D4AF37]"></div>
+                        </div>
                         <label className="block text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-3">Pawn Date</label>
                         <div className="relative flex items-center">
-                            <Calendar size={16} className="absolute left-0 text-gray-300" />
-                            <input
-                                type="date"
-                                value={startDate}
-                                onChange={(e) => setStartDate(e.target.value)}
-                                className="w-full pl-6 py-2 bg-transparent border-b-2 border-gray-100 focus:border-[#D4AF37] outline-none transition-all font-bold text-base text-gray-800 cursor-pointer"
+                            <CustomDatePicker
+                                selected={startDate ? new Date(parseInt(startDate.split('-')[0]), parseInt(startDate.split('-')[1]) - 1, parseInt(startDate.split('-')[2])) : null}
+                                onChange={(date) => {
+                                    if (date) {
+                                        const dateString = date.getFullYear() + '-' + String(date.getMonth() + 1).padStart(2, '0') + '-' + String(date.getDate()).padStart(2, '0');
+                                        setStartDate(dateString);
+                                    }
+                                }}
                             />
                         </div>
                     </div>
 
-                    {/* Interest Rate Card */}
                     {/* Interest Rate Card */}
                     <div className="bg-white p-5 rounded-3xl shadow-sm border border-gray-100 relative overflow-hidden group">
                         <div className="absolute top-0 left-0 w-1 h-full bg-[#D4AF37]"></div>
@@ -217,8 +219,10 @@ export default function PawnCalculatorPage() {
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         {extraCash.map((cash) => (
-                            <div key={cash.id} className="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 relative overflow-hidden group animate-in fade-in slide-in-from-bottom-4 duration-300">
-                                <div className="absolute top-0 left-0 w-1 h-full bg-[#D4AF37]"></div>
+                            <div key={cash.id} className="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 relative group animate-in fade-in slide-in-from-bottom-4 duration-300">
+                                <div className="absolute inset-0 rounded-3xl overflow-hidden pointer-events-none">
+                                    <div className="absolute top-0 left-0 w-1 h-full bg-[#D4AF37]"></div>
+                                </div>
                                 <div className="flex items-start justify-between mb-6">
                                     <div className="flex-1 grid grid-cols-2 gap-6">
                                         <div>
@@ -236,11 +240,14 @@ export default function PawnCalculatorPage() {
                                         </div>
                                         <div>
                                             <label className="block text-[9px] font-black text-gray-400 uppercase tracking-widest mb-2">Date Added</label>
-                                            <input
-                                                type="date"
-                                                value={cash.date}
-                                                onChange={(e) => updateExtraCash(cash.id, 'date', e.target.value)}
-                                                className="w-full py-1 bg-transparent border-b border-gray-100 focus:border-[#D4AF37] outline-none transition-all font-bold text-sm text-gray-800 cursor-pointer"
+                                            <CustomDatePicker
+                                                selected={cash.date ? new Date(parseInt(cash.date.split('-')[0]), parseInt(cash.date.split('-')[1]) - 1, parseInt(cash.date.split('-')[2])) : null}
+                                                onChange={(date) => {
+                                                    if (date) {
+                                                        const dateString = date.getFullYear() + '-' + String(date.getMonth() + 1).padStart(2, '0') + '-' + String(date.getDate()).padStart(2, '0');
+                                                        updateExtraCash(cash.id, 'date', dateString);
+                                                    }
+                                                }}
                                             />
                                         </div>
                                     </div>
@@ -353,7 +360,7 @@ export default function PawnCalculatorPage() {
 
                             <button
                                 onClick={() => setShowPrintModal(true)}
-                                className="w-full bg-[#333333] text-white py-2.5 rounded-2xl hover:bg-black transition-all shadow-xl shadow-gray-900/20 flex items-center justify-center gap-2 font-black uppercase tracking-widest text-[8px]"
+                                className="w-full bg-[#333333] text-white py-2.5 rounded-2xl hover:bg-black transition-all shadow-xl shadow-gray-900/20 flex items-center justify-center gap-2 font-black uppercase tracking-widest text-[10px]"
                             >
                                 <Printer size={12} className="text-[#D4AF37]" />
                                 View & Print
