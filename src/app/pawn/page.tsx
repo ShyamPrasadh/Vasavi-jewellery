@@ -137,11 +137,12 @@ export default function PawnCalculatorPage() {
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
                     {/* Principal Amount Card */}
-                    <div className="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 relative overflow-hidden group">
+                    {/* Principal Amount Card */}
+                    <div className="bg-white p-5 rounded-3xl shadow-sm border border-gray-100 relative overflow-hidden group">
                         <div className="absolute top-0 left-0 w-1 h-full bg-[#D4AF37]"></div>
                         <label className="block text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-3">Principal Amount</label>
                         <div className="relative">
-                            <span className="absolute left-0 top-1/2 -translate-y-1/2 text-2xl font-bold text-gray-300">₹</span>
+                            <span className="absolute left-0 top-1/2 -translate-y-1/2 text-lg font-bold text-gray-300">₹</span>
                             <input
                                 type="text"
                                 inputMode="decimal"
@@ -150,32 +151,34 @@ export default function PawnCalculatorPage() {
                                     const val = e.target.value;
                                     if (val === '' || /^\d*\.?\d*$/.test(val)) setPrincipal(val);
                                 }}
-                                className="w-full pl-8 py-2 bg-transparent border-b-2 border-gray-100 focus:border-[#D4AF37] outline-none transition-all font-bold text-2xl text-gray-800"
+                                className="w-full pl-6 py-2 bg-transparent border-b-2 border-gray-100 focus:border-[#D4AF37] outline-none transition-all font-bold text-lg text-gray-800"
                             />
                         </div>
                     </div>
 
                     {/* Pawn Date Card */}
-                    <div className="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 relative overflow-hidden group">
+                    {/* Pawn Date Card */}
+                    <div className="bg-white p-5 rounded-3xl shadow-sm border border-gray-100 relative overflow-hidden group">
                         <div className="absolute top-0 left-0 w-1 h-full bg-[#D4AF37]"></div>
                         <label className="block text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-3">Pawn Date</label>
                         <div className="relative flex items-center">
-                            <Calendar size={18} className="absolute left-0 text-gray-300" />
+                            <Calendar size={16} className="absolute left-0 text-gray-300" />
                             <input
                                 type="date"
                                 value={startDate}
                                 onChange={(e) => setStartDate(e.target.value)}
-                                className="w-full pl-8 py-2 bg-transparent border-b-2 border-gray-100 focus:border-[#D4AF37] outline-none transition-all font-bold text-lg text-gray-800 cursor-pointer"
+                                className="w-full pl-6 py-2 bg-transparent border-b-2 border-gray-100 focus:border-[#D4AF37] outline-none transition-all font-bold text-base text-gray-800 cursor-pointer"
                             />
                         </div>
                     </div>
 
                     {/* Interest Rate Card */}
-                    <div className="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 relative overflow-hidden group">
+                    {/* Interest Rate Card */}
+                    <div className="bg-white p-5 rounded-3xl shadow-sm border border-gray-100 relative overflow-hidden group">
                         <div className="absolute top-0 left-0 w-1 h-full bg-[#D4AF37]"></div>
                         <label className="block text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-3">Monthly Interest Rate</label>
                         <div className="relative flex items-center">
-                            <Percent size={18} className="absolute left-0 text-gray-300" />
+                            <Percent size={16} className="absolute left-0 text-gray-300" />
                             <input
                                 type="text"
                                 inputMode="decimal"
@@ -184,7 +187,7 @@ export default function PawnCalculatorPage() {
                                     const val = e.target.value;
                                     if (val === '' || /^\d*\.?\d*$/.test(val)) setInterestRate(val);
                                 }}
-                                className="w-full pl-8 py-2 bg-transparent border-b-2 border-gray-100 focus:border-[#D4AF37] outline-none transition-all font-bold text-2xl text-gray-800"
+                                className="w-full pl-6 py-2 bg-transparent border-b-2 border-gray-100 focus:border-[#D4AF37] outline-none transition-all font-bold text-lg text-gray-800"
                             />
                             <span className="absolute right-0 text-gray-300 font-bold">%</span>
                         </div>
@@ -193,9 +196,9 @@ export default function PawnCalculatorPage() {
 
                 {/* Extra Cash Section */}
                 <div className="mb-12">
-                    <div className="flex items-center justify-between mb-6 px-2">
+                    <div className="flex flex-col md:flex-row md:items-center justify-between mb-6 px-2 gap-4">
                         <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-2xl bg-[#D4AF37]/5 flex items-center justify-center text-[#D4AF37]">
+                            <div className="w-10 h-10 rounded-2xl bg-[#D4AF37]/5 flex items-center justify-center text-[#D4AF37] shrink-0">
                                 <Plus size={20} />
                             </div>
                             <div>
@@ -205,7 +208,7 @@ export default function PawnCalculatorPage() {
                         </div>
                         <button
                             onClick={addExtraCash}
-                            className="flex items-center gap-2 bg-[#333333] text-white px-6 py-3 rounded-xl hover:bg-black transition-all shadow-lg shadow-gray-200 text-[10px] font-black uppercase tracking-widest"
+                            className="w-full md:w-auto flex items-center justify-center gap-2 bg-[#333333] text-white px-6 py-3 rounded-xl hover:bg-black transition-all shadow-lg shadow-gray-200 text-[10px] font-black uppercase tracking-widest"
                         >
                             <Plus size={14} />
                             Add Entry
@@ -227,7 +230,7 @@ export default function PawnCalculatorPage() {
                                                     inputMode="decimal"
                                                     value={cash.amount}
                                                     onChange={(e) => updateExtraCash(cash.id, 'amount', e.target.value)}
-                                                    className="w-full pl-5 py-1 bg-transparent border-b border-gray-100 focus:border-[#D4AF37] outline-none transition-all font-bold text-lg text-gray-800"
+                                                    className="w-full pl-4 py-1 bg-transparent border-b border-gray-100 focus:border-[#D4AF37] outline-none transition-all font-bold text-base text-gray-800"
                                                 />
                                             </div>
                                         </div>
@@ -268,9 +271,9 @@ export default function PawnCalculatorPage() {
                         ))}
 
                         {extraCash.length === 0 && (
-                            <div className="md:col-span-2 py-12 border-2 border-dashed border-gray-100 rounded-3xl flex flex-col items-center justify-center text-gray-300">
-                                <Wallet size={40} className="mb-4 opacity-20" />
-                                <p className="text-xs font-bold uppercase tracking-widest opacity-50">No extra cash entries added yet</p>
+                            <div className="md:col-span-2 py-12 border-2 border-dashed border-gray-200 rounded-3xl flex flex-col items-center justify-center text-gray-400 bg-gray-50/50">
+                                <Wallet size={48} className="mb-4 text-gray-300" />
+                                <p className="text-sm font-bold uppercase tracking-widest">No extra cash entries added yet</p>
                             </div>
                         )}
                     </div>
@@ -279,17 +282,17 @@ export default function PawnCalculatorPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-10 print:hidden">
                     {/* Interest Breakup Card */}
                     <div className="bg-white rounded-3xl shadow-xl shadow-gray-200/50 border border-gray-100 overflow-hidden flex flex-col h-full">
-                        <div className="bg-[#333333] text-white p-4 flex items-center justify-between">
+                        <div className="bg-[#333333] text-white px-4 py-2.5 flex items-center justify-between">
                             <div className="flex items-center gap-2">
-                                <CalcIcon size={20} />
-                                <h2 className="text-lg font-semibold uppercase tracking-wider">Interest Breakup</h2>
+                                <CalcIcon size={16} />
+                                <h2 className="text-xs font-bold uppercase tracking-wider">Interest Breakup</h2>
                             </div>
                         </div>
-                        <div className="p-6 flex-1 flex flex-col">
+                        <div className="p-5 flex-1 flex flex-col">
                             <div className="overflow-x-auto">
                                 <table className="w-full text-left text-sm border-collapse">
                                     <thead>
-                                        <tr className="text-[10px] text-gray-400 uppercase tracking-widest border-b border-gray-100">
+                                        <tr className="text-xs text-gray-400 uppercase tracking-widest border-b border-gray-100">
                                             <th className="pb-3 font-black">Principal</th>
                                             <th className="pb-3 font-black">Rate</th>
                                             <th className="pb-3 font-black">Duration</th>
@@ -299,24 +302,24 @@ export default function PawnCalculatorPage() {
                                     <tbody className="divide-y divide-gray-50">
                                         {calculations.allEntries.map((entry, idx) => (
                                             <tr key={idx} className="group/row">
-                                                <td className="py-4 font-bold text-gray-800">₹{entry.amount.toLocaleString()}</td>
-                                                <td className="py-4 text-gray-500 font-medium">{entry.rate}%</td>
-                                                <td className="py-4 text-gray-500 font-medium">{entry.months.toFixed(2)}m</td>
-                                                <td className="py-4 font-bold text-[#D4AF37] text-right">₹{Math.round(entry.interest).toLocaleString()}</td>
+                                                <td className="py-3 font-bold text-gray-800">₹{entry.amount.toLocaleString()}</td>
+                                                <td className="py-3 text-gray-500 font-medium">{entry.rate}%</td>
+                                                <td className="py-3 text-gray-500 font-medium">{entry.months.toFixed(2)}m</td>
+                                                <td className="py-3 font-bold text-[#D4AF37] text-right">₹{Math.round(entry.interest).toLocaleString()}</td>
                                             </tr>
                                         ))}
                                     </tbody>
                                 </table>
                             </div>
 
-                            <div className="pt-6 mt-auto border-t-2 border-dashed border-gray-100">
-                                <div className="flex justify-between items-center mb-2">
-                                    <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Total Principal</span>
-                                    <span className="text-lg font-black text-gray-900">₹{calculations.totalPrincipal.toLocaleString()}</span>
+                            <div className="pt-3 mt-auto border-t-2 border-dashed border-gray-100">
+                                <div className="flex justify-between items-center mb-1">
+                                    <span className="text-[8px] font-black text-gray-400 uppercase tracking-widest">Total Principal</span>
+                                    <span className="text-sm font-black text-gray-900">₹{calculations.totalPrincipal.toLocaleString()}</span>
                                 </div>
                                 <div className="flex justify-between items-center">
-                                    <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Total Interest</span>
-                                    <span className="text-2xl font-black text-[#D4AF37]">₹{Math.round(calculations.interestAmount).toLocaleString()}</span>
+                                    <span className="text-[8px] font-black text-gray-400 uppercase tracking-widest">Total Interest</span>
+                                    <span className="text-lg md:text-xl font-black text-[#D4AF37]">₹{Math.round(calculations.interestAmount).toLocaleString()}</span>
                                 </div>
                             </div>
                         </div>
@@ -324,41 +327,41 @@ export default function PawnCalculatorPage() {
 
                     {/* Total Payable Card */}
                     <div className="bg-white rounded-3xl shadow-xl shadow-amber-100/50 border border-gray-100 overflow-hidden flex flex-col h-full">
-                        <div className="bg-gradient-to-r from-[#D4AF37] to-[#B8860B] text-white p-4 flex items-center gap-2">
-                            <TrendingUp size={20} />
-                            <h2 className="text-lg font-semibold uppercase tracking-wider">Total Payable</h2>
+                        <div className="bg-gradient-to-r from-[#D4AF37] to-[#B8860B] text-white px-4 py-2.5 flex items-center gap-2">
+                            <TrendingUp size={16} />
+                            <h2 className="text-xs font-bold uppercase tracking-wider">Total Payable</h2>
                         </div>
-                        <div className="p-8 flex-1 flex flex-col items-center justify-center text-center">
-                            <div className="mb-6">
-                                <p className="text-gray-400 uppercase text-[10px] font-black tracking-[0.2em] mb-2">Final Settlement Amount</p>
+                        <div className="p-4 flex-1 flex flex-col items-center justify-center text-center">
+                            <div className="mb-3">
+                                <p className="text-gray-400 uppercase text-[8px] font-black tracking-[0.2em] mb-1">Final Settlement Amount</p>
                                 <div className="relative inline-block">
-                                    <p className="text-4xl font-black text-gray-800 tracking-tighter">₹{Math.round(calculations.totalAmount).toLocaleString()}</p>
+                                    <p className="text-xl md:text-2xl font-black text-gray-800 tracking-tighter">₹{Math.round(calculations.totalAmount).toLocaleString()}</p>
                                     <div className="absolute -bottom-1 left-0 w-full h-1 bg-[#D4AF37]/20 rounded-full"></div>
                                 </div>
                             </div>
 
-                            <div className="grid grid-cols-2 gap-8 w-full max-w-[240px] mb-8">
+                            <div className="grid grid-cols-2 gap-4 w-full max-w-[180px] mb-4">
                                 <div>
-                                    <p className="text-[9px] text-gray-400 font-black uppercase tracking-widest mb-1">Principal</p>
-                                    <p className="text-lg font-bold text-gray-800">₹{calculations.totalPrincipal.toLocaleString()}</p>
+                                    <p className="text-[8px] text-gray-400 font-black uppercase tracking-widest mb-1">Principal</p>
+                                    <p className="text-sm font-bold text-gray-800">₹{calculations.totalPrincipal.toLocaleString()}</p>
                                 </div>
                                 <div className="border-l border-gray-100">
-                                    <p className="text-[9px] text-gray-400 font-black uppercase tracking-widest mb-1">Interest</p>
-                                    <p className="text-lg font-bold text-[#D4AF37]">₹{Math.round(calculations.interestAmount).toLocaleString()}</p>
+                                    <p className="text-[8px] text-gray-400 font-black uppercase tracking-widest mb-1">Interest</p>
+                                    <p className="text-sm font-bold text-[#D4AF37]">₹{Math.round(calculations.interestAmount).toLocaleString()}</p>
                                 </div>
                             </div>
 
                             <button
                                 onClick={() => setShowPrintModal(true)}
-                                className="w-full bg-[#333333] text-white py-4 rounded-2xl hover:bg-black transition-all shadow-xl shadow-gray-900/20 flex items-center justify-center gap-3 font-black uppercase tracking-widest text-[10px]"
+                                className="w-full bg-[#333333] text-white py-2.5 rounded-2xl hover:bg-black transition-all shadow-xl shadow-gray-900/20 flex items-center justify-center gap-2 font-black uppercase tracking-widest text-[8px]"
                             >
-                                <Printer size={16} className="text-[#D4AF37]" />
+                                <Printer size={12} className="text-[#D4AF37]" />
                                 View & Print
                             </button>
 
-                            <div className="mt-6 flex items-center gap-2 bg-amber-50 px-4 py-2 rounded-full border border-amber-100">
-                                <Info size={12} className="text-[#D4AF37]" />
-                                <p className="text-[9px] font-bold text-amber-800 uppercase tracking-widest">
+                            <div className="mt-3 flex items-center gap-2 bg-amber-50 px-3 py-1.5 rounded-full border border-amber-100">
+                                <Info size={10} className="text-[#D4AF37]" />
+                                <p className="text-[8px] font-bold text-amber-800 uppercase tracking-widest">
                                     Interest is calculated at {interestRate}% per month.
                                 </p>
                             </div>

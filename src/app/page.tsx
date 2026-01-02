@@ -79,14 +79,15 @@ export default function CalculatorPage() {
 
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 mb-10">
           {/* Product Name Card */}
-          <div className="col-span-2 md:col-span-1 bg-white p-6 rounded-3xl shadow-sm border border-gray-100 relative overflow-hidden group">
+          {/* Product Name Card */}
+          <div className="col-span-2 md:col-span-1 bg-white p-5 rounded-3xl shadow-sm border border-gray-100 relative overflow-hidden group">
             <div className="absolute top-0 left-0 w-1 h-full bg-[#D4AF37]"></div>
             <label className="block text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-3">Product Name</label>
             <div className="relative">
               <select
                 value={product}
                 onChange={(e) => setProduct(e.target.value as ProductType)}
-                className="w-full py-2 bg-transparent border-b-2 border-gray-100 focus:border-[#D4AF37] outline-none transition-all font-bold text-lg text-gray-800 appearance-none cursor-pointer"
+                className="w-full py-2 bg-transparent border-b-2 border-gray-100 focus:border-[#D4AF37] outline-none transition-all font-bold text-base text-gray-800 appearance-none cursor-pointer"
               >
                 {['Ring', 'Earring', 'Chain', 'Haram', 'Necklace', 'Coin'].map((item) => (
                   <option key={item} value={item}>{item}</option>
@@ -99,7 +100,7 @@ export default function CalculatorPage() {
           </div>
 
           {/* Weight Card */}
-          <div className="col-span-1 md:col-span-1 bg-white p-6 rounded-3xl shadow-sm border border-gray-100 relative overflow-hidden group">
+          <div className="col-span-1 md:col-span-1 bg-white p-5 rounded-3xl shadow-sm border border-gray-100 relative overflow-hidden group">
             <div className="absolute top-0 left-0 w-1 h-full bg-[#D4AF37]"></div>
             <label className="block text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-3">Weight (Grams)</label>
             <div className="relative">
@@ -112,21 +113,21 @@ export default function CalculatorPage() {
                   const val = e.target.value;
                   if (val === '' || /^\d*\.?\d*$/.test(val)) setWeight(val);
                 }}
-                className="w-full py-2 bg-transparent border-b-2 border-gray-100 focus:border-[#D4AF37] outline-none transition-all font-bold text-2xl text-gray-800"
+                className="w-full py-2 bg-transparent border-b-2 border-gray-100 focus:border-[#D4AF37] outline-none transition-all font-bold text-lg text-gray-800"
               />
               <span className="absolute right-0 top-1/2 -translate-y-1/2 text-gray-300 font-bold">g</span>
             </div>
           </div>
 
           {/* Gold Rate Card */}
-          <div className="col-span-1 md:col-span-1 bg-white p-6 rounded-3xl shadow-sm border border-gray-100 relative overflow-hidden group">
+          <div className="col-span-1 md:col-span-1 bg-white p-5 rounded-3xl shadow-sm border border-gray-100 relative overflow-hidden group">
             <div className="absolute top-0 left-0 w-1 h-full bg-[#D4AF37]"></div>
             <div className="flex justify-between items-center mb-3">
               <label className="block text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">Gold Rate (22KT)</label>
               {isSyncing && <RefreshCcw size={12} className="animate-spin text-[#D4AF37]" />}
             </div>
             <div className="relative">
-              <span className="absolute left-0 top-1/2 -translate-y-1/2 text-2xl font-bold text-gray-300">₹</span>
+              <span className="absolute left-0 top-1/2 -translate-y-1/2 text-lg font-bold text-gray-300">₹</span>
               <input
                 type="text"
                 inputMode="decimal"
@@ -135,7 +136,7 @@ export default function CalculatorPage() {
                   const val = e.target.value;
                   if (val === '' || /^\d*\.?\d*$/.test(val)) setGoldRate(val);
                 }}
-                className="w-full pl-8 py-2 bg-transparent border-b-2 border-gray-100 focus:border-[#D4AF37] outline-none transition-all font-bold text-2xl text-gray-800"
+                className="w-full pl-6 py-2 bg-transparent border-b-2 border-gray-100 focus:border-[#D4AF37] outline-none transition-all font-bold text-lg text-gray-800"
               />
             </div>
           </div>
@@ -144,62 +145,62 @@ export default function CalculatorPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
           {/* Detailed Breakup Card */}
           <div className="bg-white rounded-3xl shadow-xl shadow-gray-200/50 border border-gray-100 overflow-hidden flex flex-col h-full">
-            <div className="bg-[#333333] text-white p-4 flex items-center gap-2">
-              <CalcIcon size={20} />
-              <h2 className="text-lg font-semibold uppercase tracking-wider">Detailed Breakup</h2>
+            <div className="bg-[#333333] text-white px-4 py-2.5 flex items-center gap-2">
+              <CalcIcon size={16} />
+              <h2 className="text-xs font-bold uppercase tracking-wider">Detailed Breakup</h2>
             </div>
-            <div className="p-8 flex-1 flex flex-col justify-center space-y-6">
+            <div className="p-4 flex-1 flex flex-col justify-center space-y-3">
               <div className="flex justify-between items-center">
-                <span className="text-sm font-bold text-gray-400 uppercase tracking-widest">Gold Value</span>
-                <span className="text-lg font-bold text-gray-800">₹{calculations.goldValue.toLocaleString()}</span>
+                <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Gold Value</span>
+                <span className="text-sm font-bold text-gray-800">₹{calculations.goldValue.toLocaleString()}</span>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-sm font-bold text-gray-400 uppercase tracking-widest">Wastage Cost</span>
-                <span className="text-lg font-bold text-gray-800">₹{calculations.wastageCost.toLocaleString()}</span>
+                <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Wastage Cost</span>
+                <span className="text-sm font-bold text-gray-800">₹{calculations.wastageCost.toLocaleString()}</span>
               </div>
-              <div className="flex justify-between items-center pb-6 border-b-2 border-dashed border-gray-100">
-                <span className="text-sm font-bold text-gray-400 uppercase tracking-widest">Labour Charge</span>
-                <span className="text-lg font-bold text-gray-800">₹{calculations.labCharge.toLocaleString()}</span>
+              <div className="flex justify-between items-center pb-3 border-b-2 border-dashed border-gray-100">
+                <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Labour Charge</span>
+                <span className="text-sm font-bold text-gray-800">₹{calculations.labCharge.toLocaleString()}</span>
               </div>
-              <div className="flex justify-between items-center pt-2">
-                <span className="text-sm font-black text-gray-800 uppercase tracking-widest">Total Amount</span>
-                <span className="text-4xl font-black text-[#D4AF37]">₹{Math.round(calculations.totalAmount).toLocaleString()}</span>
+              <div className="flex justify-between items-center pt-1">
+                <span className="text-[10px] font-black text-gray-800 uppercase tracking-widest">Total Amount</span>
+                <span className="text-xl md:text-2xl font-black text-[#D4AF37]">₹{Math.round(calculations.totalAmount).toLocaleString()}</span>
               </div>
             </div>
           </div>
 
           {/* VA Card */}
           <div className="bg-white rounded-3xl shadow-xl shadow-amber-100/50 border border-gray-100 overflow-hidden flex flex-col h-full">
-            <div className="bg-gradient-to-r from-[#D4AF37] to-[#B8860B] text-white p-4 flex items-center gap-2">
-              <Percent size={20} />
-              <h2 className="text-lg font-semibold uppercase tracking-wider">Value Addition (VA)</h2>
+            <div className="bg-gradient-to-r from-[#D4AF37] to-[#B8860B] text-white px-4 py-2.5 flex items-center gap-2">
+              <Percent size={16} />
+              <h2 className="text-xs font-bold uppercase tracking-wider">Value Addition (VA)</h2>
             </div>
-            <div className="p-8 flex-1 grid grid-cols-2 gap-0 items-center">
+            <div className="p-4 flex-1 grid grid-cols-2 gap-0 items-center">
               {/* Left Column: Wastage & Labour */}
-              <div className="space-y-10 pr-6 border-r-2 border-dashed border-gray-100">
+              <div className="space-y-4 pr-4 border-r-2 border-dashed border-gray-100">
                 <div className="text-center">
-                  <p className="text-[10px] text-gray-400 font-black uppercase tracking-widest mb-2">Waste (mg)</p>
-                  <p className="text-3xl font-black text-gray-800">
+                  <p className="text-[8px] text-gray-400 font-black uppercase tracking-widest mb-1">Waste (mg)</p>
+                  <p className="text-lg md:text-xl font-black text-gray-800">
                     {calculations.wasteGrams < 1
                       ? `${calculations.wasteGrams.toFixed(3)}`
                       : `${calculations.wasteGrams}g`}
                   </p>
                 </div>
                 <div className="text-center">
-                  <p className="text-[10px] text-gray-400 font-black uppercase tracking-widest mb-2">Labour Charge</p>
-                  <p className="text-3xl font-black text-gray-800">₹{calculations.labCharge.toLocaleString()}</p>
+                  <p className="text-[8px] text-gray-400 font-black uppercase tracking-widest mb-1">Labour Charge</p>
+                  <p className="text-lg md:text-xl font-black text-gray-800">₹{calculations.labCharge.toLocaleString()}</p>
                 </div>
               </div>
 
               {/* Right Column: VA Totals */}
-              <div className="pl-10 flex flex-col justify-center space-y-10">
+              <div className="pl-4 flex flex-col justify-center space-y-4">
                 <div className="text-center">
-                  <p className="text-gray-400 uppercase text-[10px] font-black tracking-widest mb-2">Overall VA %</p>
-                  <p className="text-5xl font-black text-[#D4AF37] tracking-tighter">{calculations.vaPercent.toFixed(2)}%</p>
+                  <p className="text-gray-400 uppercase text-[8px] font-black tracking-widest mb-1">Overall VA %</p>
+                  <p className="text-2xl md:text-3xl font-black text-[#D4AF37] tracking-tighter">{calculations.vaPercent.toFixed(2)}%</p>
                 </div>
                 <div className="text-center">
-                  <p className="text-gray-400 uppercase text-[10px] font-black tracking-widest mb-2">Total VA Amount</p>
-                  <p className="text-3xl font-black text-[#D4AF37]">₹{calculations.vaAmount.toLocaleString()}</p>
+                  <p className="text-gray-400 uppercase text-[8px] font-black tracking-widest mb-1">Total VA Amount</p>
+                  <p className="text-lg md:text-xl font-black text-[#D4AF37]">₹{calculations.vaAmount.toLocaleString()}</p>
                 </div>
               </div>
             </div>
