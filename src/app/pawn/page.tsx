@@ -360,9 +360,9 @@ export default function PawnCalculatorPage() {
 
                             <button
                                 onClick={() => setShowPrintModal(true)}
-                                className="w-full bg-[#333333] text-white py-2.5 rounded-2xl hover:bg-black transition-all shadow-xl shadow-gray-900/20 flex items-center justify-center gap-2 font-black uppercase tracking-widest text-xs"
+                                className="w-full bg-[#333333] text-white py-4 rounded-2xl hover:bg-black hover:scale-[1.02] active:scale-95 transition-all shadow-2xl shadow-gray-900/30 flex items-center justify-center gap-3 font-black uppercase tracking-[0.15em] text-sm"
                             >
-                                <Printer size={12} className="text-[#D4AF37]" />
+                                <Printer size={18} className="text-[#D4AF37]" />
                                 View & Print
                             </button>
 
