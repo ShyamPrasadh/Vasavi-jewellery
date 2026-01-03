@@ -56,9 +56,10 @@ Calculated on a monthly simple interest basis.
 ## 🛠️ Developer Guide
 
 ### Tech Stack
-- **Framework:** Next.js (App Router)
+- **Framework:** Next.js 15 (App Router)
 - **Styling:** Tailwind CSS (Modern premium aesthetic)
 - **Icons:** Lucide React
+- **Date Picking:** Custom Stable Calendar Grid (Optimized for zero-lag and mobility)
 - **Type Safety:** TypeScript
 
 ### Environment Setup
