@@ -1,7 +1,8 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import Header from '../components/Header';
+import { useGoldRates } from '@/hooks/useGoldRates';
 import CustomDatePicker from '../components/CustomDatePicker';
 import { Calculator as CalcIcon, Calendar, TrendingUp, Wallet, Plus, Trash2, Info, Printer, Download, X, Percent } from 'lucide-react';
 import Link from 'next/link';
@@ -18,6 +19,7 @@ export default function PawnCalculatorPage() {
     const [interestRate, setInterestRate] = useState<string>('2'); // 2% per month
     const [extraCash, setExtraCash] = useState<ExtraCash[]>([]);
     const [showPrintModal, setShowPrintModal] = useState(false);
+    const { rates, isSyncing } = useGoldRates();
 
     const addExtraCash = () => {
         setExtraCash([...extraCash, {
@@ -119,11 +121,11 @@ export default function PawnCalculatorPage() {
         window.print();
     };
 
-    const rates = { k22: 7520, k24: 8200 }; // Placeholder or fetch if needed
+    const rates_legacy = { k22: 7520, k24: 8200 }; // Still kept for fallback or legacy if needed
 
     return (
         <main className="min-h-screen bg-[#FDFCFB] pb-12">
-            <Header rates={rates} />
+            <Header rates={rates || undefined} />
 
             <div className="max-w-5xl mx-auto px-4 mt-8">
                 {/* Modern Navigation Toggle */}
@@ -170,12 +172,12 @@ export default function PawnCalculatorPage() {
                     </div>
 
                     {/* Pawn Date Card */}
-                    <div className="bg-white p-5 rounded-3xl shadow-sm border border-gray-100 relative group">
+                    <div className="bg-white p-5 rounded-3xl shadow-sm border border-gray-100 relative group overflow-visible">
                         <div className="absolute inset-0 rounded-3xl overflow-hidden pointer-events-none">
                             <div className="absolute top-0 left-0 w-1 h-full bg-[#D4AF37]"></div>
                         </div>
                         <label className="block text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-3">Pawn Date</label>
-                        <div className="relative flex items-center">
+                        <div className="relative flex items-center overflow-visible">
                             <CustomDatePicker
                                 selected={startDate ? new Date(parseInt(startDate.split('-')[0]), parseInt(startDate.split('-')[1]) - 1, parseInt(startDate.split('-')[2])) : null}
                                 onChange={(date) => {
@@ -237,21 +239,21 @@ export default function PawnCalculatorPage() {
                                     <div className="absolute top-0 left-0 w-1 h-full bg-[#D4AF37]"></div>
                                 </div>
                                 <div className="flex items-start justify-between mb-6">
-                                    <div className="flex-1 grid grid-cols-2 gap-6">
-                                        <div>
+                                    <div className="flex-1 grid grid-cols-2 gap-4 items-end">
+                                        <div className="flex flex-col h-full">
                                             <label className="block text-[9px] font-black text-gray-400 uppercase tracking-widest mb-2">Amount</label>
-                                            <div className="relative">
+                                            <div className="relative mt-auto">
                                                 <span className="absolute left-0 top-1/2 -translate-y-1/2 text-gray-300 font-bold">₹</span>
                                                 <input
                                                     type="text"
                                                     inputMode="decimal"
                                                     value={cash.amount}
                                                     onChange={(e) => updateExtraCash(cash.id, 'amount', e.target.value)}
-                                                    className="w-full pl-4 py-1 bg-transparent border-b border-gray-100 focus:border-[#D4AF37] outline-none transition-all font-bold text-base text-gray-800"
+                                                    className="w-full pl-4 py-2 bg-transparent border-b-2 border-gray-100 focus:border-[#D4AF37] outline-none transition-all font-bold text-base text-gray-800"
                                                 />
                                             </div>
                                         </div>
-                                        <div>
+                                        <div className="overflow-visible">
                                             <label className="block text-[9px] font-black text-gray-400 uppercase tracking-widest mb-2">Date Added</label>
                                             <CustomDatePicker
                                                 selected={cash.date ? new Date(parseInt(cash.date.split('-')[0]), parseInt(cash.date.split('-')[1]) - 1, parseInt(cash.date.split('-')[2])) : null}

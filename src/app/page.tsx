@@ -3,6 +3,7 @@
 import { useState, useMemo, useEffect } from 'react';
 import Header from './components/Header';
 import { ProductType, getTierData } from './data';
+import { useGoldRates } from '@/hooks/useGoldRates';
 import Link from 'next/link';
 import { Calculator as CalcIcon, Percent, Table, RefreshCcw } from 'lucide-react';
 
@@ -10,30 +11,14 @@ export default function CalculatorPage() {
   const [product, setProduct] = useState<ProductType>('Ring');
   const [weight, setWeight] = useState<string>('1');
   const [goldRate, setGoldRate] = useState<string>('7500');
-  const [rates, setRates] = useState({ k22: 7520, k24: 8200 });
-  const [isSyncing, setIsSyncing] = useState(false);
+  const { rates, isSyncing } = useGoldRates();
 
   useEffect(() => {
-    const fetchRates = async () => {
-      setIsSyncing(true);
-      try {
-        const res = await fetch('/api/gold-rate');
-        const data = await res.json();
-        if (data.k22 && data.k24) {
-          setRates({ k22: data.k22, k24: data.k24 });
-          setGoldRate((prev) => (prev === '7500' ? data.k22.toString() : prev));
-        }
-      } catch (err) {
-        console.error("Failed to sync rates:", err);
-      } finally {
-        setIsSyncing(false);
-      }
-    };
-
-    fetchRates();
-    const interval = setInterval(fetchRates, 600000); // 10 min refresh
-    return () => clearInterval(interval);
-  }, []);
+    // Only update the input gold rate if it's still at the default placeholder
+    if (rates && rates.k22 && goldRate === '7500') {
+      setGoldRate(rates.k22.toString());
+    }
+  }, [rates]);
 
   const calculations = useMemo(() => {
     const numWeight = parseFloat(weight) || 0;
@@ -64,7 +49,7 @@ export default function CalculatorPage() {
 
   return (
     <main className="min-h-screen bg-[#FDFCFB] pb-12">
-      <Header rates={rates} />
+      <Header rates={rates || undefined} />
 
       <div className="max-w-5xl mx-auto px-4 mt-8">
         {/* Modern Navigation Toggle */}

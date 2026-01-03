@@ -17,7 +17,7 @@ export default function Header({ rates }: { rates?: { k22: number; k24: number }
                     </div>
                 </Link>
 
-                {rates && (
+                {rates ? (
                     <div className="flex items-center gap-4 md:gap-6">
                         <div className="flex items-center gap-2 bg-gray-50 px-4 py-2 rounded-full border border-gray-100">
                             <span className="relative flex h-2 w-2">
@@ -33,6 +33,16 @@ export default function Header({ rates }: { rates?: { k22: number; k24: number }
                                 24KT: <span className="text-[#D4AF37] font-black ml-1 text-sm">₹{rates.k24.toLocaleString()}</span>
                             </p>
                         </div>
+                    </div>
+                ) : (
+                    <div className="flex items-center gap-2 bg-gray-50 px-4 py-2 rounded-full border border-gray-100">
+                        <span className="relative flex h-2 w-2">
+                            <span className="animate-pulse absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+                            <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-500"></span>
+                        </span>
+                        <p className="text-[10px] font-black text-gray-300 uppercase tracking-widest animate-pulse">
+                            Syncing Live Rates...
+                        </p>
                     </div>
                 )}
             </div>
