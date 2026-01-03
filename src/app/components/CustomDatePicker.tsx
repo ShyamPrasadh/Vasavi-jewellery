@@ -1,65 +1,52 @@
 'use client';
 
-import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { Calendar as CalendarIcon, X, Check } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { Calendar, Check, X } from 'lucide-react';
 
 interface CustomDatePickerProps {
     selected: Date | null;
-    onChange: (date: Date | null) => void;
-    placeholderText?: string;
+    onChange: (date: Date) => void;
 }
 
 const MONTHS = [
-    "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'
 ];
 
-const START_YEAR = 1900;
-const END_YEAR = 2100;
-const YEARS = Array.from({ length: END_YEAR - START_YEAR + 1 }, (_, i) => START_YEAR + i);
+const START_YEAR = 2000;
+const YEARS = Array.from({ length: 51 }, (_, i) => START_YEAR + i);
 
-export default function CustomDatePicker({ selected, onChange, placeholderText }: CustomDatePickerProps) {
+export default function CustomDatePicker({ selected, onChange }: CustomDatePickerProps) {
     const [isOpen, setIsOpen] = useState(false);
-
-    // Internal state for the wheels
-    const [wheelDate, setWheelDate] = useState(selected || new Date());
-
+    const [wheelDate, setWheelDate] = useState<Date>(selected || new Date());
     const monthRef = useRef<HTMLDivElement>(null);
     const dayRef = useRef<HTMLDivElement>(null);
     const yearRef = useRef<HTMLDivElement>(null);
 
-    const getDaysInMonth = (month: number, year: number) => new Date(year, month + 1, 0).getDate();
+    const getDaysInMonth = (month: number, year: number) => {
+        return new Date(year, month + 1, 0).getDate();
+    };
 
-    // Helper to scroll a container to a specific index
-    const scrollToItem = useCallback((container: HTMLDivElement | null, index: number, behavior: ScrollBehavior = 'smooth') => {
-        if (container && container.children[index]) {
-            const item = container.children[index] as HTMLElement;
-            container.scrollTo({
-                top: item.offsetTop - (container.clientHeight / 2) + (item.clientHeight / 2),
-                behavior
-            });
-        }
-    }, []);
-
-    // Effect to handle initialization and selection updates
     useEffect(() => {
         if (isOpen) {
-            const date = selected || new Date();
-            setWheelDate(date);
-
-            // Short delay to ensure DOM is ready for scrolling
-            const timer = setTimeout(() => {
-                scrollToItem(monthRef.current, date.getMonth(), 'auto');
-                scrollToItem(dayRef.current, date.getDate() - 1, 'auto');
-                scrollToItem(yearRef.current, date.getFullYear() - START_YEAR, 'auto');
-            }, 50);
-            return () => clearTimeout(timer);
+            scrollToItem(monthRef.current, wheelDate.getMonth());
+            scrollToItem(dayRef.current, wheelDate.getDate() - 1);
+            scrollToItem(yearRef.current, wheelDate.getFullYear() - START_YEAR);
         }
-    }, [isOpen, selected, scrollToItem]);
+    }, [isOpen]);
+
+    const scrollToItem = (container: HTMLDivElement | null, index: number) => {
+        if (container) {
+            container.scrollTo({
+                top: index * 36,
+                behavior: 'smooth'
+            });
+        }
+    };
 
     const handleScroll = (type: 'month' | 'day' | 'year') => (e: React.UIEvent<HTMLDivElement>) => {
         const container = e.currentTarget;
-        const itemHeight = 36; // Matching .wheel-item height
+        const itemHeight = 36;
         const index = Math.round((container.scrollTop) / itemHeight);
 
         const currentMonth = wheelDate.getMonth();
@@ -106,8 +93,7 @@ export default function CustomDatePicker({ selected, onChange, placeholderText }
                 .scrolling-picker {
                     position: absolute;
                     top: 100%;
-                    left: 50%;
-                    transform: translateX(-50%);
+                    right: 0;
                     z-index: 100;
                     margin-top: 8px;
                     background: white;
@@ -116,11 +102,22 @@ export default function CustomDatePicker({ selected, onChange, placeholderText }
                     box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(0,0,0,0.05);
                     border: 1px solid #f3f4f6;
                     overflow: hidden;
-                    animation: slideUp 0.2s ease-out;
+                    animation: slideUp 0.15s ease-out;
                 }
                 @keyframes slideUp {
-                    from { transform: translateY(10px) translateX(-50%); opacity: 0; }
-                    to { transform: translateY(0) translateX(-50%); opacity: 1; }
+                    from { transform: translateY(5px); opacity: 0; }
+                    to { transform: translateY(0); opacity: 1; }
+                }
+                @media (min-width: 640px) {
+                    .scrolling-picker {
+                        left: 50%;
+                        right: auto;
+                        transform: translateX(-50%);
+                    }
+                    @keyframes slideUp {
+                        from { transform: translateY(5px) translateX(-50%); opacity: 0; }
+                        to { transform: translateY(0) translateX(-50%); opacity: 1; }
+                    }
                 }
                 .wheel-container {
                     display: flex;
@@ -136,7 +133,7 @@ export default function CustomDatePicker({ selected, onChange, placeholderText }
                     scroll-snap-type: y mandatory;
                     scrollbar-width: none;
                     -ms-overflow-style: none;
-                    padding: 42px 0; /* (120 - 36) / 2 */
+                    padding: 42px 0;
                 }
                 .wheel-col::-webkit-scrollbar {
                     display: none;
@@ -173,26 +170,20 @@ export default function CustomDatePicker({ selected, onChange, placeholderText }
                 .wheel-header {
                     padding: 12px 16px;
                     border-bottom: 1px solid #f3f4f6;
-                    background: #333;
-                    color: white;
                     display: flex;
-                    justify-content: space-between;
                     align-items: center;
+                    justify-content: space-between;
                 }
             `}</style>
 
             <div
-                className="relative flex items-center cursor-pointer group"
                 onClick={() => setIsOpen(!isOpen)}
+                className="flex items-center gap-2 px-4 py-2 bg-gray-50 rounded-xl border border-gray-100 cursor-pointer hover:border-[#D4AF37] transition-all group"
             >
-                <CalendarIcon size={16} className={`absolute left-0 transition-colors ${isOpen ? 'text-[#D4AF37]' : 'text-gray-300 group-hover:text-[#D4AF37]'}`} />
-                <input
-                    type="text"
-                    readOnly
-                    value={displayDate}
-                    placeholder={placeholderText || "DD-MM-YYYY"}
-                    className="w-full pl-6 py-2 bg-transparent border-b-2 border-gray-100 group-hover:border-[#D4AF37] outline-none transition-all font-bold text-base text-gray-800 cursor-pointer"
-                />
+                <Calendar size={16} className="text-gray-400 group-hover:text-[#D4AF37]" />
+                <span className="font-bold text-gray-700 text-sm">
+                    {displayDate || 'Select Date'}
+                </span>
             </div>
 
             {isOpen && (
@@ -200,7 +191,7 @@ export default function CustomDatePicker({ selected, onChange, placeholderText }
                     <div className="wheel-header">
                         <span className="text-[10px] font-black uppercase tracking-widest text-[#D4AF37]">Select Date</span>
                         <div className="flex gap-2">
-                            <button onClick={() => setIsOpen(false)} className="hover:text-red-400">
+                            <button onClick={() => setIsOpen(false)} className="p-1 hover:bg-gray-100 rounded-lg text-gray-400">
                                 <X size={14} />
                             </button>
                         </div>

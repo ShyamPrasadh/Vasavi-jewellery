@@ -21,6 +21,16 @@ export default function PawnCalculatorPage() {
     const [showPrintModal, setShowPrintModal] = useState(false);
     const { rates, isSyncing } = useGoldRates();
 
+    // Prevent body scroll when modal is open
+    useEffect(() => {
+        if (showPrintModal) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'unset';
+        }
+        return () => { document.body.style.overflow = 'unset'; };
+    }, [showPrintModal]);
+
     const addExtraCash = () => {
         setExtraCash([...extraCash, {
             id: Math.random().toString(36).substr(2, 9),
@@ -113,7 +123,14 @@ export default function PawnCalculatorPage() {
             totalAmount,
             allEntries,
             extraBreakdown,
-            todayDate: today.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })
+            todayDate: today.toLocaleString('en-GB', {
+                day: '2-digit',
+                month: '2-digit',
+                year: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: true
+            }).toUpperCase()
         };
     }, [principal, startDate, interestRate, extraCash]);
 
@@ -398,8 +415,8 @@ export default function PawnCalculatorPage() {
 
             {/* Print Modal */}
             {showPrintModal && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm print:static print:bg-white print:p-0">
-                    <div className="bg-white w-full max-w-3xl rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh] print:shadow-none print:max-h-none print:rounded-none">
+                <div id="print-modal-root" className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm print:static print:bg-white print:p-0">
+                    <div className="bg-white w-fit max-w-[calc(100vw-2rem)] md:w-full md:max-w-3xl rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh] print:shadow-none print:max-h-none print:rounded-none">
                         {/* Modal Header */}
                         <div className="p-6 border-b border-gray-100 flex justify-between items-center print:hidden">
                             <h3 className="text-lg font-bold text-gray-800">Print Preview</h3>
@@ -422,62 +439,132 @@ export default function PawnCalculatorPage() {
 
                         {/* Printable Content */}
                         <div className="px-8 py-4 md:px-12 md:py-6 overflow-y-auto print:overflow-visible print:p-0" id="printable-area">
-                            <h1 className="hidden print:block text-3xl font-serif-gold text-[#D4AF37] text-center mb-10">
-                                Sri Vasavi Jewellery
-                            </h1>
 
-                            <div className="flex justify-between items-center mb-6">
-                                <div>
-                                    <p className="text-[9px] text-gray-400 font-black uppercase tracking-widest mb-1">Date of Calculation</p>
-                                    <p className="text-sm font-bold text-gray-800">{calculations.todayDate}</p>
+                            {/* ===== SCREEN PREVIEW ===== */}
+                            <div className="print:hidden">
+                                <div className="flex justify-between items-center mb-6">
+                                    <div>
+                                        <p className="text-[9px] text-gray-400 font-black uppercase tracking-widest mb-1">Date of Calculation</p>
+                                        <p className="text-sm font-bold text-gray-800">{calculations.todayDate.split(',')[0]}</p>
+                                    </div>
+                                </div>
+
+                                <div className="mb-8">
+                                    <h4 className="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-4 border-b border-gray-50 pb-2">Calculation Breakdown</h4>
+                                    <table className="w-full text-sm border-collapse">
+                                        <thead>
+                                            <tr className="text-[10px] text-gray-400 uppercase tracking-widest border-b border-gray-100 bg-gray-50/50">
+                                                <th className="p-3 font-black text-left">Date Added</th>
+                                                <th className="p-3 font-black text-left">Principal Amount</th>
+                                                <th className="p-3 font-black text-left">Rate (%)</th>
+                                                <th className="p-3 font-black text-left">Duration (Mos)</th>
+                                                <th className="p-3 font-black text-right">Interest Amount</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody className="divide-y divide-gray-50">
+                                            {calculations.allEntries.map((entry, idx) => (
+                                                <tr key={idx}>
+                                                    <td className="p-3 text-gray-600 font-medium">
+                                                        {new Date(entry.date).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
+                                                    </td>
+                                                    <td className="p-3 font-bold text-gray-800">₹{entry.amount.toLocaleString()}</td>
+                                                    <td className="p-3 text-gray-600">{entry.rate}%</td>
+                                                    <td className="p-3 text-gray-600">{entry.months.toFixed(2)}</td>
+                                                    <td className="p-3 font-bold text-[#D4AF37] text-right">₹{Math.round(entry.interest).toLocaleString()}</td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <div className="bg-gray-50 p-6 rounded-2xl border border-gray-100">
+                                    <div className="flex justify-between items-center mb-3">
+                                        <span className="text-xs font-bold text-gray-500 uppercase tracking-widest">Total Principal</span>
+                                        <span className="text-base font-bold text-gray-900">₹{calculations.totalPrincipal.toLocaleString()}</span>
+                                    </div>
+                                    <div className="flex justify-between items-center mb-4">
+                                        <span className="text-xs font-bold text-gray-500 uppercase tracking-widest">Total Interest</span>
+                                        <span className="text-base font-bold text-[#D4AF37]">₹{Math.round(calculations.interestAmount).toLocaleString()}</span>
+                                    </div>
+                                    <div className="mt-8 pt-4 border-t border-dashed border-gray-200 flex justify-between items-center">
+                                        <span className="text-sm font-black text-gray-800 uppercase tracking-widest">Total Payable</span>
+                                        <span className="text-xl font-black text-[#D4AF37]">₹{Math.round(calculations.totalAmount).toLocaleString()}</span>
+                                    </div>
                                 </div>
                             </div>
 
-                            <div className="mb-6">
-                                <h4 className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-4">Principal Breakdown</h4>
-                                <table className="w-full text-left text-sm border-collapse">
+                            {/* ===== PRINT ONLY BILL ===== */}
+                            <div className="hidden print:block" style={{ fontFamily: 'Arial, sans-serif', fontSize: '11pt', color: '#000', maxWidth: '650pt', margin: '0 auto', padding: '20pt' }}>
+
+                                {/* Header */}
+                                <div style={{ textAlign: 'center', marginBottom: '40pt' }}>
+                                    <h1 className="font-serif-gold" style={{ fontSize: '28pt', margin: '0', color: '#D4AF37' }}>Sri Vasavi Jewellery</h1>
+                                </div>
+
+                                {/* Header Row: Gold Loan Summary (left) and Date of Calculation (right) */}
+                                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '30pt' }}>
+                                    <div>
+                                        <div style={{ fontSize: '9pt', color: '#999', textTransform: 'uppercase', letterSpacing: '1pt', marginBottom: '6pt' }}>Gold Loan Summary</div>
+                                    </div>
+                                    <div style={{ textAlign: 'right' }}>
+                                        <div style={{ fontSize: '9pt', color: '#999', textTransform: 'uppercase', letterSpacing: '1pt', marginBottom: '6pt' }}>Date of Calculation</div>
+                                        <div style={{ fontSize: '13pt', fontWeight: 'bold', color: '#333' }}>
+                                            {new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Principal Breakdown Header */}
+                                <div style={{ fontSize: '9pt', color: '#999', textTransform: 'uppercase', letterSpacing: '1pt', marginBottom: '16pt' }}>
+                                    Principal Breakdown
+                                </div>
+
+                                {/* Table */}
+                                <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: '30pt' }}>
                                     <thead>
-                                        <tr className="text-[10px] text-gray-400 uppercase tracking-widest border-b border-gray-100 bg-gray-50/50">
-                                            <th className="p-3 font-black">Date Added</th>
-                                            <th className="p-3 font-black">Principal Amount</th>
-                                            <th className="p-3 font-black">Rate (%)</th>
-                                            <th className="p-3 font-black">Duration (Mos)</th>
-                                            <th className="p-3 font-black text-right">Interest Amount</th>
+                                        <tr style={{ borderBottom: '1pt solid #ddd' }}>
+                                            <th style={{ padding: '10pt 8pt', textAlign: 'left', fontSize: '9pt', fontWeight: '600', color: '#999', textTransform: 'uppercase', letterSpacing: '0.5pt' }}>Date Added</th>
+                                            <th style={{ padding: '10pt 8pt', textAlign: 'left', fontSize: '9pt', fontWeight: '600', color: '#999', textTransform: 'uppercase', letterSpacing: '0.5pt' }}>Principal Amount</th>
+                                            <th style={{ padding: '10pt 8pt', textAlign: 'left', fontSize: '9pt', fontWeight: '600', color: '#999', textTransform: 'uppercase', letterSpacing: '0.5pt' }}>Rate (%)</th>
+                                            <th style={{ padding: '10pt 8pt', textAlign: 'left', fontSize: '9pt', fontWeight: '600', color: '#999', textTransform: 'uppercase', letterSpacing: '0.5pt' }}>Duration (Mos)</th>
+                                            <th style={{ padding: '10pt 8pt', textAlign: 'right', fontSize: '9pt', fontWeight: '600', color: '#999', textTransform: 'uppercase', letterSpacing: '0.5pt' }}>Interest Amount</th>
                                         </tr>
                                     </thead>
-                                    <tbody className="divide-y divide-gray-50">
+                                    <tbody>
                                         {calculations.allEntries.map((entry, idx) => (
-                                            <tr key={idx}>
-                                                <td className="p-3 text-gray-600 font-medium">
-                                                    {new Date(entry.date).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
+                                            <tr key={idx} style={{ borderBottom: idx < calculations.allEntries.length - 1 ? '1pt solid #f0f0f0' : 'none' }}>
+                                                <td style={{ padding: '14pt 8pt', fontSize: '11pt', color: '#333' }}>
+                                                    {new Date(entry.date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}
                                                 </td>
-                                                <td className="p-3 font-bold text-gray-800">₹{entry.amount.toLocaleString()}</td>
-                                                <td className="p-3 text-gray-600">{entry.rate}%</td>
-                                                <td className="p-3 text-gray-600">{entry.months.toFixed(2)}</td>
-                                                <td className="p-3 font-bold text-[#D4AF37] text-right">₹{Math.round(entry.interest).toLocaleString()}</td>
+                                                <td style={{ padding: '14pt 8pt', fontSize: '11pt', fontWeight: '500', color: '#333' }}>₹{entry.amount.toLocaleString()}</td>
+                                                <td style={{ padding: '14pt 8pt', fontSize: '11pt', color: '#333' }}>{entry.rate}%</td>
+                                                <td style={{ padding: '14pt 8pt', fontSize: '11pt', color: '#333' }}>{entry.months.toFixed(2)}</td>
+                                                <td style={{ padding: '14pt 8pt', fontSize: '11pt', fontWeight: '600', color: '#D4AF37', textAlign: 'right' }}>₹{Math.round(entry.interest).toLocaleString()}</td>
                                             </tr>
                                         ))}
                                     </tbody>
                                 </table>
-                            </div>
 
-                            <div className="bg-gray-50 p-6 rounded-2xl border border-gray-100">
-                                <div className="flex justify-between items-center mb-3">
-                                    <span className="text-xs font-bold text-gray-500 uppercase tracking-widest">Total Principal</span>
-                                    <span className="text-base font-bold text-gray-900">₹{calculations.totalPrincipal.toLocaleString()}</span>
+                                {/* Totals */}
+                                <div style={{ marginTop: '30pt', marginBottom: '30pt' }}>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', padding: '10pt 8pt', borderBottom: '1pt solid #f0f0f0' }}>
+                                        <span style={{ fontSize: '11pt', color: '#999', textTransform: 'uppercase', letterSpacing: '0.5pt' }}>Total Principal</span>
+                                        <span style={{ fontSize: '12pt', fontWeight: 'bold', color: '#333' }}>₹{calculations.totalPrincipal.toLocaleString()}</span>
+                                    </div>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', padding: '10pt 8pt', borderBottom: '1pt solid #f0f0f0' }}>
+                                        <span style={{ fontSize: '11pt', color: '#999', textTransform: 'uppercase', letterSpacing: '0.5pt' }}>Total Interest</span>
+                                        <span style={{ fontSize: '12pt', fontWeight: 'bold', color: '#D4AF37' }}>₹{Math.round(calculations.interestAmount).toLocaleString()}</span>
+                                    </div>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', padding: '16pt 8pt 0 8pt', marginTop: '10pt' }}>
+                                        <span style={{ fontSize: '13pt', fontWeight: 'bold', color: '#333', textTransform: 'uppercase', letterSpacing: '0.5pt' }}>Total Payable</span>
+                                        <span style={{ fontSize: '16pt', fontWeight: 'bold', color: '#D4AF37' }}>₹{Math.round(calculations.totalAmount).toLocaleString()}</span>
+                                    </div>
                                 </div>
-                                <div className="flex justify-between items-center mb-4">
-                                    <span className="text-xs font-bold text-gray-500 uppercase tracking-widest">Total Interest</span>
-                                    <span className="text-base font-bold text-[#D4AF37]">₹{Math.round(calculations.interestAmount).toLocaleString()}</span>
-                                </div>
-                                <div className="pt-4 border-t border-dashed border-gray-200 flex justify-between items-center">
-                                    <span className="text-sm font-black text-gray-800 uppercase tracking-widest">Total Payable</span>
-                                    <span className="text-xl font-black text-[#D4AF37]">₹{Math.round(calculations.totalAmount).toLocaleString()}</span>
-                                </div>
-                            </div>
 
-                            <div className="mt-12 text-center">
-                                <p className="text-[9px] text-gray-400 italic">This is a computer-generated calculation summary for Sri Vasavi Jewellery.</p>
+                                {/* Footer */}
+                                <div style={{ textAlign: 'center', marginTop: '60pt', paddingTop: '20pt', borderTop: '1pt solid #f0f0f0' }}>
+                                    <p style={{ fontSize: '9pt', color: '#999', fontStyle: 'italic', margin: '0' }}>This is a computer-generated calculation summary for Sri Vasavi Jewellery.</p>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -485,30 +572,42 @@ export default function PawnCalculatorPage() {
             )}
 
             <style jsx global>{`
-                @page {
-                    margin: 0;
-                }
                 @media print {
-                    body {
+                    @page {
                         margin: 0;
-                        -webkit-print-color-adjust: exact;
                     }
-                    body * {
-                        visibility: hidden;
+                    body {
+                        background: white !important;
+                        margin: 15mm !important;
+                        padding: 0 !important;
                     }
-                    #printable-area, #printable-area * {
-                        visibility: visible;
+                    /* Hide everything by default */
+                    body > * {
+                        display: none !important;
                     }
-                    #printable-area {
-                        position: absolute;
-                        left: 0;
-                        top: 0;
-                        width: 100%;
-                        padding: 20mm !important;
+                    /* ONLY show the main container that holds our modal */
+                    body > main {
+                        display: block !important;
+                        padding: 0 !important;
                         margin: 0 !important;
                     }
-                    .print\\:hidden {
+                    /* Hide all children of main except the modal */
+                    main > * {
                         display: none !important;
+                    }
+                    main > #print-modal-root {
+                        display: block !important;
+                    }
+                    /* Hide modal header/buttons in print */
+                    .print-hidden, button, .modal-header {
+                        display: none !important;
+                    }
+                    #printable-area {
+                        display: block !important;
+                        position: relative !important;
+                        width: 100% !important;
+                        margin: 0 !important;
+                        padding: 0 !important;
                     }
                 }
             `}</style>
