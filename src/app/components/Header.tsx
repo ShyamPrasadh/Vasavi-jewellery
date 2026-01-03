@@ -5,7 +5,12 @@ export default function Header({ rates }: { rates?: { k22: number; k24: number }
         <header className="py-4 bg-white border-b border-gray-100 shadow-sm sticky top-0 z-50">
             <div className="w-full px-4 md:px-8 flex flex-col md:flex-row justify-between items-center gap-4">
                 <Link href="/">
-                    <div className="group">
+                    <div className="group flex items-center gap-3">
+                        <img
+                            src="/logo.jpg"
+                            alt="SVJ Logo"
+                            className="h-10 w-10 md:h-12 md:w-12 object-cover rounded-xl shadow-sm border border-gray-100"
+                        />
                         <h1 className="text-xl md:text-2xl font-serif-gold cursor-pointer transition-all group-hover:opacity-80 tracking-tight">
                             Sri Vasavi Jewellery
                         </h1>

@@ -126,13 +126,26 @@ export default function PawnCalculatorPage() {
             <Header rates={rates} />
 
             <div className="max-w-5xl mx-auto px-4 mt-8">
-                {/* Navigation Tabs */}
-                <div className="flex gap-2 mb-10 bg-white p-1.5 rounded-2xl shadow-sm border border-gray-100 w-fit mx-auto">
-                    <Link href="/" className="px-8 py-2.5 rounded-xl text-sm font-bold text-gray-400 hover:text-[#D4AF37] transition-all">
-                        Gold Calculator
-                    </Link>
-                    <div className="px-8 py-2.5 rounded-xl text-sm font-bold bg-[#D4AF37] text-white shadow-lg shadow-amber-200/50">
-                        Pawn Interest
+                {/* Modern Navigation Toggle */}
+                <div className="flex justify-center mb-12">
+                    <div className="relative bg-gray-100 p-1 rounded-2xl flex w-full max-w-[400px]">
+                        <div
+                            className="absolute top-1 bottom-1 transition-all duration-300 ease-out bg-white rounded-xl shadow-md"
+                            style={{
+                                left: '50%',
+                                right: '1px',
+                                width: 'calc(50% - 2px)'
+                            }}
+                        />
+                        <Link
+                            href="/"
+                            className="relative flex-1 py-3 text-sm font-black text-center z-10 transition-colors text-gray-400 hover:text-gray-600"
+                        >
+                            GOLD CALCULATOR
+                        </Link>
+                        <div className="relative flex-1 py-3 text-sm font-black text-center z-10 text-[#D4AF37]">
+                            PAWN INTEREST
+                        </div>
                     </div>
                 </div>
 
@@ -200,8 +213,8 @@ export default function PawnCalculatorPage() {
                 <div className="mb-12">
                     <div className="flex flex-col md:flex-row md:items-center justify-between mb-6 px-2 gap-4">
                         <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-2xl bg-[#D4AF37]/5 flex items-center justify-center text-[#D4AF37] shrink-0">
-                                <Plus size={20} />
+                            <div className="w-10 h-10 rounded-2xl bg-[#D4AF37]/10 flex items-center justify-center text-[#D4AF37] shrink-0 font-black text-lg">
+                                ₹
                             </div>
                             <div>
                                 <h3 className="text-lg font-black text-gray-800 uppercase tracking-wider">Extra Cash</h3>

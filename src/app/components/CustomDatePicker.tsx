@@ -106,20 +106,21 @@ export default function CustomDatePicker({ selected, onChange, placeholderText }
                 .scrolling-picker {
                     position: absolute;
                     top: 100%;
-                    left: 0;
+                    left: 50%;
+                    transform: translateX(-50%);
                     z-index: 100;
                     margin-top: 8px;
                     background: white;
                     border-radius: 16px;
-                    width: 260px;
+                    width: 240px;
                     box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(0,0,0,0.05);
                     border: 1px solid #f3f4f6;
                     overflow: hidden;
                     animation: slideUp 0.2s ease-out;
                 }
                 @keyframes slideUp {
-                    from { transform: translateY(10px); opacity: 0; }
-                    to { transform: translateY(0); opacity: 1; }
+                    from { transform: translateY(10px) translateX(-50%); opacity: 0; }
+                    to { transform: translateY(0) translateX(-50%); opacity: 1; }
                 }
                 .wheel-container {
                     display: flex;
