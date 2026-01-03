@@ -94,7 +94,7 @@ export default function CustomDatePicker({ selected, onChange }: CustomDatePicke
                     position: absolute;
                     top: 100%;
                     right: 0;
-                    z-index: 100;
+                    z-index: 9999;
                     margin-top: 8px;
                     background: white;
                     border-radius: 16px;
@@ -180,8 +180,8 @@ export default function CustomDatePicker({ selected, onChange }: CustomDatePicke
                 onClick={() => setIsOpen(!isOpen)}
                 className="flex items-center gap-2 px-4 py-2 bg-gray-50 rounded-xl border border-gray-100 cursor-pointer hover:border-[#D4AF37] transition-all group"
             >
-                <Calendar size={16} className="text-gray-400 group-hover:text-[#D4AF37]" />
-                <span className="font-bold text-gray-700 text-sm">
+                <Calendar size={16} className="text-gray-400 group-hover:text-[#D4AF37] shrink-0" />
+                <span className="font-bold text-gray-700 text-sm whitespace-nowrap">
                     {displayDate || 'Select Date'}
                 </span>
             </div>
