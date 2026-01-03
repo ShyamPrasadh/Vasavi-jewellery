@@ -1,43 +1,77 @@
-# Sri Vasavi Jewellery Calculator
+# Sri Vasavi Jewellery Management System
 
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+A professional, real-time application designed for jewellery inventory management, pricing calculations, and pawn loan interest tracking. Built with **Next.js 15**, **TypeScript**, and **Tailwind CSS**.
 
-## Features
-- Live gold rates integration
-- Jewellery price calculator
-- 22KT and 24KT rate comparison
+---
 
-## Getting Started
+## 🚀 Key Modules
 
-First, run the development server:
+### 1. Gold Price Calculator
+Provides a high-precision breakup of jewellery pricing based on live market rates.
+- **Live Sync:** Integrates with GoldAPI.io for real-time 22KT and 24KT INR rates.
+- **Product Categories:** Supports RINGS, EARRINGS, CHAINS, HARAMS, NECKLACES, and COINS.
+- **Dynamic Breakup:** Shows Gold Value, Wastage Cost, and Labour charges separately.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+### 2. Pawn Loan Management
+A robust tool for tracking pawned items and calculating multi-entry interest.
+- **Flexible Principal:** Support for initial principal and secondary "Extra Cash" entries added at any date.
+- **Precise Duration:** Calculates months and days (as fractional months) between the pawn date and current date.
+- **Financial Summary:** Generates a professional settlement statement with total payable amounts.
+- **Printable Receipts:** Built-in PDF/Print preview for customer records.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 3. Reference Rate Table
+A centralized table displaying standard wastage and labour charges across different weight tiers and product categories.
 
-You can start editing the page by modifying `src/app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🧮 Calculation Logic
 
-## Learn More
+### **Value Addition (VA) Logic**
+The system uses a tier-based lookup to ensure fair and consistent pricing.
 
-To learn more about Next.js, take a look at the following resources:
+1.  **Lookup Mechanism:** The application searches for the **closest lower weight tier** (e.g., if weight is 7g, it uses the 6g tier).
+2.  **Parameters:**
+    *   `Waste`: Grams of gold added as wastage.
+    *   `Lab`: Fixed labour/making charge in INR.
+3.  **Formulas:**
+    *   **Gold Value** = `Net Weight × Gold Rate`
+    *   **Wastage Cost** = `Waste Grams × Gold Rate`
+    *   **VA Amount** = `Wastage Cost + Labour Charge`
+    *   **VA %** = `(VA Amount / Gold Value) × 100`
+    *   **Total Amount** = `Gold Value + VA Amount`
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### **Pawn Interest Logic**
+Calculated on a monthly simple interest basis.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1.  **Time Calculation:**
+    *   `Total Months = (Year Difference × 12) + Month Difference`
+    *   `Days Adjustment = (Day Difference / 30)`
+    *   `Final Duration = Total Months + Days Adjustment`
+2.  **Interest Formula:**
+    *   `Interest = (Principal × Monthly Rate × Duration) / 100`
+3.  **Handling Extra Cash:** Each additional cash entry is treated as a separate interest-bearing entity from its specific "Date Added" up to the current date.
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 🛠️ Developer Guide
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Tech Stack
+- **Framework:** Next.js (App Router)
+- **Styling:** Tailwind CSS (Modern premium aesthetic)
+- **Icons:** Lucide React
+- **Type Safety:** TypeScript
+
+### Environment Setup
+1. Clone the repository.
+2. Install dependencies: `npm install`
+3. Run dev server: `npm run dev`
+
+### API Integration
+Live gold rates are fetched via `/api/gold-rate`, which proxies requests to GoldAPI.io and provides a fallback rate if the API is unavailable.
+
+---
+
+## 🎨 Design Philosophy
+- **Premium Aesthetic:** Uses a "Gold & Charcoal" theme (`#D4AF37` and `#333333`) to reflect the luxury nature of the business.
+- **Precision First:** Wastage is tracked to 3 decimal places (milligrams) for complete transparency.
+- **Mobile Optimized:** All interfaces are fully responsive for use on tablets and smartphones during customer interactions.
