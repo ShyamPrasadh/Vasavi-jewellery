@@ -108,15 +108,11 @@ export default function CustomDatePicker({ selected, onChange }: CustomDatePicke
                     from { transform: translateY(5px); opacity: 0; }
                     to { transform: translateY(0); opacity: 1; }
                 }
-                @media (min-width: 640px) {
+                @media (min-width: 641px) {
                     .scrolling-picker {
                         left: 50%;
                         right: auto;
                         transform: translateX(-50%);
-                    }
-                    @keyframes slideUp {
-                        from { transform: translateY(5px) translateX(-50%); opacity: 0; }
-                        to { transform: translateY(0) translateX(-50%); opacity: 1; }
                     }
                 }
                 .wheel-container {
@@ -178,10 +174,10 @@ export default function CustomDatePicker({ selected, onChange }: CustomDatePicke
 
             <div
                 onClick={() => setIsOpen(!isOpen)}
-                className="flex items-center gap-2 px-4 py-2 bg-gray-50 rounded-xl border border-gray-100 cursor-pointer hover:border-[#D4AF37] transition-all group"
+                className="flex items-center flex-nowrap gap-2 px-3 py-2 bg-gray-50 rounded-xl border border-gray-100 cursor-pointer hover:border-[#D4AF37] transition-all group w-full overflow-hidden"
             >
-                <Calendar size={16} className="text-gray-400 group-hover:text-[#D4AF37] shrink-0" />
-                <span className="font-bold text-gray-700 text-sm whitespace-nowrap">
+                <Calendar size={14} className="text-gray-400 group-hover:text-[#D4AF37] shrink-0" />
+                <span className="font-bold text-gray-700 text-xs sm:text-sm whitespace-nowrap overflow-hidden text-ellipsis flex-1">
                     {displayDate || 'Select Date'}
                 </span>
             </div>
