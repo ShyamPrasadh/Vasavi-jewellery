@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useState, useRef, useEffect } from 'react';
-import { Calendar as CalendarIcon, ChevronLeft, ChevronRight, X } from 'lucide-react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
+import { Calendar as CalendarIcon, X, Check } from 'lucide-react';
 
 interface CustomDatePickerProps {
     selected: Date | null;
@@ -10,84 +10,171 @@ interface CustomDatePickerProps {
 }
 
 const MONTHS = [
-    "January", "February", "March", "April", "May", "June",
-    "July", "August", "September", "October", "November", "December"
+    "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
 ];
 
-const WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+const START_YEAR = 1900;
+const END_YEAR = 2100;
+const YEARS = Array.from({ length: END_YEAR - START_YEAR + 1 }, (_, i) => START_YEAR + i);
 
 export default function CustomDatePicker({ selected, onChange, placeholderText }: CustomDatePickerProps) {
     const [isOpen, setIsOpen] = useState(false);
-    const [viewDate, setViewDate] = useState(selected || new Date());
-    const containerRef = useRef<HTMLDivElement>(null);
 
-    // Close on click outside
-    useEffect(() => {
-        const handleClickOutside = (event: MouseEvent) => {
-            if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
-                setIsOpen(false);
-            }
-        };
-        if (isOpen) {
-            document.addEventListener('mousedown', handleClickOutside);
+    // Internal state for the wheels
+    const [wheelDate, setWheelDate] = useState(selected || new Date());
+
+    const monthRef = useRef<HTMLDivElement>(null);
+    const dayRef = useRef<HTMLDivElement>(null);
+    const yearRef = useRef<HTMLDivElement>(null);
+
+    const getDaysInMonth = (month: number, year: number) => new Date(year, month + 1, 0).getDate();
+
+    // Helper to scroll a container to a specific index
+    const scrollToItem = useCallback((container: HTMLDivElement | null, index: number, behavior: ScrollBehavior = 'smooth') => {
+        if (container && container.children[index]) {
+            const item = container.children[index] as HTMLElement;
+            container.scrollTo({
+                top: item.offsetTop - (container.clientHeight / 2) + (item.clientHeight / 2),
+                behavior
+            });
         }
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
-    }, [isOpen]);
+    }, []);
 
-    // Calendar logic
-    const month = viewDate.getMonth();
-    const year = viewDate.getFullYear();
+    // Effect to handle initialization and selection updates
+    useEffect(() => {
+        if (isOpen) {
+            const date = selected || new Date();
+            setWheelDate(date);
 
-    const daysInMonth = new Date(year, month + 1, 0).getDate();
-    const firstDayOfMonth = new Date(year, month, 1).getDay();
+            // Short delay to ensure DOM is ready for scrolling
+            const timer = setTimeout(() => {
+                scrollToItem(monthRef.current, date.getMonth(), 'auto');
+                scrollToItem(dayRef.current, date.getDate() - 1, 'auto');
+                scrollToItem(yearRef.current, date.getFullYear() - START_YEAR, 'auto');
+            }, 50);
+            return () => clearTimeout(timer);
+        }
+    }, [isOpen, selected, scrollToItem]);
 
-    const days = [];
-    // Padding for the start of the month
-    for (let i = 0; i < firstDayOfMonth; i++) {
-        days.push(null);
-    }
-    // Days of the month
-    for (let i = 1; i <= daysInMonth; i++) {
-        days.push(new Date(year, month, i));
-    }
+    const handleScroll = (type: 'month' | 'day' | 'year') => (e: React.UIEvent<HTMLDivElement>) => {
+        const container = e.currentTarget;
+        const itemHeight = 36; // Matching .wheel-item height
+        const index = Math.round((container.scrollTop) / itemHeight);
 
-    const changeMonth = (offset: number) => {
-        const newDate = new Date(year, month + offset, 1);
-        setViewDate(newDate);
+        const currentMonth = wheelDate.getMonth();
+        const currentYear = wheelDate.getFullYear();
+        const currentDay = wheelDate.getDate();
+
+        if (type === 'month' && index >= 0 && index < 12 && index !== currentMonth) {
+            const maxDays = getDaysInMonth(index, currentYear);
+            setWheelDate(new Date(currentYear, index, Math.min(currentDay, maxDays)));
+        } else if (type === 'day') {
+            const maxDays = getDaysInMonth(currentMonth, currentYear);
+            if (index >= 0 && index < maxDays && (index + 1) !== currentDay) {
+                setWheelDate(new Date(currentYear, currentMonth, index + 1));
+            }
+        } else if (type === 'year') {
+            const year = START_YEAR + index;
+            if (index >= 0 && index < YEARS.length && year !== currentYear) {
+                const maxDays = getDaysInMonth(currentMonth, year);
+                setWheelDate(new Date(year, currentMonth, Math.min(currentDay, maxDays)));
+            }
+        }
     };
 
-    const handleDateSelect = (date: Date) => {
-        onChange(date);
+    const handleConfirm = () => {
+        onChange(wheelDate);
         setIsOpen(false);
     };
 
-    const isSelected = (date: Date) => {
-        if (!selected) return false;
-        return date.getDate() === selected.getDate() &&
-            date.getMonth() === selected.getMonth() &&
-            date.getFullYear() === selected.getFullYear();
-    };
+    const displayDate = selected
+        ? `${String(selected.getDate()).padStart(2, '0')}-${String(selected.getMonth() + 1).padStart(2, '0')}-${selected.getFullYear()}`
+        : '';
 
-    const isToday = (date: Date) => {
-        const today = new Date();
-        return date.getDate() === today.getDate() &&
-            date.getMonth() === today.getMonth() &&
-            date.getFullYear() === today.getFullYear();
-    };
-
-    const formatDisplayDate = (date: Date | null) => {
-        if (!date) return "";
-        const d = String(date.getDate()).padStart(2, '0');
-        const m = String(date.getMonth() + 1).padStart(2, '0');
-        const y = date.getFullYear();
-        return `${d}-${m}-${y}`;
-    };
+    const daysInMonth = getDaysInMonth(wheelDate.getMonth(), wheelDate.getFullYear());
+    const DAYS_ARRAY = Array.from({ length: daysInMonth }, (_, i) => i + 1);
 
     return (
-        <div className="relative w-full" ref={containerRef}>
-            {/* Input Trigger */}
+        <div className="relative w-full">
+            <style jsx global>{`
+                .scrolling-picker {
+                    position: absolute;
+                    top: 100%;
+                    left: 0;
+                    z-index: 100;
+                    margin-top: 8px;
+                    background: white;
+                    border-radius: 16px;
+                    width: 260px;
+                    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(0,0,0,0.05);
+                    border: 1px solid #f3f4f6;
+                    overflow: hidden;
+                    animation: slideUp 0.2s ease-out;
+                }
+                @keyframes slideUp {
+                    from { transform: translateY(10px); opacity: 0; }
+                    to { transform: translateY(0); opacity: 1; }
+                }
+                .wheel-container {
+                    display: flex;
+                    height: 180px;
+                    position: relative;
+                    padding: 0 12px;
+                    background: linear-gradient(to bottom, #fff 0%, transparent 20%, transparent 80%, #fff 100%);
+                }
+                .wheel-col {
+                    flex: 1;
+                    height: 100%;
+                    overflow-y: scroll;
+                    scroll-snap-type: y mandatory;
+                    scrollbar-width: none;
+                    -ms-overflow-style: none;
+                    padding: 72px 0; /* (ContainerHeight / 2) - (ItemHeight / 2) */
+                }
+                .wheel-col::-webkit-scrollbar {
+                    display: none;
+                }
+                .wheel-item {
+                    height: 36px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    scroll-snap-align: center;
+                    font-size: 14px;
+                    font-weight: 600;
+                    color: #9ca3af;
+                    transition: all 0.2s;
+                    cursor: pointer;
+                }
+                .wheel-item.active {
+                    color: #111827;
+                    font-weight: 800;
+                    font-size: 16px;
+                }
+                .selection-bar {
+                    position: absolute;
+                    top: 50%;
+                    left: 12px;
+                    right: 12px;
+                    height: 36px;
+                    transform: translateY(-50%);
+                    background: #f9f9f9;
+                    border-radius: 8px;
+                    z-index: -1;
+                    border: 1px solid #f3f4f6;
+                }
+                .wheel-header {
+                    padding: 12px 16px;
+                    border-bottom: 1px solid #f3f4f6;
+                    background: #333;
+                    color: white;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                }
+            `}</style>
+
             <div
                 className="relative flex items-center cursor-pointer group"
                 onClick={() => setIsOpen(!isOpen)}
@@ -96,80 +183,61 @@ export default function CustomDatePicker({ selected, onChange, placeholderText }
                 <input
                     type="text"
                     readOnly
-                    value={formatDisplayDate(selected)}
+                    value={displayDate}
                     placeholder={placeholderText || "DD-MM-YYYY"}
                     className="w-full pl-6 py-2 bg-transparent border-b-2 border-gray-100 group-hover:border-[#D4AF37] outline-none transition-all font-bold text-base text-gray-800 cursor-pointer"
                 />
             </div>
 
-            {/* Calendar Popover */}
             {isOpen && (
-                <div className="absolute top-full left-0 mt-2 z-[100] w-[300px] bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden animate-in fade-in zoom-in-95 duration-200 origin-top-left">
-                    {/* Header */}
-                    <div className="bg-[#333333] p-4 flex items-center justify-between text-white">
-                        <div className="flex flex-col">
-                            <span className="text-[10px] font-black text-[#D4AF37] uppercase tracking-widest">Select Date</span>
-                            <span className="text-sm font-bold">{MONTHS[month]} {year}</span>
-                        </div>
-                        <div className="flex items-center gap-1">
-                            <button
-                                onClick={(e) => { e.stopPropagation(); changeMonth(-1); }}
-                                className="p-1.5 hover:bg-white/10 rounded-lg transition-colors"
-                            >
-                                <ChevronLeft size={18} />
-                            </button>
-                            <button
-                                onClick={(e) => { e.stopPropagation(); changeMonth(1); }}
-                                className="p-1.5 hover:bg-white/10 rounded-lg transition-colors"
-                            >
-                                <ChevronRight size={18} />
+                <div className="scrolling-picker">
+                    <div className="wheel-header">
+                        <span className="text-[10px] font-black uppercase tracking-widest text-[#D4AF37]">Select Date</span>
+                        <div className="flex gap-2">
+                            <button onClick={() => setIsOpen(false)} className="hover:text-red-400">
+                                <X size={14} />
                             </button>
                         </div>
                     </div>
 
-                    {/* Weekdays */}
-                    <div className="grid grid-cols-7 gap-0 p-2 bg-gray-50/50">
-                        {WEEKDAYS.map(day => (
-                            <div key={day} className="text-center text-[10px] font-black text-gray-400 uppercase py-1">
-                                {day}
-                            </div>
-                        ))}
+                    <div className="wheel-container">
+                        <div className="selection-bar"></div>
+
+                        {/* Month */}
+                        <div className="wheel-col" ref={monthRef} onScroll={handleScroll('month')}>
+                            {MONTHS.map((m, i) => (
+                                <div key={m} className={`wheel-item ${wheelDate.getMonth() === i ? 'active' : ''}`} onClick={() => scrollToItem(monthRef.current, i)}>
+                                    {m}
+                                </div>
+                            ))}
+                        </div>
+
+                        {/* Day */}
+                        <div className="wheel-col" ref={dayRef} onScroll={handleScroll('day')}>
+                            {DAYS_ARRAY.map((d, i) => (
+                                <div key={d} className={`wheel-item ${wheelDate.getDate() === d ? 'active' : ''}`} onClick={() => scrollToItem(dayRef.current, i)}>
+                                    {d}
+                                </div>
+                            ))}
+                        </div>
+
+                        {/* Year */}
+                        <div className="wheel-col" ref={yearRef} onScroll={handleScroll('year')}>
+                            {YEARS.map((y, i) => (
+                                <div key={y} className={`wheel-item ${wheelDate.getFullYear() === y ? 'active' : ''}`} onClick={() => scrollToItem(yearRef.current, i)}>
+                                    {y}
+                                </div>
+                            ))}
+                        </div>
                     </div>
 
-                    {/* Days Grid */}
-                    <div className="grid grid-cols-7 gap-1 p-2">
-                        {days.map((date, idx) => (
-                            <div key={idx} className="aspect-square flex items-center justify-center">
-                                {date ? (
-                                    <button
-                                        onClick={(e) => { e.stopPropagation(); handleDateSelect(date); }}
-                                        className={`
-                                            w-full h-full rounded-xl text-sm font-bold transition-all
-                                            flex items-center justify-center
-                                            ${isSelected(date)
-                                                ? 'bg-[#D4AF37] text-white shadow-lg shadow-amber-200'
-                                                : isToday(date)
-                                                    ? 'text-[#D4AF37] bg-amber-50'
-                                                    : 'text-gray-700 hover:bg-gray-100'
-                                            }
-                                        `}
-                                    >
-                                        {date.getDate()}
-                                    </button>
-                                ) : (
-                                    <div className="w-full h-full"></div>
-                                )}
-                            </div>
-                        ))}
-                    </div>
-
-                    {/* Footer - Quick Today shortcut */}
-                    <div className="p-3 border-t border-gray-50 bg-gray-50/30 flex justify-center">
+                    <div className="p-3 bg-gray-50 flex gap-2">
                         <button
-                            onClick={(e) => { e.stopPropagation(); handleDateSelect(new Date()); }}
-                            className="text-[10px] font-black text-[#D4AF37] uppercase tracking-widest hover:underline"
+                            onClick={handleConfirm}
+                            className="flex-1 bg-[#D4AF37] text-white py-2 rounded-xl text-[10px] font-black uppercase tracking-widest shadow-md hover:bg-[#b8962e] transition-all flex items-center justify-center gap-2"
                         >
-                            Select Today
+                            <Check size={14} />
+                            Set Date
                         </button>
                     </div>
                 </div>
