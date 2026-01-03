@@ -270,7 +270,7 @@ export default function PawnCalculatorPage() {
                                                 />
                                             </div>
                                         </div>
-                                        <div className="overflow-visible -ml-4 sm:ml-0">
+                                        <div className="overflow-visible">
                                             <label className="block text-[9px] font-black text-gray-400 uppercase tracking-widest mb-2">Date Added</label>
                                             <CustomDatePicker
                                                 selected={cash.date ? new Date(parseInt(cash.date.split('-')[0]), parseInt(cash.date.split('-')[1]) - 1, parseInt(cash.date.split('-')[2])) : null}

@@ -105,6 +105,11 @@ export default function CustomDatePicker({ selected, onChange, align = 'left' }:
                     overflow: hidden;
                     animation: slideUp 0.15s ease-out;
                 }
+                @media (max-width: 640px) {
+                    .scrolling-picker {
+                        ${align === 'left' ? 'transform: translateX(-40px);' : ''}
+                    }
+                }
                 @keyframes slideUp {
                     from { transform: translateY(5px); opacity: 0; }
                     to { transform: translateY(0); opacity: 1; }
