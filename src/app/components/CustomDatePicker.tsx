@@ -68,23 +68,28 @@ export default function CustomDatePicker({ selected, onChange, placeholderText }
 
         if (type === 'month' && index >= 0 && index < 12 && index !== currentMonth) {
             const maxDays = getDaysInMonth(index, currentYear);
-            setWheelDate(new Date(currentYear, index, Math.min(currentDay, maxDays)));
+            const d = new Date(currentYear, index, Math.min(currentDay, maxDays));
+            setWheelDate(d);
+            onChange(d);
         } else if (type === 'day') {
             const maxDays = getDaysInMonth(currentMonth, currentYear);
             if (index >= 0 && index < maxDays && (index + 1) !== currentDay) {
-                setWheelDate(new Date(currentYear, currentMonth, index + 1));
+                const d = new Date(currentYear, currentMonth, index + 1);
+                setWheelDate(d);
+                onChange(d);
             }
         } else if (type === 'year') {
             const year = START_YEAR + index;
             if (index >= 0 && index < YEARS.length && year !== currentYear) {
                 const maxDays = getDaysInMonth(currentMonth, year);
-                setWheelDate(new Date(year, currentMonth, Math.min(currentDay, maxDays)));
+                const d = new Date(year, currentMonth, Math.min(currentDay, maxDays));
+                setWheelDate(d);
+                onChange(d);
             }
         }
     };
 
     const handleConfirm = () => {
-        onChange(wheelDate);
         setIsOpen(false);
     };
 
@@ -118,10 +123,10 @@ export default function CustomDatePicker({ selected, onChange, placeholderText }
                 }
                 .wheel-container {
                     display: flex;
-                    height: 180px;
+                    height: 120px;
                     position: relative;
                     padding: 0 12px;
-                    background: linear-gradient(to bottom, #fff 0%, transparent 20%, transparent 80%, #fff 100%);
+                    background: linear-gradient(to bottom, #fff 0%, transparent 40%, transparent 60%, #fff 100%);
                 }
                 .wheel-col {
                     flex: 1;
@@ -130,7 +135,7 @@ export default function CustomDatePicker({ selected, onChange, placeholderText }
                     scroll-snap-type: y mandatory;
                     scrollbar-width: none;
                     -ms-overflow-style: none;
-                    padding: 72px 0; /* (ContainerHeight / 2) - (ItemHeight / 2) */
+                    padding: 42px 0; /* (120 - 36) / 2 */
                 }
                 .wheel-col::-webkit-scrollbar {
                     display: none;
