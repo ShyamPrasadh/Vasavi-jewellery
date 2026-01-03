@@ -23,9 +23,19 @@ export default function CustomDatePicker({ selected, onChange, align = 'left' }:
     const monthRef = useRef<HTMLDivElement>(null);
     const dayRef = useRef<HTMLDivElement>(null);
     const yearRef = useRef<HTMLDivElement>(null);
+    const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+    const isHoveringRef = useRef(false);
 
     const getDaysInMonth = (month: number, year: number) => {
         return new Date(year, month + 1, 0).getDate();
+    };
+
+    const resetAutoCloseTimer = () => {
+        if (timeoutRef.current) clearTimeout(timeoutRef.current);
+        if (isHoveringRef.current) return;
+        timeoutRef.current = setTimeout(() => {
+            setIsOpen(false);
+        }, 4000);
     };
 
     useEffect(() => {
@@ -33,7 +43,13 @@ export default function CustomDatePicker({ selected, onChange, align = 'left' }:
             scrollToItem(monthRef.current, wheelDate.getMonth());
             scrollToItem(dayRef.current, wheelDate.getDate() - 1);
             scrollToItem(yearRef.current, wheelDate.getFullYear() - START_YEAR);
+            resetAutoCloseTimer();
+        } else {
+            if (timeoutRef.current) clearTimeout(timeoutRef.current);
         }
+        return () => {
+            if (timeoutRef.current) clearTimeout(timeoutRef.current);
+        };
     }, [isOpen]);
 
     const scrollToItem = (container: HTMLDivElement | null, index: number) => {
@@ -46,6 +62,7 @@ export default function CustomDatePicker({ selected, onChange, align = 'left' }:
     };
 
     const handleScroll = (type: 'month' | 'day' | 'year') => (e: React.UIEvent<HTMLDivElement>) => {
+        resetAutoCloseTimer();
         const container = e.currentTarget;
         const itemHeight = 36;
         const index = Math.round((container.scrollTop) / itemHeight);
@@ -78,6 +95,7 @@ export default function CustomDatePicker({ selected, onChange, align = 'left' }:
     };
 
     const handleConfirm = () => {
+        if (timeoutRef.current) clearTimeout(timeoutRef.current);
         setIsOpen(false);
     };
 
@@ -182,7 +200,17 @@ export default function CustomDatePicker({ selected, onChange, align = 'left' }:
             </div>
 
             {isOpen && (
-                <div className="scrolling-picker">
+                <div
+                    className="scrolling-picker"
+                    onMouseEnter={() => {
+                        isHoveringRef.current = true;
+                        if (timeoutRef.current) clearTimeout(timeoutRef.current);
+                    }}
+                    onMouseLeave={() => {
+                        isHoveringRef.current = false;
+                        resetAutoCloseTimer();
+                    }}
+                >
                     <div className="wheel-header">
                         <span className="text-[10px] font-black uppercase tracking-widest text-[#D4AF37]">Select Date</span>
                         <div className="flex gap-2">
@@ -198,7 +226,7 @@ export default function CustomDatePicker({ selected, onChange, align = 'left' }:
                         {/* Month */}
                         <div className="wheel-col" ref={monthRef} onScroll={handleScroll('month')}>
                             {MONTHS.map((m, i) => (
-                                <div key={m} className={`wheel-item ${wheelDate.getMonth() === i ? 'active' : ''}`} onClick={() => scrollToItem(monthRef.current, i)}>
+                                <div key={m} className={`wheel-item ${wheelDate.getMonth() === i ? 'active' : ''}`} onClick={() => { scrollToItem(monthRef.current, i); resetAutoCloseTimer(); }}>
                                     {m}
                                 </div>
                             ))}
@@ -207,7 +235,7 @@ export default function CustomDatePicker({ selected, onChange, align = 'left' }:
                         {/* Day */}
                         <div className="wheel-col" ref={dayRef} onScroll={handleScroll('day')}>
                             {DAYS_ARRAY.map((d, i) => (
-                                <div key={d} className={`wheel-item ${wheelDate.getDate() === d ? 'active' : ''}`} onClick={() => scrollToItem(dayRef.current, i)}>
+                                <div key={d} className={`wheel-item ${wheelDate.getDate() === d ? 'active' : ''}`} onClick={() => { scrollToItem(dayRef.current, i); resetAutoCloseTimer(); }}>
                                     {d}
                                 </div>
                             ))}
@@ -216,7 +244,7 @@ export default function CustomDatePicker({ selected, onChange, align = 'left' }:
                         {/* Year */}
                         <div className="wheel-col" ref={yearRef} onScroll={handleScroll('year')}>
                             {YEARS.map((y, i) => (
-                                <div key={y} className={`wheel-item ${wheelDate.getFullYear() === y ? 'active' : ''}`} onClick={() => scrollToItem(yearRef.current, i)}>
+                                <div key={y} className={`wheel-item ${wheelDate.getFullYear() === y ? 'active' : ''}`} onClick={() => { scrollToItem(yearRef.current, i); resetAutoCloseTimer(); }}>
                                     {y}
                                 </div>
                             ))}

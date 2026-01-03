@@ -193,7 +193,7 @@ export default function PawnCalculatorPage() {
                         <div className="absolute inset-0 rounded-3xl overflow-hidden pointer-events-none">
                             <div className="absolute top-0 left-0 w-1 h-full bg-[#D4AF37]"></div>
                         </div>
-                        <label className="block text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-3">Pawn Date</label>
+                        <label className="block text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-3 min-h-[30px]">Pawn Date</label>
                         <div className="relative w-full overflow-visible">
                             <CustomDatePicker
                                 selected={startDate ? new Date(parseInt(startDate.split('-')[0]), parseInt(startDate.split('-')[1]) - 1, parseInt(startDate.split('-')[2])) : null}
@@ -210,9 +210,8 @@ export default function PawnCalculatorPage() {
                     {/* Interest Rate Card */}
                     <div className="col-span-1 bg-white p-5 rounded-3xl shadow-sm border border-gray-100 relative overflow-hidden group">
                         <div className="absolute top-0 left-0 w-1 h-full bg-[#D4AF37]"></div>
-                        <label className="block text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-3">Monthly Interest Rate</label>
+                        <label className="block text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-3 min-h-[30px]">Monthly Interest Rate</label>
                         <div className="relative flex items-center">
-                            <Percent size={16} className="absolute left-0 text-gray-300" />
                             <input
                                 type="text"
                                 inputMode="decimal"
@@ -563,6 +562,7 @@ export default function PawnCalculatorPage() {
 
                                 {/* Footer */}
                                 <div style={{ textAlign: 'center', marginTop: '60pt', paddingTop: '20pt', borderTop: '1pt solid #f0f0f0' }}>
+                                    <h2 style={{ fontSize: '16pt', fontWeight: 'bold', margin: '0 0 12pt 0', letterSpacing: '4pt', color: '#111' }}>THANK YOU</h2>
                                     <p style={{ fontSize: '9pt', color: '#999', fontStyle: 'italic', margin: '0' }}>This is a computer-generated calculation summary for Sri Vasavi Jewellery.</p>
                                 </div>
                             </div>
