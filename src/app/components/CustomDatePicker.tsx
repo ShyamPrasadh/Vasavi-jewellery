@@ -6,6 +6,7 @@ import { Calendar, Check, X } from 'lucide-react';
 interface CustomDatePickerProps {
     selected: Date | null;
     onChange: (date: Date) => void;
+    align?: 'left' | 'right';
 }
 
 const MONTHS = [
@@ -16,7 +17,7 @@ const MONTHS = [
 const START_YEAR = 2000;
 const YEARS = Array.from({ length: 51 }, (_, i) => START_YEAR + i);
 
-export default function CustomDatePicker({ selected, onChange }: CustomDatePickerProps) {
+export default function CustomDatePicker({ selected, onChange, align = 'left' }: CustomDatePickerProps) {
     const [isOpen, setIsOpen] = useState(false);
     const [wheelDate, setWheelDate] = useState<Date>(selected || new Date());
     const monthRef = useRef<HTMLDivElement>(null);
@@ -93,7 +94,7 @@ export default function CustomDatePicker({ selected, onChange }: CustomDatePicke
                 .scrolling-picker {
                     position: absolute;
                     top: 100%;
-                    right: 0;
+                    ${align === 'left' ? 'left: 0;' : 'right: 0;'}
                     z-index: 9999;
                     margin-top: 8px;
                     background: white;
@@ -107,13 +108,6 @@ export default function CustomDatePicker({ selected, onChange }: CustomDatePicke
                 @keyframes slideUp {
                     from { transform: translateY(5px); opacity: 0; }
                     to { transform: translateY(0); opacity: 1; }
-                }
-                @media (min-width: 641px) {
-                    .scrolling-picker {
-                        left: 50%;
-                        right: auto;
-                        transform: translateX(-50%);
-                    }
                 }
                 .wheel-container {
                     display: flex;

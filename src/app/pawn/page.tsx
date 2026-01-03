@@ -189,11 +189,11 @@ export default function PawnCalculatorPage() {
                     </div>
 
                     {/* Pawn Date Card */}
-                    <div className="col-span-1 bg-white p-3 sm:p-5 rounded-3xl shadow-sm border border-gray-100 relative group overflow-visible">
+                    <div className="col-span-1 bg-white p-5 rounded-3xl shadow-sm border border-gray-100 relative group overflow-visible">
                         <div className="absolute inset-0 rounded-3xl overflow-hidden pointer-events-none">
                             <div className="absolute top-0 left-0 w-1 h-full bg-[#D4AF37]"></div>
                         </div>
-                        <label className="block text-[8px] sm:text-[10px] font-black text-gray-400 uppercase tracking-[0.1em] sm:tracking-[0.2em] mb-3">Pawn Date</label>
+                        <label className="block text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-3">Pawn Date</label>
                         <div className="relative w-full overflow-visible">
                             <CustomDatePicker
                                 selected={startDate ? new Date(parseInt(startDate.split('-')[0]), parseInt(startDate.split('-')[1]) - 1, parseInt(startDate.split('-')[2])) : null}
@@ -208,9 +208,9 @@ export default function PawnCalculatorPage() {
                     </div>
 
                     {/* Interest Rate Card */}
-                    <div className="col-span-1 bg-white p-3 sm:p-5 rounded-3xl shadow-sm border border-gray-100 relative overflow-hidden group">
+                    <div className="col-span-1 bg-white p-5 rounded-3xl shadow-sm border border-gray-100 relative overflow-hidden group">
                         <div className="absolute top-0 left-0 w-1 h-full bg-[#D4AF37]"></div>
-                        <label className="block text-[8px] sm:text-[10px] font-black text-gray-400 uppercase tracking-[0.1em] sm:tracking-[0.2em] mb-3">Interest Rate</label>
+                        <label className="block text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-3">Monthly Interest Rate</label>
                         <div className="relative flex items-center">
                             <Percent size={16} className="absolute left-0 text-gray-300" />
                             <input
@@ -273,6 +273,7 @@ export default function PawnCalculatorPage() {
                                         <div className="overflow-visible">
                                             <label className="block text-[9px] font-black text-gray-400 uppercase tracking-widest mb-2">Date Added</label>
                                             <CustomDatePicker
+                                                align="right"
                                                 selected={cash.date ? new Date(parseInt(cash.date.split('-')[0]), parseInt(cash.date.split('-')[1]) - 1, parseInt(cash.date.split('-')[2])) : null}
                                                 onChange={(date) => {
                                                     if (date) {
