@@ -16,6 +16,7 @@ const MONTHS = [
 
 const START_YEAR = 2000;
 const YEARS = Array.from({ length: 51 }, (_, i) => START_YEAR + i);
+const MONTHS_RECURRING = [...MONTHS, ...MONTHS, ...MONTHS];
 
 export default function CustomDatePicker({ selected, onChange, align = 'left' }: CustomDatePickerProps) {
     const [isOpen, setIsOpen] = useState(false);
@@ -25,10 +26,15 @@ export default function CustomDatePicker({ selected, onChange, align = 'left' }:
     const yearRef = useRef<HTMLDivElement>(null);
     const timeoutRef = useRef<NodeJS.Timeout | null>(null);
     const isHoveringRef = useRef(false);
+    const isProgrammaticScroll = useRef(false);
 
     const getDaysInMonth = (month: number, year: number) => {
         return new Date(year, month + 1, 0).getDate();
     };
+
+    const daysInMonth = getDaysInMonth(wheelDate.getMonth(), wheelDate.getFullYear());
+    const DAYS_ARRAY = Array.from({ length: daysInMonth }, (_, i) => i + 1);
+    const DAYS_RECURRING = [...DAYS_ARRAY, ...DAYS_ARRAY, ...DAYS_ARRAY];
 
     const resetAutoCloseTimer = () => {
         if (timeoutRef.current) clearTimeout(timeoutRef.current);
@@ -38,30 +44,29 @@ export default function CustomDatePicker({ selected, onChange, align = 'left' }:
         }, 4000);
     };
 
-    useEffect(() => {
-        if (isOpen) {
-            scrollToItem(monthRef.current, wheelDate.getMonth());
-            scrollToItem(dayRef.current, wheelDate.getDate() - 1);
-            scrollToItem(yearRef.current, wheelDate.getFullYear() - START_YEAR);
-            resetAutoCloseTimer();
-        } else {
-            if (timeoutRef.current) clearTimeout(timeoutRef.current);
-        }
-        return () => {
-            if (timeoutRef.current) clearTimeout(timeoutRef.current);
-        };
-    }, [isOpen]);
-
-    const scrollToItem = (container: HTMLDivElement | null, index: number) => {
+    const scrollToItem = (container: HTMLDivElement | null, index: number, behavior: ScrollBehavior = 'smooth', offsetSet: number = 0) => {
         if (container) {
+            isProgrammaticScroll.current = true;
             container.scrollTo({
-                top: index * 36,
-                behavior: 'smooth'
+                top: (index + offsetSet) * 36,
+                behavior
             });
+            setTimeout(() => { isProgrammaticScroll.current = false; }, 200);
         }
     };
 
+    useEffect(() => {
+        if (isOpen) {
+            // Initialize at middle set for looping
+            scrollToItem(monthRef.current, wheelDate.getMonth(), 'auto', 12);
+            scrollToItem(dayRef.current, wheelDate.getDate() - 1, 'auto', daysInMonth);
+            scrollToItem(yearRef.current, wheelDate.getFullYear() - START_YEAR, 'auto');
+            resetAutoCloseTimer();
+        }
+    }, [isOpen]);
+
     const handleScroll = (type: 'month' | 'day' | 'year') => (e: React.UIEvent<HTMLDivElement>) => {
+        if (isProgrammaticScroll.current) return;
         resetAutoCloseTimer();
         const container = e.currentTarget;
         const itemHeight = 36;
@@ -71,15 +76,32 @@ export default function CustomDatePicker({ selected, onChange, align = 'left' }:
         const currentYear = wheelDate.getFullYear();
         const currentDay = wheelDate.getDate();
 
-        if (type === 'month' && index >= 0 && index < 12 && index !== currentMonth) {
-            const maxDays = getDaysInMonth(index, currentYear);
-            const d = new Date(currentYear, index, Math.min(currentDay, maxDays));
-            setWheelDate(d);
-            onChange(d);
+        if (type === 'month') {
+            const normalizedIndex = index % 12;
+            // Looping jump
+            if (index < 6) {
+                scrollToItem(container, normalizedIndex + 12, 'auto');
+            } else if (index > 24) {
+                scrollToItem(container, normalizedIndex + 12, 'auto');
+            }
+
+            if (normalizedIndex !== currentMonth) {
+                const maxDays = getDaysInMonth(normalizedIndex, currentYear);
+                const d = new Date(currentYear, normalizedIndex, Math.min(currentDay, maxDays));
+                setWheelDate(d);
+                onChange(d);
+            }
         } else if (type === 'day') {
-            const maxDays = getDaysInMonth(currentMonth, currentYear);
-            if (index >= 0 && index < maxDays && (index + 1) !== currentDay) {
-                const d = new Date(currentYear, currentMonth, index + 1);
+            const normalizedIndex = index % daysInMonth;
+            // Looping jump
+            if (index < daysInMonth / 2) {
+                scrollToItem(container, normalizedIndex + daysInMonth, 'auto');
+            } else if (index > daysInMonth * 2) {
+                scrollToItem(container, normalizedIndex + daysInMonth, 'auto');
+            }
+
+            if ((normalizedIndex + 1) !== currentDay) {
+                const d = new Date(currentYear, currentMonth, normalizedIndex + 1);
                 setWheelDate(d);
                 onChange(d);
             }
@@ -102,9 +124,6 @@ export default function CustomDatePicker({ selected, onChange, align = 'left' }:
     const displayDate = selected
         ? `${String(selected.getDate()).padStart(2, '0')}-${String(selected.getMonth() + 1).padStart(2, '0')}-${selected.getFullYear()}`
         : '';
-
-    const daysInMonth = getDaysInMonth(wheelDate.getMonth(), wheelDate.getFullYear());
-    const DAYS_ARRAY = Array.from({ length: daysInMonth }, (_, i) => i + 1);
 
     return (
         <div className="relative w-full">
@@ -191,10 +210,12 @@ export default function CustomDatePicker({ selected, onChange, align = 'left' }:
 
             <div
                 onClick={() => setIsOpen(!isOpen)}
-                className="flex items-center flex-nowrap gap-2 px-3 py-2 bg-gray-50 rounded-xl border border-gray-100 cursor-pointer hover:border-[#D4AF37] transition-all group w-full overflow-hidden"
+                className="relative h-[40px] flex items-center bg-transparent border-b-2 border-gray-100 cursor-pointer hover:border-[#D4AF37] transition-all group w-full overflow-hidden"
             >
-                <Calendar size={14} className="text-gray-400 group-hover:text-[#D4AF37] shrink-0" />
-                <span className="font-bold text-gray-700 text-xs sm:text-sm whitespace-nowrap overflow-hidden text-ellipsis flex-1">
+                <span className="absolute left-0 top-1/2 -translate-y-1/2 text-gray-400 group-hover:text-[#D4AF37]">
+                    <Calendar size={14} />
+                </span>
+                <span className="block pl-8 font-bold text-gray-700 text-lg whitespace-nowrap overflow-hidden text-ellipsis leading-none">
                     {displayDate || 'Select Date'}
                 </span>
             </div>
@@ -212,7 +233,7 @@ export default function CustomDatePicker({ selected, onChange, align = 'left' }:
                     }}
                 >
                     <div className="wheel-header">
-                        <span className="text-[10px] font-black uppercase tracking-widest text-[#D4AF37]">Select Date</span>
+                        <span className="text-[11px] font-black uppercase tracking-widest text-[#D4AF37]">Loan Date</span>
                         <div className="flex gap-2">
                             <button onClick={() => setIsOpen(false)} className="p-1 hover:bg-gray-100 rounded-lg text-gray-400">
                                 <X size={14} />
@@ -225,8 +246,8 @@ export default function CustomDatePicker({ selected, onChange, align = 'left' }:
 
                         {/* Month */}
                         <div className="wheel-col" ref={monthRef} onScroll={handleScroll('month')}>
-                            {MONTHS.map((m, i) => (
-                                <div key={m} className={`wheel-item ${wheelDate.getMonth() === i ? 'active' : ''}`} onClick={() => { scrollToItem(monthRef.current, i); resetAutoCloseTimer(); }}>
+                            {MONTHS_RECURRING.map((m, i) => (
+                                <div key={`${m}-${i}`} className={`wheel-item ${wheelDate.getMonth() === (i % 12) ? 'active' : ''}`} onClick={() => { scrollToItem(monthRef.current, i % 12, 'smooth', 12); resetAutoCloseTimer(); }}>
                                     {m}
                                 </div>
                             ))}
@@ -234,8 +255,8 @@ export default function CustomDatePicker({ selected, onChange, align = 'left' }:
 
                         {/* Day */}
                         <div className="wheel-col" ref={dayRef} onScroll={handleScroll('day')}>
-                            {DAYS_ARRAY.map((d, i) => (
-                                <div key={d} className={`wheel-item ${wheelDate.getDate() === d ? 'active' : ''}`} onClick={() => { scrollToItem(dayRef.current, i); resetAutoCloseTimer(); }}>
+                            {DAYS_RECURRING.map((d, i) => (
+                                <div key={`${d}-${i}`} className={`wheel-item ${wheelDate.getDate() === d && (i >= daysInMonth && i < daysInMonth * 2) ? 'active' : ''}`} onClick={() => { scrollToItem(dayRef.current, d - 1, 'smooth', daysInMonth); resetAutoCloseTimer(); }}>
                                     {d}
                                 </div>
                             ))}
@@ -254,7 +275,7 @@ export default function CustomDatePicker({ selected, onChange, align = 'left' }:
                     <div className="p-3 bg-gray-50 flex gap-2">
                         <button
                             onClick={handleConfirm}
-                            className="flex-1 bg-[#D4AF37] text-white py-2 rounded-xl text-[10px] font-black uppercase tracking-widest shadow-md hover:bg-[#b8962e] transition-all flex items-center justify-center gap-2"
+                            className="flex-1 bg-[#D4AF37] text-white py-2 rounded-xl text-[11px] font-black uppercase tracking-widest shadow-md hover:bg-[#b8962e] transition-all flex items-center justify-center gap-2"
                         >
                             <Check size={14} />
                             Set Date
