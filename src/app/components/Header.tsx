@@ -61,14 +61,14 @@ export default function Header({ rates }: { rates?: { k22: number; k24: number }
 
                     <button
                         onClick={() => setLanguage(language === 'en' ? 'ta' : 'en')}
-                        className="flex items-center gap-2 px-3 py-1.5 md:px-4 md:py-2 bg-gray-50 border border-gray-100 rounded-full hover:bg-white hover:border-[#D4AF37]/30 transition-all group shrink-0 mt-1"
+                        className="flex items-center gap-1.5 px-2 py-1 md:px-2.5 md:py-1.5 bg-gray-50 border border-gray-100 rounded-full hover:bg-white hover:border-[#D4AF37]/30 transition-all group shrink-0 mt-1"
                     >
-                        <div className="flex items-center justify-center w-5 h-5 md:w-6 md:h-6 rounded-full bg-[#D4AF37]/10 text-[#D4AF37] group-hover:bg-[#D4AF37] group-hover:text-white transition-all">
-                            <Languages size={10} className="md:hidden" />
-                            <Languages size={12} className="hidden md:block" />
+                        <div className="flex items-center justify-center w-4 h-4 md:w-5 md:h-5 rounded-full bg-[#D4AF37]/10 text-[#D4AF37] group-hover:bg-[#D4AF37] group-hover:text-white transition-all">
+                            <Languages size={8} className="md:hidden" />
+                            <Languages size={10} className="hidden md:block" />
                         </div>
-                        <span className="text-[10px] md:text-[11px] font-black uppercase tracking-widest text-gray-600 group-hover:text-gray-900 transition-colors">
-                            {language === 'en' ? 'தமிழ்' : 'English'}
+                        <span className="text-[10px] md:text-xs font-black uppercase text-gray-600 group-hover:text-gray-900 transition-colors">
+                            {language === 'en' ? 'த' : 'E'}
                         </span>
                     </button>
                 </div>
