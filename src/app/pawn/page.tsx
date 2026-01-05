@@ -59,7 +59,7 @@ export default function PawnCalculatorPage() {
     };
 
     const updateExtraCash = (id: string, field: 'amount' | 'date', value: string) => {
-        if (field === 'amount' && value !== '' && !/^\d*\.?\d*$/.test(value)) return;
+        if (field === 'amount' && value !== '' && !/^\d*$/.test(value)) return;
         setExtraCash(extraCash.map(item => {
             if (item.id === id) {
                 return { ...item, [field]: value };
@@ -172,7 +172,7 @@ export default function PawnCalculatorPage() {
                                         <input
                                             type="text"
                                             value={customerName}
-                                            onChange={(e) => setCustomerName(e.target.value)}
+                                            onChange={(e) => setCustomerName(e.target.value.replace(/[^a-zA-Z\s]/g, ''))}
                                             placeholder="Enter Full Name"
                                             className="w-full pl-12 pr-4 py-4.5 bg-white border border-gray-200 rounded-2xl focus:ring-4 focus:ring-[#D4AF37]/10 focus:border-[#D4AF37] outline-none transition-all font-bold text-lg text-gray-800 shadow-sm"
                                         />
@@ -185,7 +185,7 @@ export default function PawnCalculatorPage() {
                                         <input
                                             type="tel"
                                             value={customerPhone}
-                                            onChange={(e) => setCustomerPhone(e.target.value)}
+                                            onChange={(e) => setCustomerPhone(e.target.value.replace(/\D/g, '').slice(0, 10))}
                                             placeholder="Enter Phone Number"
                                             className="w-full pl-12 pr-4 py-4.5 bg-white border border-gray-200 rounded-2xl focus:ring-4 focus:ring-[#D4AF37]/10 focus:border-[#D4AF37] outline-none transition-all font-bold text-lg text-gray-800 shadow-sm"
                                         />
@@ -200,7 +200,11 @@ export default function PawnCalculatorPage() {
                                     <input
                                         type="text"
                                         value={customerAadhaar}
-                                        onChange={(e) => setCustomerAadhaar(e.target.value)}
+                                        onChange={(e) => {
+                                            const val = e.target.value.replace(/\D/g, '').slice(0, 12);
+                                            const formatted = val.replace(/(\d{4})(?=\d)/g, '$1 ');
+                                            setCustomerAadhaar(formatted);
+                                        }}
                                         placeholder="0000 0000 0000"
                                         className="w-full pl-12 pr-4 py-4.5 bg-white border border-gray-200 rounded-2xl focus:ring-4 focus:ring-[#D4AF37]/10 focus:border-[#D4AF37] outline-none transition-all font-bold text-lg text-gray-800 shadow-sm"
                                     />
@@ -240,8 +244,8 @@ export default function PawnCalculatorPage() {
                                             type="text"
                                             value={principal}
                                             onChange={(e) => {
-                                                const val = e.target.value;
-                                                if (val === '' || /^\d*\.?\d*$/.test(val)) setPrincipal(val);
+                                                const val = e.target.value.replace(/\D/g, '');
+                                                setPrincipal(val);
                                             }}
                                             className="w-full pl-12 pr-4 py-4.5 bg-white border border-gray-200 rounded-2xl focus:ring-4 focus:ring-[#D4AF37]/10 focus:border-[#D4AF37] outline-none transition-all font-bold text-lg text-gray-800 shadow-sm"
                                         />
@@ -269,6 +273,7 @@ export default function PawnCalculatorPage() {
                                 <div className="space-y-3">
                                     <label className="text-xs font-black text-gray-600 uppercase tracking-widest block ml-1">{t('loanDate')}</label>
                                     <CustomDatePicker
+                                        className="pl-6"
                                         selected={new Date(startDate)}
                                         onChange={(date) => {
                                             if (date) {
@@ -322,8 +327,8 @@ export default function PawnCalculatorPage() {
                                         onFocus={(e) => { if (principal === '0') setPrincipal(''); }}
                                         onBlur={(e) => { if (principal === '') setPrincipal('0'); }}
                                         onChange={(e) => {
-                                            const val = e.target.value;
-                                            if (val === '' || /^\d*\.?\d*$/.test(val)) setPrincipal(val);
+                                            const val = e.target.value.replace(/\D/g, '');
+                                            setPrincipal(val);
                                         }}
                                         className="w-full pl-8 py-2 bg-transparent border-b-2 border-gray-100 focus:border-[#D4AF37] outline-none transition-all font-bold text-lg text-gray-800 leading-none h-full"
                                     />
@@ -410,7 +415,7 @@ export default function PawnCalculatorPage() {
                                                             value={cash.amount}
                                                             onFocus={(e) => { if (cash.amount === '0') updateExtraCash(cash.id, 'amount', ''); }}
                                                             onBlur={(e) => { if (cash.amount === '') updateExtraCash(cash.id, 'amount', '0'); }}
-                                                            onChange={(e) => updateExtraCash(cash.id, 'amount', e.target.value)}
+                                                            onChange={(e) => updateExtraCash(cash.id, 'amount', e.target.value.replace(/\D/g, ''))}
                                                             className="w-full pl-8 py-2 bg-transparent border-b-2 border-gray-100 focus:border-[#D4AF37] outline-none transition-all font-bold text-lg text-gray-800 leading-none h-full"
                                                         />
                                                     </div>

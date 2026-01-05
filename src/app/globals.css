@@ -50,3 +50,33 @@ body {
 .btn-gold:hover {
   background-color: #B8860B;
 }
+
+/* Tamil Language Specific Styles */
+.lang-ta {
+  font-size: 1.1em;
+  /* Overall font boost for Tamil */
+}
+
+.lang-ta * {
+  letter-spacing: normal !important;
+  /* Reset tracking for Tamil text */
+}
+
+/* Specific overrides for common small text in Tamil */
+.lang-ta .text-\[10px\],
+.lang-ta .text-\[11px\],
+.lang-ta .text-xs {
+  font-size: 0.85rem !important;
+  /* Increase small text sizes */
+}
+
+.lang-ta .text-sm {
+  font-size: 0.95rem !important;
+}
+
+.lang-ta .tracking-widest,
+.lang-ta .tracking-\[0\.5em\],
+.lang-ta .tracking-\[0\.2em\] {
+  letter-spacing: 0.02em !important;
+  /* Minimal tracking for icons/special cases */
+}

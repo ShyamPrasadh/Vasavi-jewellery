@@ -7,6 +7,7 @@ interface CustomDatePickerProps {
     selected: Date | null;
     onChange: (date: Date) => void;
     align?: 'left' | 'right';
+    className?: string;
 }
 
 const MONTHS = [
@@ -18,7 +19,7 @@ const START_YEAR = 2000;
 const YEARS = Array.from({ length: 51 }, (_, i) => START_YEAR + i);
 const MONTHS_RECURRING = [...MONTHS, ...MONTHS, ...MONTHS];
 
-export default function CustomDatePicker({ selected, onChange, align = 'left' }: CustomDatePickerProps) {
+export default function CustomDatePicker({ selected, onChange, align = 'left', className = '' }: CustomDatePickerProps) {
     const [isOpen, setIsOpen] = useState(false);
     const [wheelDate, setWheelDate] = useState<Date>(selected || new Date());
     const monthRef = useRef<HTMLDivElement>(null);
@@ -125,8 +126,35 @@ export default function CustomDatePicker({ selected, onChange, align = 'left' }:
         ? `${String(selected.getDate()).padStart(2, '0')}-${String(selected.getMonth() + 1).padStart(2, '0')}-${selected.getFullYear()}`
         : '';
 
+    const [inputValue, setInputValue] = useState(displayDate);
+
+    useEffect(() => {
+        setInputValue(displayDate);
+    }, [displayDate]);
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const val = e.target.value;
+        setInputValue(val);
+
+        // Try to parse DD-MM-YYYY
+        const parts = val.split('-');
+        if (parts.length === 3) {
+            const d = parseInt(parts[0]);
+            const m = parseInt(parts[1]) - 1;
+            const y = parseInt(parts[2]);
+
+            if (!isNaN(d) && !isNaN(m) && !isNaN(y) && y >= START_YEAR && y < START_YEAR + 51) {
+                const newDate = new Date(y, m, d);
+                if (newDate.getDate() === d && newDate.getMonth() === m && newDate.getFullYear() === y) {
+                    onChange(newDate);
+                    setWheelDate(newDate);
+                }
+            }
+        }
+    };
+
     return (
-        <div className="relative w-full">
+        <div className={`relative w-full ${className}`}>
             <style jsx global>{`
                 .scrolling-picker {
                     position: absolute;
@@ -206,18 +234,25 @@ export default function CustomDatePicker({ selected, onChange, align = 'left' }:
                     align-items: center;
                     justify-content: space-between;
                 }
+                .date-input-field:focus-within {
+                    border-color: #D4AF37;
+                }
             `}</style>
 
             <div
-                onClick={() => setIsOpen(!isOpen)}
-                className="relative h-[40px] flex items-center bg-transparent border-b-2 border-gray-100 cursor-pointer hover:border-[#D4AF37] transition-all group w-full overflow-hidden"
+                className="relative h-[40px] flex items-center bg-transparent border-b-2 border-gray-100 transition-all group w-full overflow-hidden date-input-field"
             >
-                <span className="absolute left-0 top-1/2 -translate-y-1/2 text-gray-400 group-hover:text-[#D4AF37]">
+                <span className="absolute left-0 top-1/2 -translate-y-1/2 text-gray-400 group-hover:text-[#D4AF37] transition-colors">
                     <Calendar size={14} />
                 </span>
-                <span className="block pl-8 font-bold text-gray-700 text-lg whitespace-nowrap overflow-hidden text-ellipsis leading-none">
-                    {displayDate || 'Select Date'}
-                </span>
+                <input
+                    type="text"
+                    value={inputValue}
+                    onChange={handleInputChange}
+                    onFocus={() => setIsOpen(true)}
+                    placeholder="DD-MM-YYYY"
+                    className="w-full pl-8 pr-4 py-2 bg-transparent outline-none font-bold text-gray-700 text-lg leading-none"
+                />
             </div>
 
             {isOpen && (
