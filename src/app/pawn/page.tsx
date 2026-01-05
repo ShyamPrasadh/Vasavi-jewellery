@@ -169,9 +169,9 @@ export default function PawnCalculatorPage() {
                     </div>
                 </div>
 
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 mb-10">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mb-10">
                     {/* Loan Amount Card */}
-                    <div className="col-span-2 md:col-span-1 bg-white p-5 rounded-3xl shadow-sm border border-gray-100 relative overflow-hidden group">
+                    <div className="col-span-1 bg-white p-5 rounded-3xl shadow-sm border border-gray-100 relative overflow-hidden group">
                         <div className="absolute top-0 left-0 w-1 h-full bg-[#D4AF37]"></div>
                         <label className="block text-[11px] font-black text-gray-600 uppercase tracking-widest mb-3">Loan Amount</label>
                         <div className="relative h-[40px] flex items-center">
@@ -261,9 +261,9 @@ export default function PawnCalculatorPage() {
                                     <div className="absolute top-0 left-0 w-1 h-full bg-[#D4AF37]"></div>
                                 </div>
                                 <div className="flex items-start justify-between mb-6">
-                                    <div className="flex-1 grid grid-cols-2 gap-4">
+                                    <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-4">
                                         <div className="flex flex-col">
-                                            <label className="block text-[11px] font-black text-gray-600 uppercase tracking-widest mb-3">Loan Amount</label>
+                                            <label className="block text-xs font-black text-gray-600 uppercase tracking-widest mb-3">Loan Amount</label>
                                             <div className="relative h-[40px] flex items-center">
                                                 <span className="absolute left-0 top-1/2 -translate-y-1/2 text-gray-600 font-bold text-sm">₹</span>
                                                 <input
@@ -278,7 +278,7 @@ export default function PawnCalculatorPage() {
                                             </div>
                                         </div>
                                         <div className="flex flex-col">
-                                            <label className="block text-[11px] font-black text-gray-600 uppercase tracking-widest mb-3">Loan Date</label>
+                                            <label className="block text-xs font-black text-gray-600 uppercase tracking-widest mb-3">Loan Date</label>
                                             <CustomDatePicker
                                                 selected={cash.date ? new Date(parseInt(cash.date.split('-')[0]), parseInt(cash.date.split('-')[1]) - 1, parseInt(cash.date.split('-')[2])) : null}
                                                 onChange={(date) => {
