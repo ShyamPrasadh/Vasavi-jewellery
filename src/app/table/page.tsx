@@ -5,9 +5,11 @@ import { RATE_DATA } from '../data';
 import Link from 'next/link';
 import { ArrowLeft, Calculator as CalcIcon } from 'lucide-react';
 import { useState, useEffect } from 'react';
+import { useLanguage } from '@/context/LanguageContext';
 
 export default function ReferenceTablePage() {
     const [rates, setRates] = useState({ k22: 7520, k24: 8200 });
+    const { t } = useLanguage();
 
     useEffect(() => {
         const fetchRates = async () => {
@@ -31,12 +33,12 @@ export default function ReferenceTablePage() {
             <div className="max-w-6xl mx-auto px-4 mt-8 pb-12">
                 <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-6 mb-8 md:mb-12">
                     <div>
-                        <h2 className="text-2xl md:text-3xl font-black text-[#333333] uppercase tracking-tighter">Reference Rate Table</h2>
-                        <p className="text-gray-400 text-[10px] md:text-xs font-bold uppercase tracking-widest mt-1">Standard Wastage & Labour Standards</p>
+                        <h2 className="text-2xl md:text-3xl font-black text-[#333333] uppercase tracking-tighter">{t('referenceRateTable')}</h2>
+                        <p className="text-gray-400 text-[10px] md:text-xs font-bold uppercase tracking-widest mt-1">{t('standardWastageLabour')}</p>
                     </div>
                     <Link href="/" className="inline-flex items-center gap-2 text-gray-400 hover:text-[#D4AF37] transition-all font-bold uppercase text-[10px] md:text-xs tracking-widest group w-fit">
                         <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
-                        Back to Calculator
+                        {t('backToCalculator')}
                     </Link>
                 </div>
 
@@ -44,11 +46,11 @@ export default function ReferenceTablePage() {
                     <table className="w-full text-left border-collapse">
                         <thead>
                             <tr className="bg-[#333333] text-white">
-                                <th className="p-3 md:p-6 font-black uppercase text-xs tracking-[0.2em] border-r border-gray-700 sticky left-0 z-20 bg-[#333333]">Weight</th>
-                                <th className="p-3 md:p-6 font-black uppercase text-xs tracking-[0.2em] border-r border-gray-700">Coin (Lab)</th>
-                                <th className="p-3 md:p-6 font-black uppercase text-xs tracking-[0.2em] border-r border-gray-700 text-center">Ring/Earring (W/L)</th>
-                                <th className="p-3 md:p-6 font-black uppercase text-xs tracking-[0.2em] border-r border-gray-700 text-center">Chain (W/L)</th>
-                                <th className="p-3 md:p-6 font-black uppercase text-xs tracking-[0.2em] text-center">Haram/Necklace (W/L)</th>
+                                <th className="p-3 md:p-6 font-black uppercase text-xs tracking-[0.2em] border-r border-gray-700 sticky left-0 z-20 bg-[#333333]">{t('weight')}</th>
+                                <th className="p-3 md:p-6 font-black uppercase text-xs tracking-[0.2em] border-r border-gray-700">{t('coinLab')}</th>
+                                <th className="p-3 md:p-6 font-black uppercase text-xs tracking-[0.2em] border-r border-gray-700 text-center">{t('ringEarringWL')}</th>
+                                <th className="p-3 md:p-6 font-black uppercase text-xs tracking-[0.2em] border-r border-gray-700 text-center">{t('chainWL')}</th>
+                                <th className="p-3 md:p-6 font-black uppercase text-xs tracking-[0.2em] text-center">{t('haramNecklaceWL')}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -62,7 +64,7 @@ export default function ReferenceTablePage() {
                                         {row.Coin ? (
                                             <span className="flex flex-col">
                                                 <span className="text-xl">₹{row.Coin.lab}</span>
-                                                <span className="text-[10px] text-gray-400 uppercase">Fixed Lab</span>
+                                                <span className="text-[10px] text-gray-400 uppercase">{t('fixedLab')}</span>
                                             </span>
                                         ) : (
                                             <span className="text-xs text-gray-300">₹{(row.weight * 100).toLocaleString()} (Calc)</span>
@@ -110,13 +112,13 @@ export default function ReferenceTablePage() {
                     </div>
                     <div className="relative z-10 flex flex-col md:flex-row justify-between items-center gap-6">
                         <div>
-                            <h3 className="text-xl font-black uppercase tracking-widest text-[#D4AF37]">Policy Note</h3>
+                            <h3 className="text-xl font-black uppercase tracking-widest text-[#D4AF37]">{t('policyNote')}</h3>
                             <p className="mt-2 text-gray-400 text-sm max-w-xl">
-                                For weights not explicitly listed above, the system automatically uses the parameters from the <span className="text-white font-bold underline">closest lower weight tier</span> to ensure fair valuation. All calculations are real-time and based on market rates.
+                                {t('policyNoteDescription')}
                             </p>
                         </div>
                         <Link href="/" className="bg-[#D4AF37] text-white px-8 py-4 rounded-xl font-black uppercase text-xs tracking-[0.2em] shadow-lg hover:bg-[#B8860B] transition-all">
-                            Launch Calculator
+                            {t('launchCalculator')}
                         </Link>
                     </div>
                 </div>

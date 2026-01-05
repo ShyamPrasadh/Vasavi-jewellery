@@ -22,6 +22,8 @@ export const metadata: Metadata = {
   },
 };
 
+import ClientLayout from "./ClientLayout";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -30,7 +32,9 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className="antialiased" suppressHydrationWarning>
-        {children}
+        <ClientLayout>
+          {children}
+        </ClientLayout>
       </body>
     </html>
   );
