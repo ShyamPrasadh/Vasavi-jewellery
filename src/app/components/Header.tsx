@@ -6,7 +6,7 @@ export default function Header({ rates }: { rates?: { k22: number; k24: number }
     const { language, setLanguage, t } = useLanguage();
 
     return (
-        <header className="py-4 bg-white border-b border-gray-100 shadow-sm sticky top-0 z-50">
+        <header className="py-2.5 md:py-4 bg-white border-b border-gray-100 shadow-sm sticky top-0 z-50">
             <div className="w-full px-4 md:px-8 flex flex-col">
                 {/* Header Row */}
                 <div className="flex justify-between items-start w-full">
@@ -15,7 +15,7 @@ export default function Header({ rates }: { rates?: { k22: number; k24: number }
                             <img
                                 src="/svj-1.png"
                                 alt="SVJ Logo"
-                                className="h-10 w-10 md:h-16 md:w-16 object-cover rounded-xl shadow-sm border border-gray-100 mt-1"
+                                className="h-[46px] w-[46px] md:h-16 md:w-16 object-cover rounded-xl shadow-sm border border-gray-100 mt-1"
                             />
                         </Link>
                         <div className="flex flex-col gap-1 md:gap-2">
@@ -67,7 +67,7 @@ export default function Header({ rates }: { rates?: { k22: number; k24: number }
                             <Languages size={8} className="md:hidden" />
                             <Languages size={10} className="hidden md:block" />
                         </div>
-                        <span className="text-[10px] md:text-xs font-black uppercase text-gray-600 group-hover:text-gray-900 transition-colors">
+                        <span className={`font-black uppercase text-gray-600 group-hover:text-gray-900 transition-colors ${language === 'en' ? 'text-sm md:text-base' : 'text-[11px] md:text-sm'}`}>
                             {language === 'en' ? 'த' : 'E'}
                         </span>
                     </button>

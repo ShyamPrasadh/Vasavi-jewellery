@@ -170,11 +170,6 @@ export default function CustomDatePicker({ selected, onChange, align = 'left', c
                     overflow: hidden;
                     animation: slideUp 0.15s ease-out;
                 }
-                @media (max-width: 640px) {
-                    .scrolling-picker {
-                        ${align === 'left' ? 'transform: translateX(-40px);' : ''}
-                    }
-                }
                 @keyframes slideUp {
                     from { transform: translateY(5px); opacity: 0; }
                     to { transform: translateY(0); opacity: 1; }
@@ -242,9 +237,12 @@ export default function CustomDatePicker({ selected, onChange, align = 'left', c
             <div
                 className="relative h-[40px] flex items-center bg-transparent border-b-2 border-gray-100 transition-all group w-full overflow-hidden date-input-field"
             >
-                <span className="absolute left-0 top-1/2 -translate-y-1/2 text-gray-400 group-hover:text-[#D4AF37] transition-colors">
+                <div
+                    onClick={() => setIsOpen(!isOpen)}
+                    className="absolute left-0 top-1/2 -translate-y-1/2 text-gray-400 group-hover:text-[#D4AF37] transition-colors cursor-pointer z-10"
+                >
                     <Calendar size={14} />
-                </span>
+                </div>
                 <input
                     type="text"
                     value={inputValue}

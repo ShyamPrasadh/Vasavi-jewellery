@@ -273,7 +273,6 @@ export default function PawnCalculatorPage() {
                                 <div className="space-y-3">
                                     <label className="text-xs font-black text-gray-600 uppercase tracking-widest block ml-1">{t('loanDate')}</label>
                                     <CustomDatePicker
-                                        className="pl-6"
                                         selected={new Date(startDate)}
                                         onChange={(date) => {
                                             if (date) {
