@@ -13,7 +13,7 @@ export default function Header({ rates }: { rates?: { k22: number; k24: number }
                     <div className="flex items-center gap-2 md:gap-4">
                         <Link href="/">
                             <img
-                                src="/logo.jpg"
+                                src="/svj-1.png"
                                 alt="SVJ Logo"
                                 className="h-10 w-10 md:h-16 md:w-16 object-cover rounded-xl shadow-sm border border-gray-100 mt-1"
                             />

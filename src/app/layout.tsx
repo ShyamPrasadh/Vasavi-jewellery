@@ -5,15 +5,19 @@ export const metadata: Metadata = {
   title: "Sri Vasavi Jewellery",
   description: "Calculate accurate gold jewellery prices with wastage and making charges.",
   icons: {
-    icon: "/logo.jpg",
-    apple: "/logo.jpg",
+    icon: [
+      { url: "/favicon.ico" },
+      { url: "/favicon.png", type: "image/png" },
+      { url: "/svj-1.png", type: "image/png" },
+    ],
+    apple: "/apple-touch-icon.png",
   },
   openGraph: {
     title: "Sri Vasavi Jewellery",
     description: "Calculate accurate gold jewellery prices with wastage and making charges.",
     images: [
       {
-        url: "/logo.jpg",
+        url: "/svj-1.png",
         width: 800,
         height: 800,
         alt: "Sri Vasavi Jewellery Logo",
