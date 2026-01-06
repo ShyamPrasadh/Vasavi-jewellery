@@ -8,10 +8,9 @@ export default function Header({ rates }: { rates?: { k22: number; k24: number }
     return (
         <header className="py-2.5 md:py-4 bg-white border-b border-gray-100 shadow-sm sticky top-0 z-50">
             <div className="w-full px-4 md:px-8 flex flex-col">
-                {/* Header Row */}
                 <div className="flex justify-between items-start w-full">
                     <div className="flex items-center gap-2 md:gap-4">
-                        <Link href="/">
+                        <Link href="/" className="md:hidden">
                             <img
                                 src="/svj-1.png"
                                 alt="SVJ Logo"

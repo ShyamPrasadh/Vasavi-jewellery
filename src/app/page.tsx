@@ -17,7 +17,7 @@ export default function CalculatorPage() {
 
   useEffect(() => {
     // Only update the input gold rate if it's still at the default placeholder
-    if (rates && rates.k22 && goldRate === '7500') {
+    if (rates && rates.k22 && goldRate === '12500') {
       setGoldRate(rates.k22.toString());
     }
   }, [rates, goldRate]);
@@ -54,27 +54,6 @@ export default function CalculatorPage() {
       <Header rates={rates || undefined} />
 
       <div className="max-w-5xl mx-auto px-4 mt-8">
-        {/* Modern Navigation Toggle */}
-        <div className="flex justify-center mb-12">
-          <div className="relative bg-gray-100 p-1 rounded-2xl flex w-full max-w-[400px]">
-            <div
-              className="absolute top-1 bottom-1 transition-all duration-300 ease-out bg-white rounded-xl shadow-md"
-              style={{
-                left: '2px',
-                width: 'calc(50% - 2px)'
-              }}
-            />
-            <div className="relative flex-1 py-3 text-sm font-black text-center z-10 text-[#D4AF37] bg-white rounded-xl shadow-sm border border-gray-100/50">
-              {t('goldCalculator')}
-            </div>
-            <Link
-              href="/pawn"
-              className="relative flex-1 py-3 text-sm font-black text-center z-10 transition-colors text-gray-400 hover:text-gray-600"
-            >
-              {t('pawnInterest')}
-            </Link>
-          </div>
-        </div>
 
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 mb-10">
           {/* Product Name Card */}
