@@ -543,24 +543,25 @@ function PawnCalculatorContent() {
                     <div id="print-modal-root" className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm print:static print:bg-white print:p-0">
                         <div className="bg-white w-full max-w-3xl rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col max-h-[95vh] print:shadow-none print:max-h-none print:rounded-none">
                             {/* Modal Header - Hidden during print */}
-                            <div className="p-6 border-b border-gray-100 flex justify-between items-center print:hidden bg-gray-50">
+                            <div className="p-4 md:p-6 border-b border-gray-100 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 print:hidden bg-gray-50">
                                 <div className="flex items-center gap-3">
                                     <div className="p-2 bg-[#D4AF37]/10 rounded-xl text-[#D4AF37]">
                                         <Printer size={20} />
                                     </div>
-                                    <h3 className="text-lg font-black text-gray-800 uppercase tracking-widest">Receipt Preview</h3>
+                                    <h3 className="text-sm md:text-lg font-black text-gray-800 uppercase tracking-widest">Receipt Preview</h3>
                                 </div>
-                                <div className="flex gap-3">
+                                <div className="flex gap-3 w-full md:w-auto">
                                     <button
                                         onClick={handlePrint}
-                                        className="bg-[#D4AF37] text-white px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest flex items-center gap-2 hover:bg-[#B8860B] transition-all shadow-lg shadow-amber-200"
+                                        className="flex-1 md:flex-none bg-[#D4AF37] text-white px-4 md:px-6 py-3 md:py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-[#B8860B] transition-all shadow-lg shadow-amber-200"
                                     >
-                                        <Download size={14} />
-                                        Download / Print
+                                        <Printer size={14} />
+                                        <span className="hidden sm:inline">Print</span>
+                                        <span className="sm:hidden">Print</span>
                                     </button>
                                     <button
                                         onClick={() => setShowPrintModal(false)}
-                                        className="p-2.5 text-gray-400 hover:bg-gray-200 rounded-xl transition-all"
+                                        className="p-3 md:p-2.5 text-gray-400 hover:bg-gray-200 rounded-xl transition-all bg-white md:bg-transparent"
                                     >
                                         <X size={20} />
                                     </button>
@@ -573,12 +574,12 @@ function PawnCalculatorContent() {
                                     {/* Receipt Header */}
                                     {/* Receipt Header */}
                                     <div className="pb-6 border-b-4 border-[#D4AF37] mb-8">
-                                        <div className="flex items-center justify-between mb-6 relative">
+                                        <div className="flex items-center gap-4 mb-6">
                                             <div className="flex-shrink-0">
-                                                <img src="/svj-1.png" alt="SVJ Logo" className="h-20 w-20 object-contain rounded-xl" />
+                                                <img src="/svj-1.png" alt="SVJ Logo" className="h-16 w-16 md:h-20 md:w-20 object-contain rounded-xl" />
                                             </div>
-                                            <div className="absolute left-1/2 -translate-x-1/2 text-center w-full pointer-events-none">
-                                                <h1 className="text-3xl font-serif-gold text-[#D4AF37] leading-none tracking-tighter uppercase">{t('sriVasaviJewellery')}</h1>
+                                            <div className="flex-1 text-center">
+                                                <h1 className="text-xl md:text-3xl font-serif-gold text-[#D4AF37] leading-none tracking-tight">Sri Vasavi Jewellery</h1>
                                             </div>
                                         </div>
                                         <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest text-gray-500">
@@ -681,31 +682,85 @@ function PawnCalculatorContent() {
 
             <style jsx global>{`
                 @media print {
-                    @page { margin: 10mm; }
-                    body * { visibility: hidden !important; }
-                    #print-modal-root, #print-modal-root * { visibility: visible !important; }
+                    @page { 
+                        margin: 10mm;
+                        size: A4;
+                    }
+                    
+                    /* Hide everything except print area */
+                    body * { 
+                        visibility: hidden !important; 
+                    }
+                    
+                    /* Show only the print modal and its contents */
+                    #print-modal-root, 
+                    #print-modal-root * { 
+                        visibility: visible !important; 
+                    }
+                    
+                    /* Reset modal to static positioning for print */
                     #print-modal-root {
-                        position: fixed;
-                        inset: 0;
+                        position: absolute !important;
+                        top: 0 !important;
+                        left: 0 !important;
+                        right: 0 !important;
+                        bottom: auto !important;
+                        width: 100% !important;
+                        height: auto !important;
                         display: block !important;
                         padding: 0 !important;
                         margin: 0 !important;
                         background: white !important;
                         z-index: 100000;
+                        overflow: visible !important;
                     }
-                    .print-hidden, button, .modal-header { display: none !important; }
+                    
+                    /* Hide modal wrapper, buttons, backdrop */
+                    #print-modal-root > div {
+                        position: static !important;
+                        max-height: none !important;
+                        height: auto !important;
+                        overflow: visible !important;
+                        border-radius: 0 !important;
+                        box-shadow: none !important;
+                    }
+                    
+                    /* Hide header with buttons */
+                    .print-hidden, 
+                    button, 
+                    #print-modal-root > div > div:first-child {
+                        display: none !important;
+                    }
+                    
+                    /* Printable area - full width, no padding issues */
                     #printable-area { 
                         display: block !important; 
                         width: 100% !important; 
                         padding: 0 !important;
                         margin: 0 !important;
                         overflow: visible !important;
+                        max-height: none !important;
                     }
+                    
+                    /* Receipt content - proper sizing */
                     #receipt-content {
                         width: 100% !important;
                         max-width: 100% !important;
-                        padding: 20mm !important;
+                        padding: 5mm !important;
+                        margin: 0 !important;
                         border: none !important;
+                        box-sizing: border-box !important;
+                    }
+                    
+                    /* Ensure table fits */
+                    table {
+                        width: 100% !important;
+                        page-break-inside: avoid;
+                    }
+                    
+                    /* Keep signature section together */
+                    #receipt-content > div:last-child {
+                        page-break-inside: avoid;
                     }
                 }
             `}</style>
