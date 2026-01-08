@@ -27,7 +27,7 @@ export default function ReferenceTablePage() {
     }, []);
 
     return (
-        <main className="h-screen bg-white pt-[70px] md:pt-[80px] flex flex-col overflow-hidden">
+        <main className="h-screen bg-white pt-[70px] md:pt-[80px] flex flex-col overflow-hidden overflow-x-hidden">
             <Header rates={rates} />
 
             {/* Fixed Title Section */}

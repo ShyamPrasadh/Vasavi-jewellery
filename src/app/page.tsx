@@ -50,7 +50,7 @@ export default function CalculatorPage() {
   }, [product, weight, goldRate]);
 
   return (
-    <main className="min-h-screen bg-[#FDFCFB] pb-12 pt-[70px] md:pt-[80px]">
+    <main className="min-h-screen bg-[#FDFCFB] pb-12 pt-[70px] md:pt-[80px] overflow-x-hidden">
       <Header rates={rates || undefined} />
 
       <div className="max-w-5xl mx-auto px-4 mt-8">
