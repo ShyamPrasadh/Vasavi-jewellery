@@ -45,7 +45,7 @@ export default function ReferenceTablePage() {
             </div>
 
             {/* Scrollable Table Container */}
-            <div className="flex-1 overflow-auto px-4 py-4 md:py-6">
+            <div className="flex-1 overflow-y-auto px-4 py-4 md:py-6">
                 <div className="max-w-6xl mx-auto">
                     <div className="overflow-x-auto rounded-2xl md:rounded-3xl border border-gray-100 shadow-xl bg-white">
                         <table className="w-full text-left border-collapse min-w-[700px]">
