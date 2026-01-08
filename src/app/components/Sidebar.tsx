@@ -65,24 +65,15 @@ export default function Sidebar() {
             )}
 
             {/* Sidebar Container */}
-            {/* Sidebar Container */}
             <aside className={`
-                fixed inset-y-0 left-0 z-50 bg-white border-r border-gray-100 shadow-xl shadow-gray-200/50 transform transition-all duration-300 ease-in-out
+                fixed inset-y-0 left-0 z-40 bg-white border-r border-gray-100 shadow-xl shadow-gray-200/50 transform transition-all duration-300 ease-in-out
                 ${mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0
                 w-[280px] ${isCollapsed ? 'md:w-[88px]' : 'md:w-[280px]'}
             `}>
                 <div className="h-full flex flex-col p-4 transition-all duration-300">
-                    {/* Logo Section */}
-                    <div className="hidden md:flex items-center h-16 mb-6 -mt-2">
-                        <div className="relative flex-shrink-0">
-                            <div className="absolute inset-0 bg-[#D4AF37]/20 blur-lg rounded-full"></div>
-                            <img src="/svj-1.png" alt="SVJ" className="relative object-cover rounded-xl shadow-sm h-14 w-14" />
-                        </div>
-                    </div>
-
-                    {/* Menu Items */}
-                    <div className="space-y-2 flex-1 pt-24 md:pt-4">
-                        {/* Menu Label Removed */}
+                    {/* Menu Items - starts below header */}
+                    <div className="space-y-2 flex-1 pt-24 md:pt-28">
+                        {/* Menu Items */}
 
                         {menuItems.map((item) => {
                             const active = isActive(item.path, item.mode || undefined);
