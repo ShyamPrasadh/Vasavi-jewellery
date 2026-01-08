@@ -30,8 +30,6 @@ export function useGoldRates() {
 
     useEffect(() => {
         fetchRates();
-        const interval = setInterval(fetchRates, 600000); // 10 min refresh
-        return () => clearInterval(interval);
     }, []);
 
     return { rates, isSyncing, refresh: fetchRates };

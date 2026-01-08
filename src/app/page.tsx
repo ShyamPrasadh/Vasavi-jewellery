@@ -11,16 +11,16 @@ import { useLanguage } from '@/context/LanguageContext';
 export default function CalculatorPage() {
   const [product, setProduct] = useState<ProductType>('Ring');
   const [weight, setWeight] = useState<string>('1');
-  const [goldRate, setGoldRate] = useState<string>('7500');
+  const [goldRate, setGoldRate] = useState<string>('');
   const { rates, isSyncing } = useGoldRates();
   const { t } = useLanguage();
 
   useEffect(() => {
-    // Only update the input gold rate if it's still at the default placeholder
-    if (rates && rates.k22 && goldRate === '12500') {
+    // Sync gold rate input with live rate from API
+    if (rates && rates.k22) {
       setGoldRate(rates.k22.toString());
     }
-  }, [rates, goldRate]);
+  }, [rates]);
 
   const calculations = useMemo(() => {
     const numWeight = parseFloat(weight) || 0;
