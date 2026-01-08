@@ -6,7 +6,7 @@ export default function Header({ rates }: { rates?: { k22: number; k24: number }
     const { language, setLanguage, t } = useLanguage();
 
     return (
-        <header className="py-2.5 md:py-4 bg-white border-b border-gray-100 shadow-sm sticky top-0 z-50">
+        <header className="py-2.5 md:py-4 bg-white border-b border-gray-100 shadow-sm fixed top-0 left-0 right-0 z-[55]">
             <div className="w-full px-4 md:px-8 flex flex-col">
                 <div className="flex justify-between items-start w-full">
                     <div className="flex items-center gap-2 md:gap-4">
@@ -33,12 +33,12 @@ export default function Header({ rates }: { rates?: { k22: number; k24: number }
                                                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
                                                 <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-green-500"></span>
                                             </span>
-                                            <p className="text-[8px] md:text-[13px] font-bold text-gray-400 uppercase tracking-widest leading-none">
+                                            <p className="text-[12px] md:text-[13px] font-bold text-gray-400 uppercase tracking-widest leading-none">
                                                 22KT: <span className="text-[#D4AF37] font-black ml-0.5">₹{rates.k22.toLocaleString()}</span>
                                             </p>
                                         </div>
                                         <div className="flex items-center gap-1.5 md:gap-2 bg-gray-50/50 px-2 py-0.5 md:px-3 md:py-1 rounded-full border border-gray-100/50 transition-all hover:bg-white hover:border-[#D4AF37]/20">
-                                            <p className="text-[8px] md:text-[13px] font-bold text-gray-400 uppercase tracking-widest leading-none">
+                                            <p className="text-[12px] md:text-[13px] font-bold text-gray-400 uppercase tracking-widest leading-none">
                                                 24KT: <span className="text-[#D4AF37] font-black ml-0.5">₹{rates.k24.toLocaleString()}</span>
                                             </p>
                                         </div>

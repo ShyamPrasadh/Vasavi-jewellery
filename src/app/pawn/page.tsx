@@ -121,7 +121,7 @@ function PawnCalculatorContent() {
     };
 
     return (
-        <main className="min-h-screen bg-[#FDFCFB] pb-32">
+        <main className="min-h-screen bg-[#FDFCFB] pb-32 pt-[70px] md:pt-[80px]">
             <Header rates={rates || undefined} />
 
             <div className="max-w-5xl mx-auto px-4 mt-8">
