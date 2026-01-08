@@ -59,20 +59,21 @@ export default function Sidebar() {
             {/* Mobile Backdrop */}
             {mobileMenuOpen && (
                 <div
-                    className="fixed inset-0 bg-black/50 z-40 md:hidden backdrop-blur-sm"
+                    className="fixed top-[70px] left-0 right-0 bottom-0 bg-black/50 z-30 md:hidden backdrop-blur-sm"
                     onClick={() => setMobileMenuOpen(false)}
                 />
             )}
 
             {/* Sidebar Container */}
             <aside className={`
-                fixed inset-y-0 left-0 z-40 bg-white border-r border-gray-100 shadow-xl shadow-gray-200/50 transform transition-all duration-300 ease-in-out
+                fixed left-0 z-40 bg-white border-r border-gray-100 shadow-xl shadow-gray-200/50 transform transition-all duration-300 ease-in-out
+                top-[70px] bottom-0 md:top-[90px]
                 ${mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0
                 w-[280px] ${isCollapsed ? 'md:w-[88px]' : 'md:w-[280px]'}
             `}>
                 <div className="h-full flex flex-col p-4 transition-all duration-300">
                     {/* Menu Items - starts below header */}
-                    <div className="space-y-2 flex-1 pt-24 md:pt-28">
+                    <div className="space-y-2 flex-1 pt-4">
                         {/* Menu Items */}
 
                         {menuItems.map((item) => {

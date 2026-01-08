@@ -6,10 +6,12 @@ import Link from 'next/link';
 import { ArrowLeft, Calculator as CalcIcon } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useLanguage } from '@/context/LanguageContext';
+import { useSidebar } from '@/context/SidebarContext';
 
 export default function ReferenceTablePage() {
     const [rates, setRates] = useState({ k22: 7520, k24: 8200 });
     const { t } = useLanguage();
+    const { isCollapsed } = useSidebar();
 
     useEffect(() => {
         const fetchRates = async () => {
@@ -27,14 +29,14 @@ export default function ReferenceTablePage() {
     }, []);
 
     return (
-        <main className="fixed inset-0 bg-white flex flex-col overflow-hidden">
+        <main className={`fixed top-0 left-0 right-0 bottom-0 bg-white flex flex-col overflow-hidden transition-all duration-300 ${isCollapsed ? 'md:left-[88px]' : 'md:left-[280px]'}`}>
             <Header rates={rates} />
 
             {/* Content Container - Starts after Header */}
             <div className="flex-1 flex flex-col pt-[70px] md:pt-[90px] min-h-0">
 
                 {/* Fixed Title Section */}
-                <div className="bg-white px-4 py-4 md:py-6 border-b border-gray-100 flex-shrink-0 z-40">
+                <div className="bg-white px-4 py-4 md:py-6 border-b border-gray-100 flex-shrink-0">
                     <div className="max-w-6xl mx-auto flex flex-col md:flex-row md:justify-between md:items-center gap-4 md:gap-6">
                         <div>
                             <h2 className="text-xl md:text-3xl font-black text-[#333333] uppercase tracking-tighter leading-tight">

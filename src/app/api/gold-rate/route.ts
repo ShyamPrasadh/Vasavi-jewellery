@@ -4,7 +4,15 @@ import path from 'path';
 
 const CACHE_FILE = path.join(process.cwd(), '.gold_cache.json');
 
-function getCache() {
+interface CacheData {
+    k24: number;
+    k22: number;
+    lastFetchDate: string; // YYYY-MM-DD format
+    fetchCount: number; // Number of API calls made today
+    timestamp: number;
+}
+
+function getCache(): CacheData | null {
     try {
         if (fs.existsSync(CACHE_FILE)) {
             const data = fs.readFileSync(CACHE_FILE, 'utf8');
@@ -16,49 +24,68 @@ function getCache() {
     return null;
 }
 
-function setCache(data: any) {
+function setCache(data: CacheData) {
     try {
-        fs.writeFileSync(CACHE_FILE, JSON.stringify(data));
+        fs.writeFileSync(CACHE_FILE, JSON.stringify(data, null, 2));
     } catch (e) {
         console.error('Cache write error:', e);
     }
 }
 
+// Get current date in IST (YYYY-MM-DD format)
+function getISTDate(): string {
+    const now = new Date();
+    // IST is UTC+5:30
+    const istOffset = 5.5 * 60 * 60 * 1000;
+    const istTime = new Date(now.getTime() + istOffset + (now.getTimezoneOffset() * 60000));
+    return istTime.toISOString().split('T')[0];
+}
+
+// Get current hour in IST (0-23)
+function getISTHour(): number {
+    const now = new Date();
+    const istOffset = 5.5 * 60 * 60 * 1000;
+    const istTime = new Date(now.getTime() + istOffset + (now.getTimezoneOffset() * 60000));
+    return istTime.getHours();
+}
+
 export async function GET() {
     const API_KEY = 'goldapi-1lbve4smk56j3jz-io';
-    const now = new Date();
+    const MAX_DAILY_REQUESTS = 3;
 
-    // Convert to IST time for accurate slot checking
-    // Offset for IST is +5.5 hours (+330 minutes)
-    const utcTime = now.getTime() + (now.getTimezoneOffset() * 60000);
-    const istTime = new Date(utcTime + (330 * 60000));
-    const currentTime = istTime.getHours() * 100 + istTime.getMinutes();
+    const todayIST = getISTDate();
+    const currentHour = getISTHour();
 
     let cachedRates = getCache();
 
-    // Determine last update time from cache
-    // Note: stored timestamp is in seconds, need to convert to IST Date
-    const lastUpdateDate = cachedRates ? new Date((cachedRates.timestamp * 1000) + (330 * 60000) + (new Date().getTimezoneOffset() * 60000)) : null;
-    const lastUpdateTime = lastUpdateDate ? (lastUpdateDate.getHours() * 100 + lastUpdateDate.getMinutes()) : -1;
-    // Check if the cache is from today (to avoid using yesterday's 18:30 rate for today's 9:30 slot checks incorrectly)
-    const isSameDay = lastUpdateDate ? (lastUpdateDate.getDate() === istTime.getDate() && lastUpdateDate.getMonth() === istTime.getMonth()) : false;
+    // Reset fetch count if it's a new day
+    if (cachedRates && cachedRates.lastFetchDate !== todayIST) {
+        cachedRates.fetchCount = 0;
+        cachedRates.lastFetchDate = todayIST;
+    }
 
-    let shouldFetch = !cachedRates;
+    // Determine if we should fetch (3 slots: morning 9-12, afternoon 13-17, evening 18+)
+    let shouldFetch = false;
 
-    // Logic: Fetch only if we crossed a slot boundary since the last update
-    // Slots: 09:00, 13:00, 18:00
-    if (!shouldFetch && isSameDay) {
-        if (currentTime >= 900 && lastUpdateTime < 900) shouldFetch = true;
-        else if (currentTime >= 1300 && lastUpdateTime < 1300) shouldFetch = true;
-        else if (currentTime >= 1800 && lastUpdateTime < 1800) shouldFetch = true;
-    } else if (!isSameDay) {
-        // If it's a new day and past 9:00, fetch
-        if (currentTime >= 900) shouldFetch = true;
+    if (!cachedRates) {
+        // No cache at all, must fetch
+        shouldFetch = true;
+    } else if (cachedRates.fetchCount < MAX_DAILY_REQUESTS) {
+        // Only fetch if we haven't hit the daily limit
+        // Check if we're in a new slot that we haven't fetched for yet
+        const cacheTimestamp = cachedRates.timestamp * 1000;
+        const hoursSinceLastFetch = (Date.now() - cacheTimestamp) / (1000 * 60 * 60);
+
+        // Fetch if: more than 4 hours since last fetch AND within reasonable hours (9-20)
+        if (hoursSinceLastFetch >= 4 && currentHour >= 9 && currentHour <= 20) {
+            shouldFetch = true;
+        }
     }
 
     if (shouldFetch) {
         try {
-            console.log('Fetching new gold rates from API...');
+            console.log(`[Gold API] Fetching rates... (Request ${(cachedRates?.fetchCount || 0) + 1} of ${MAX_DAILY_REQUESTS} for ${todayIST})`);
+
             const response = await fetch('https://www.goldapi.io/api/XAU/INR', {
                 headers: {
                     'x-access-token': API_KEY,
@@ -79,17 +106,28 @@ export async function GET() {
             cachedRates = {
                 k24: k24_final,
                 k22: k22_final,
+                lastFetchDate: todayIST,
+                fetchCount: (cachedRates?.fetchCount || 0) + 1,
                 timestamp: Math.floor(Date.now() / 1000)
             };
 
             setCache(cachedRates);
+            console.log(`[Gold API] Successfully updated rates. Count today: ${cachedRates.fetchCount}`);
 
         } catch (error) {
             console.error('Gold API Error:', error);
-            // If fetch fails, return cache if available
-            if (!cachedRates) return NextResponse.json({ error: 'Failed to fetch rates' }, { status: 500 });
+            if (!cachedRates) {
+                return NextResponse.json({ error: 'Failed to fetch rates' }, { status: 500 });
+            }
         }
+    } else if (cachedRates) {
+        console.log(`[Gold API] Using cached rates from ${cachedRates.lastFetchDate}. Fetches today: ${cachedRates.fetchCount}/${MAX_DAILY_REQUESTS}`);
     }
 
-    return NextResponse.json(cachedRates);
+    return NextResponse.json({
+        k24: cachedRates?.k24,
+        k22: cachedRates?.k22,
+        fetchCount: cachedRates?.fetchCount || 0,
+        maxDaily: MAX_DAILY_REQUESTS
+    });
 }
