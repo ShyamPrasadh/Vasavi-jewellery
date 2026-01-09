@@ -3,33 +3,34 @@ import { Pool } from 'pg'
 import { PrismaPg } from '@prisma/adapter-pg'
 
 const prismaClientSingleton = () => {
-    // If PRISMA_DATABASE_URL is provided, use Prisma Accelerate
+    // 1. Prisma Accelerate (if URL provided)
     if (process.env.PRISMA_DATABASE_URL) {
         return new PrismaClient({
             accelerateUrl: process.env.PRISMA_DATABASE_URL
         })
     }
 
-    // In production or when engine type is 'client', we should use a driver adapter
-    // Vercel environments often work best with this setup
-    const connectionString = process.env.DATABASE_URL || process.env.POSTGRES_PRISMA_URL
+    // 2. PostgreSQL Adapter (Recommended for Vercel/Next.js)
+    const connectionString = `${process.env.DATABASE_URL || process.env.POSTGRES_PRISMA_URL}`
 
-    if (connectionString) {
+    if (connectionString && connectionString !== 'undefined') {
         const pool = new Pool({ connectionString })
         const adapter = new PrismaPg(pool)
         return new PrismaClient({ adapter })
     }
 
-    // Default fallback for local development
+    // 3. Native Fallback (Local Development)
     return new PrismaClient()
 }
 
-declare global {
-    var prismaGlobal: undefined | ReturnType<typeof prismaClientSingleton>
+type PrismaClientSingleton = ReturnType<typeof prismaClientSingleton>
+
+const globalForPrisma = globalThis as unknown as {
+    prisma: PrismaClientSingleton | undefined
 }
 
-const prisma = globalThis.prismaGlobal ?? prismaClientSingleton()
+const prisma = globalForPrisma.prisma ?? prismaClientSingleton()
 
 export default prisma
 
-if (process.env.NODE_ENV !== 'production') globalThis.prismaGlobal = prisma
+if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma

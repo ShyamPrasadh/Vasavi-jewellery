@@ -177,9 +177,10 @@ export default function GoldLoanPage() {
                 const data = await response.json();
                 throw new Error(data.error || 'Failed to save loan');
             }
-        } catch (error: any) {
+        } catch (error) {
             console.error('Error saving loan:', error);
-            alert(`Error: ${error.message}`);
+            const message = error instanceof Error ? error.message : 'Something went wrong';
+            alert(`Error: ${message}`);
         } finally {
             setIsSaving(false);
         }
