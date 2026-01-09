@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname, useSearchParams } from 'next/navigation';
-import { Calculator, Store, Percent, Grid, Menu, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Calculator, Percent, Coins, Menu, ChevronLeft, ChevronRight, LayoutDashboard } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
 import { useSidebar } from '@/context/SidebarContext';
 import { useState } from 'react';
@@ -24,6 +24,12 @@ export default function Sidebar() {
 
     const menuItems = [
         {
+            name: 'Dashboard',
+            path: '/dashboard',
+            mode: null,
+            icon: LayoutDashboard
+        },
+        {
             name: t('goldCalculator'),
             path: '/',
             mode: null,
@@ -36,10 +42,10 @@ export default function Sidebar() {
             icon: Percent
         },
         {
-            name: t('shopMode'),
-            path: '/pawn',
-            mode: 'shop',
-            icon: Store
+            name: 'Gold Loan',
+            path: '/gold-loan',
+            mode: null,
+            icon: Coins
         }
     ];
 
@@ -111,7 +117,7 @@ export default function Sidebar() {
                     <div className="mt-auto pt-6 border-t border-gray-100">
                         <div className={`flex items-center ${isCollapsed ? 'md:justify-center' : 'md:gap-3 md:px-2'} gap-3 px-2`}>
                             <div className="h-10 w-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-400 flex-shrink-0">
-                                <Grid size={18} />
+                                <Coins size={18} />
                             </div>
                             <div className={`overflow-hidden transition-all duration-300 ${isCollapsed ? 'md:w-0 md:opacity-0' : 'md:w-auto md:opacity-100'}`}>
                                 <p className="text-xs font-bold text-gray-800 whitespace-nowrap">Dashboard</p>

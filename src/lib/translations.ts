@@ -5,6 +5,7 @@ export const translations = {
         // Nav
         goldCalculator: 'GOLD CALCULATOR',
         pawnInterest: 'PAWN INTEREST',
+        loanHistory: 'LOAN HISTORY',
 
         // Gold Calculator Page
         productName: 'Product Name',
@@ -81,6 +82,7 @@ export const translations = {
         // Nav
         goldCalculator: 'தங்கக் கணக்கீடு',
         pawnInterest: 'அடமான வட்டி',
+        loanHistory: 'கடன் வரலாறு',
 
         // Gold Calculator Page
         productName: 'பொருள் பெயர்',

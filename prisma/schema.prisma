@@ -1,0 +1,36 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Loan {
+  id              String   @id @default(cuid())
+  billNumber      String   @unique
+  customerName    String
+  customerPhone   String?
+  customerAadhaar String?
+  customerAddress String?
+  loanAmount      Float
+  productType     String
+  productWeight   Float?   // Weight in grams
+  loanDate        DateTime
+  returnDate      DateTime?
+  interestRate    Float
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  // Relation to additional loan entries
+  additionalLoans AdditionalLoan[]
+}
+
+model AdditionalLoan {
+  id        String   @id @default(cuid())
+  amount    Float
+  date      DateTime
+  loanId    String
+  loan      Loan     @relation(fields: [loanId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+}

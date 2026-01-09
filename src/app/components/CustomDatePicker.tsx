@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { Calendar, Check, X } from 'lucide-react';
 
 interface CustomDatePickerProps {
@@ -8,6 +9,8 @@ interface CustomDatePickerProps {
     onChange: (date: Date) => void;
     align?: 'left' | 'right';
     className?: string;
+    maxDate?: Date; // Maximum allowed date
+    minDate?: Date; // Minimum allowed date
 }
 
 const MONTHS = [
@@ -19,15 +22,54 @@ const START_YEAR = 2000;
 const YEARS = Array.from({ length: 51 }, (_, i) => START_YEAR + i);
 const MONTHS_RECURRING = [...MONTHS, ...MONTHS, ...MONTHS];
 
-export default function CustomDatePicker({ selected, onChange, align = 'left', className = '' }: CustomDatePickerProps) {
+export default function CustomDatePicker({ selected, onChange, align = 'left', className = '', maxDate, minDate }: CustomDatePickerProps) {
     const [isOpen, setIsOpen] = useState(false);
     const [wheelDate, setWheelDate] = useState<Date>(selected || new Date());
+    const [pickerPosition, setPickerPosition] = useState({ top: 0, left: 0 });
+    const [isMounted, setIsMounted] = useState(false);
+    const containerRef = useRef<HTMLDivElement>(null);
     const monthRef = useRef<HTMLDivElement>(null);
     const dayRef = useRef<HTMLDivElement>(null);
     const yearRef = useRef<HTMLDivElement>(null);
     const timeoutRef = useRef<NodeJS.Timeout | null>(null);
     const isHoveringRef = useRef(false);
     const isProgrammaticScroll = useRef(false);
+
+    // Helper to clamp date within min/max
+    const clampDate = (date: Date) => {
+        let d = new Date(date);
+        if (maxDate && d > maxDate) d = new Date(maxDate);
+        if (minDate && d < minDate) d = new Date(minDate);
+        return d;
+    };
+
+    // Portal mount check
+    useEffect(() => {
+        setIsMounted(true);
+    }, []);
+
+    // Calculate picker position when opening or when window moves
+    const updatePosition = () => {
+        if (isOpen && containerRef.current) {
+            const rect = containerRef.current.getBoundingClientRect();
+            setPickerPosition({
+                top: rect.bottom + 8,
+                left: align === 'right' ? rect.right - 240 : rect.left
+            });
+        }
+    };
+
+    useEffect(() => {
+        if (isOpen) {
+            updatePosition();
+            window.addEventListener('scroll', updatePosition, true);
+            window.addEventListener('resize', updatePosition);
+            return () => {
+                window.removeEventListener('scroll', updatePosition, true);
+                window.removeEventListener('resize', updatePosition);
+            };
+        }
+    }, [isOpen, align]);
 
     const getDaysInMonth = (month: number, year: number) => {
         return new Date(year, month + 1, 0).getDate();
@@ -58,10 +100,12 @@ export default function CustomDatePicker({ selected, onChange, align = 'left', c
 
     useEffect(() => {
         if (isOpen) {
+            const initial = clampDate(wheelDate);
+            setWheelDate(initial);
             // Initialize at middle set for looping
-            scrollToItem(monthRef.current, wheelDate.getMonth(), 'auto', 12);
-            scrollToItem(dayRef.current, wheelDate.getDate() - 1, 'auto', daysInMonth);
-            scrollToItem(yearRef.current, wheelDate.getFullYear() - START_YEAR, 'auto');
+            scrollToItem(monthRef.current, initial.getMonth(), 'auto', 12);
+            scrollToItem(dayRef.current, initial.getDate() - 1, 'auto', daysInMonth);
+            scrollToItem(yearRef.current, initial.getFullYear() - START_YEAR, 'auto');
             resetAutoCloseTimer();
         }
     }, [isOpen]);
@@ -73,52 +117,38 @@ export default function CustomDatePicker({ selected, onChange, align = 'left', c
         const itemHeight = 36;
         const index = Math.round((container.scrollTop) / itemHeight);
 
-        const currentMonth = wheelDate.getMonth();
-        const currentYear = wheelDate.getFullYear();
-        const currentDay = wheelDate.getDate();
+        let nMonth = wheelDate.getMonth();
+        let nYear = wheelDate.getFullYear();
+        let nDay = wheelDate.getDate();
 
         if (type === 'month') {
-            const normalizedIndex = index % 12;
-            // Looping jump
-            if (index < 6) {
-                scrollToItem(container, normalizedIndex + 12, 'auto');
-            } else if (index > 24) {
-                scrollToItem(container, normalizedIndex + 12, 'auto');
-            }
-
-            if (normalizedIndex !== currentMonth) {
-                const maxDays = getDaysInMonth(normalizedIndex, currentYear);
-                const d = new Date(currentYear, normalizedIndex, Math.min(currentDay, maxDays));
-                setWheelDate(d);
-                onChange(d);
-            }
+            nMonth = index % 12;
+            if (index < 6 || index > 24) scrollToItem(container, nMonth + 12, 'auto');
         } else if (type === 'day') {
-            const normalizedIndex = index % daysInMonth;
-            // Looping jump
-            if (index < daysInMonth / 2) {
-                scrollToItem(container, normalizedIndex + daysInMonth, 'auto');
-            } else if (index > daysInMonth * 2) {
-                scrollToItem(container, normalizedIndex + daysInMonth, 'auto');
-            }
-
-            if ((normalizedIndex + 1) !== currentDay) {
-                const d = new Date(currentYear, currentMonth, normalizedIndex + 1);
-                setWheelDate(d);
-                onChange(d);
-            }
+            nDay = (index % daysInMonth) + 1;
+            if (index < daysInMonth / 2 || index > daysInMonth * 2) scrollToItem(container, nDay - 1 + daysInMonth, 'auto');
         } else if (type === 'year') {
-            const year = START_YEAR + index;
-            if (index >= 0 && index < YEARS.length && year !== currentYear) {
-                const maxDays = getDaysInMonth(currentMonth, year);
-                const d = new Date(year, currentMonth, Math.min(currentDay, maxDays));
-                setWheelDate(d);
-                onChange(d);
-            }
+            nYear = START_YEAR + index;
+        }
+
+        const maxD = getDaysInMonth(nMonth, nYear);
+        const d = clampDate(new Date(nYear, nMonth, Math.min(nDay, maxD)));
+
+        if (d.getTime() !== wheelDate.getTime()) {
+            setWheelDate(d);
+            onChange(d);
+
+            // If clamped, visually sync columns
+            if (d.getMonth() !== nMonth) scrollToItem(monthRef.current, d.getMonth(), 'smooth', 12);
+            if (d.getDate() !== nDay) scrollToItem(dayRef.current, d.getDate() - 1, 'smooth', daysInMonth);
+            if (d.getFullYear() !== nYear) scrollToItem(yearRef.current, d.getFullYear() - START_YEAR, 'smooth');
         }
     };
 
     const handleConfirm = () => {
         if (timeoutRef.current) clearTimeout(timeoutRef.current);
+        const final = clampDate(wheelDate);
+        onChange(final);
         setIsOpen(false);
     };
 
@@ -154,14 +184,11 @@ export default function CustomDatePicker({ selected, onChange, align = 'left', c
     };
 
     return (
-        <div className={`relative w-full ${className}`}>
+        <div ref={containerRef} className={`relative w-full ${className}`}>
             <style jsx global>{`
-                .scrolling-picker {
-                    position: absolute;
-                    top: 100%;
-                    ${align === 'left' ? 'left: 0;' : 'right: 0;'}
-                    z-index: 9999;
-                    margin-top: 8px;
+                .scrolling-picker-portal {
+                    position: fixed;
+                    z-index: 99999;
                     background: white;
                     border-radius: 16px;
                     width: 240px;
@@ -235,11 +262,11 @@ export default function CustomDatePicker({ selected, onChange, align = 'left', c
             `}</style>
 
             <div
-                className="relative h-[40px] flex items-center bg-transparent border-b-2 border-gray-100 transition-all group w-full overflow-hidden date-input-field"
+                className="relative flex items-center bg-gray-50 border border-gray-200 rounded-xl transition-all group w-full overflow-hidden date-input-field focus-within:bg-white focus-within:border-[#D4AF37] focus-within:ring-2 focus-within:ring-[#D4AF37]/10"
             >
                 <div
                     onClick={() => setIsOpen(!isOpen)}
-                    className="absolute left-0 top-1/2 -translate-y-1/2 text-gray-400 group-hover:text-[#D4AF37] transition-colors cursor-pointer z-10"
+                    className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 group-hover:text-[#D4AF37] transition-colors cursor-pointer z-10"
                 >
                     <Calendar size={14} />
                 </div>
@@ -249,13 +276,14 @@ export default function CustomDatePicker({ selected, onChange, align = 'left', c
                     onChange={handleInputChange}
                     onFocus={() => setIsOpen(true)}
                     placeholder="DD-MM-YYYY"
-                    className="w-full pl-8 pr-4 py-2 bg-transparent outline-none font-bold text-gray-700 text-lg leading-none"
+                    className="w-full pl-10 pr-4 py-4 bg-transparent outline-none font-bold text-gray-800 text-lg leading-none placeholder:text-gray-300"
                 />
             </div>
 
-            {isOpen && (
+            {isOpen && isMounted && createPortal(
                 <div
-                    className="scrolling-picker"
+                    className="scrolling-picker-portal"
+                    style={{ top: pickerPosition.top, left: pickerPosition.left }}
                     onMouseEnter={() => {
                         isHoveringRef.current = true;
                         if (timeoutRef.current) clearTimeout(timeoutRef.current);
@@ -314,7 +342,8 @@ export default function CustomDatePicker({ selected, onChange, align = 'left', c
                             Set Date
                         </button>
                     </div>
-                </div>
+                </div>,
+                document.body
             )}
         </div>
     );
