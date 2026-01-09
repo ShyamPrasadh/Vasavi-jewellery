@@ -19,7 +19,7 @@ const prismaClientSingleton = () => {
         }
     }
 
-    return new PrismaClient(options)
+    return Object.keys(options).length > 0 ? new PrismaClient(options) : new PrismaClient()
 }
 
 type PrismaClientSingleton = ReturnType<typeof prismaClientSingleton>
