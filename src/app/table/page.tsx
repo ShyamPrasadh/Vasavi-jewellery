@@ -37,12 +37,12 @@ export default function ReferenceTablePage() {
 
                 {/* Fixed Title Section */}
                 <div className="bg-white px-4 py-4 md:py-6 border-b border-gray-100 flex-shrink-0">
-                    <div className="max-w-6xl mx-auto flex flex-col md:flex-row md:justify-between md:items-center gap-4 md:gap-6">
+                    <div className="max-w-7xl mx-auto px-4 md:px-6 flex flex-col md:flex-row md:justify-between md:items-center gap-4 md:gap-6">
                         <div>
-                            <h2 className="text-xl md:text-3xl font-black text-[#333333] uppercase tracking-tighter leading-tight">
+                            <h2 className="text-2xl md:text-3xl font-black text-gray-800 uppercase tracking-tight">
                                 {t('referenceRateTable')}
                             </h2>
-                            <p className="text-gray-400 text-[9px] md:text-xs font-bold uppercase tracking-widest mt-1">
+                            <p className="text-[10px] md:text-xs font-bold text-[#D4AF37] uppercase tracking-[0.2em] mt-1">
                                 {t('standardWastageLabour')}
                             </p>
                         </div>
@@ -55,7 +55,7 @@ export default function ReferenceTablePage() {
 
                 {/* Scrollable Content Area */}
                 <div className="flex-1 overflow-y-auto px-4 md:px-6 py-4 md:py-8">
-                    <div className="max-w-6xl mx-auto space-y-8">
+                    <div className="max-w-7xl mx-auto space-y-8">
 
                         {/* Table Container */}
                         <div className="rounded-2xl md:rounded-3xl border border-gray-100 shadow-xl bg-white overflow-hidden">

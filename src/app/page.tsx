@@ -50,10 +50,18 @@ export default function CalculatorPage() {
   }, [product, weight, goldRate]);
 
   return (
-    <main className="min-h-screen bg-[#FDFCFB] pb-12 pt-[70px] md:pt-[80px]">
+    <main className="min-h-screen bg-[#FDFCFB] pb-32 pt-[70px] md:pt-[80px]">
       <Header rates={rates || undefined} />
 
-      <div className="max-w-5xl mx-auto px-4 mt-8">
+      <div className="max-w-7xl mx-auto px-4 md:px-6 mt-6 md:mt-8">
+        <div className="mb-8">
+          <h1 className="text-2xl md:text-3xl font-black text-gray-800 uppercase tracking-tight">
+            Gold Calculator
+          </h1>
+          <p className="text-[10px] md:text-xs font-bold text-[#D4AF37] uppercase tracking-[0.2em] mt-1">
+            Live Price & Wastage Calculator
+          </p>
+        </div>
 
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 mb-10">
           {/* Product Name Card */}

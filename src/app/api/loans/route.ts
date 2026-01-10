@@ -21,9 +21,36 @@ export async function POST(request: Request) {
             additionalLoans
         } = body;
 
+        let finalBillNumber = billNumber;
+
+        // Auto-generate sequential bill number if needed
+        const year = new Date().getFullYear().toString().slice(-2);
+        const prefix = `SVJ-P-${year}-`;
+
+        const lastLoan = await prisma.loan.findFirst({
+            where: {
+                billNumber: {
+                    startsWith: prefix
+                }
+            },
+            orderBy: {
+                billNumber: 'desc'
+            }
+        });
+
+        let nextSeq = 1;
+        if (lastLoan) {
+            const parts = lastLoan.billNumber.split('-');
+            const lastPart = parts[parts.length - 1];
+            if (!isNaN(parseInt(lastPart))) {
+                nextSeq = parseInt(lastPart) + 1;
+            }
+        }
+        finalBillNumber = `${prefix}${nextSeq.toString().padStart(4, '0')}`;
+
         const loan = await prisma.loan.create({
             data: {
-                billNumber,
+                billNumber: finalBillNumber,
                 customerName,
                 customerPhone,
                 customerAadhaar,

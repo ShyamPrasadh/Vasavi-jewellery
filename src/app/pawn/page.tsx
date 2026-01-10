@@ -44,7 +44,8 @@ function PawnCalculatorContent() {
 
     // Generate Bill Number on Mount
     useEffect(() => {
-        setBillNumber('SV' + Date.now().toString().slice(-6));
+        const year = new Date().getFullYear().toString().slice(-2);
+        setBillNumber(`SVJ-P-${year}-${Date.now().toString().slice(-4)}`);
     }, [showPrintModal]);
 
     // Prevent body scroll when modal is open
@@ -124,7 +125,15 @@ function PawnCalculatorContent() {
         <main className="min-h-screen bg-[#FDFCFB] pb-32 pt-[70px] md:pt-[80px]">
             <Header rates={rates || undefined} />
 
-            <div className="max-w-5xl mx-auto px-4 mt-8">
+            <div className="max-w-7xl mx-auto px-4 md:px-6 mt-6 md:mt-8">
+                <div className="mb-8">
+                    <h1 className="text-2xl md:text-3xl font-black text-gray-800 uppercase tracking-tight">
+                        {isShopMode ? 'Pawn Shop' : 'Pawn Calculator'}
+                    </h1>
+                    <p className="text-[10px] md:text-xs font-bold text-[#D4AF37] uppercase tracking-[0.2em] mt-1">
+                        {isShopMode ? 'Manage Records & Settlement' : 'Interest & Settlement Calculator'}
+                    </p>
+                </div>
 
                 {isShopMode ? (
                     /* Pawn Shop Management View - Refactored */
