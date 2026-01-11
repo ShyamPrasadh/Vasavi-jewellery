@@ -10,7 +10,7 @@ import {
     Search, User, Phone, Shield, MapPin,
     Plus, Trash2, X, Printer,
     Wallet, Check, Eye, ChevronRight, Save, Edit2, ChevronDown,
-    Filter, Calendar, ArrowUpDown, IndianRupee, AlertCircle, Clock
+    Filter, Calendar, ArrowUpDown, IndianRupee, AlertCircle, Clock, CheckCircle, Circle
 } from 'lucide-react';
 
 interface AdditionalLoan {
@@ -89,11 +89,13 @@ export default function GoldLoanPage() {
     const [showFilterPopup, setShowFilterPopup] = useState(false);
     const [sortBy, setSortBy] = useState<'date' | 'amount'>('date');
     const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
-    const [amountFilter, setAmountFilter] = useState<'all' | 'low' | 'medium' | 'high'>('all');
+    const [minAmount, setMinAmount] = useState<number>(1000);
+    const [maxAmount, setMaxAmount] = useState<number>(100000);
+    const [amountAboveLakh, setAmountAboveLakh] = useState<boolean>(false);
     const [overdueFilter, setOverdueFilter] = useState<'all' | 'overdue' | 'active'>('all');
     const [productFilter, setProductFilter] = useState<string>('all');
-    const [dateFrom, setDateFrom] = useState<string>('');
-    const [dateTo, setDateTo] = useState<string>('');
+    const [dateFrom, setDateFrom] = useState<Date | null>(null);
+    const [dateTo, setDateTo] = useState<Date | null>(null);
 
     useEffect(() => {
         fetchLoans();
@@ -381,16 +383,14 @@ export default function GoldLoanPage() {
             loan.customerPhone?.includes(searchQuery)
         );
 
-        // Amount filter
-        if (amountFilter !== 'all') {
-            filtered = filtered.filter(loan => {
-                const totalAmount = loan.loanAmount + (loan.additionalLoans?.reduce((sum, a) => sum + a.amount, 0) || 0);
-                if (amountFilter === 'low') return totalAmount < 25000;
-                if (amountFilter === 'medium') return totalAmount >= 25000 && totalAmount < 100000;
-                if (amountFilter === 'high') return totalAmount >= 100000;
-                return true;
-            });
-        }
+        // Amount filter with slider
+        filtered = filtered.filter(loan => {
+            const totalAmount = loan.loanAmount + (loan.additionalLoans?.reduce((sum, a) => sum + a.amount, 0) || 0);
+            if (amountAboveLakh) {
+                return totalAmount >= 100000;
+            }
+            return totalAmount >= minAmount && totalAmount <= maxAmount;
+        });
 
         // Overdue filter
         if (overdueFilter !== 'all') {
@@ -410,13 +410,12 @@ export default function GoldLoanPage() {
 
         // Date range filter
         if (dateFrom) {
-            const fromDate = new Date(dateFrom);
-            filtered = filtered.filter(loan => new Date(loan.loanDate) >= fromDate);
+            filtered = filtered.filter(loan => new Date(loan.loanDate) >= dateFrom);
         }
         if (dateTo) {
-            const toDate = new Date(dateTo);
-            toDate.setHours(23, 59, 59, 999);
-            filtered = filtered.filter(loan => new Date(loan.loanDate) <= toDate);
+            const toDateEnd = new Date(dateTo);
+            toDateEnd.setHours(23, 59, 59, 999);
+            filtered = filtered.filter(loan => new Date(loan.loanDate) <= toDateEnd);
         }
 
         // Sorting
@@ -433,10 +432,10 @@ export default function GoldLoanPage() {
         });
 
         return filtered;
-    }, [loans, searchQuery, amountFilter, overdueFilter, productFilter, dateFrom, dateTo, sortBy, sortOrder]);
+    }, [loans, searchQuery, minAmount, maxAmount, amountAboveLakh, overdueFilter, productFilter, dateFrom, dateTo, sortBy, sortOrder]);
 
     // Check if any filter is active
-    const hasActiveFilters = amountFilter !== 'all' || overdueFilter !== 'all' || productFilter !== 'all' || dateFrom || dateTo || sortBy !== 'date';
+    const hasActiveFilters = minAmount > 1000 || maxAmount < 100000 || amountAboveLakh || overdueFilter !== 'all' || productFilter !== 'all' || dateFrom || dateTo || sortBy !== 'date';
 
     const productTypes = ['Earring', 'Necklace', 'Chain', 'Bangle', 'Ring', 'Bracelet', 'Pendant', 'Other'];
 
@@ -652,9 +651,9 @@ export default function GoldLoanPage() {
                         {/* Filter Popup */}
                         {showFilterPopup && (
                             <>
-                                <div className="fixed inset-0 z-40" onClick={() => setShowFilterPopup(false)}></div>
-                                <div className="absolute right-0 top-full mt-2 z-50 w-80 md:w-96 bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
-                                    <div className="bg-gradient-to-br from-[#D4AF37]/10 to-[#D4AF37]/5 px-5 py-4 border-b border-[#D4AF37]/20">
+                                <div className="fixed inset-0 z-40 bg-black/20 backdrop-blur-sm" onClick={() => setShowFilterPopup(false)}></div>
+                                <div className="fixed inset-x-0 bottom-0 md:absolute md:inset-auto md:right-0 md:top-full md:mt-2 z-50 w-full md:w-96 bg-white rounded-t-3xl md:rounded-2xl shadow-2xl border border-gray-100 overflow-hidden animate-in slide-in-from-bottom-10 md:slide-in-from-top-2 duration-200 flex flex-col max-h-[85vh] md:max-h-none h-auto">
+                                    <div className="bg-gradient-to-br from-[#D4AF37]/10 to-[#D4AF37]/5 px-5 py-4 border-b border-[#D4AF37]/20 flex-shrink-0">
                                         <div className="flex items-center justify-between">
                                             <h3 className="text-sm font-black text-gray-800 uppercase tracking-widest flex items-center gap-2">
                                                 <Filter size={16} className="text-[#D4AF37]" />
@@ -666,7 +665,7 @@ export default function GoldLoanPage() {
                                         </div>
                                     </div>
 
-                                    <div className="p-5 space-y-5 max-h-[70vh] overflow-y-auto">
+                                    <div className="p-5 space-y-6 flex-1 overflow-y-auto md:max-h-[70vh]">
                                         {/* Sort By */}
                                         <div>
                                             <label className="flex items-center gap-1.5 text-[10px] font-black text-[#B8860B] uppercase tracking-widest mb-2">
@@ -695,31 +694,116 @@ export default function GoldLoanPage() {
                                             </button>
                                         </div>
 
-                                        {/* Amount Range */}
+                                        {/* Amount Range with Slider */}
                                         <div>
-                                            <label className="flex items-center gap-1.5 text-[10px] font-black text-[#B8860B] uppercase tracking-widest mb-2">
+                                            <label className="flex items-center gap-1.5 text-[10px] font-black text-[#B8860B] uppercase tracking-widest mb-3">
                                                 <IndianRupee size={12} />
                                                 Amount Range
                                             </label>
-                                            <div className="grid grid-cols-2 gap-2">
-                                                {[
-                                                    { value: 'all', label: 'All Amounts' },
-                                                    { value: 'low', label: '< ₹25,000' },
-                                                    { value: 'medium', label: '₹25K - ₹1L' },
-                                                    { value: 'high', label: '> ₹1 Lakh' },
-                                                ].map(opt => (
-                                                    <button
-                                                        key={opt.value}
-                                                        onClick={() => setAmountFilter(opt.value as typeof amountFilter)}
-                                                        className={`px-3 py-2.5 rounded-xl text-xs font-bold transition-all ${amountFilter === opt.value ? 'bg-[#D4AF37] text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
-                                                    >
-                                                        {opt.label}
-                                                    </button>
-                                                ))}
+
+                                            {/* Above 1 Lakh Toggle */}
+
+
+                                            <div className="relative pt-2 pb-6">
+                                                <style>{`
+                                                    .custom-range-slider {
+                                                        -webkit-appearance: none;
+                                                        appearance: none;
+                                                        height: 4px;
+                                                        width: 100%;
+                                                        position: absolute;
+                                                        background: transparent;
+                                                        pointer-events: none;
+                                                        z-index: 20;
+                                                    }
+                                                    .custom-range-slider {
+                                                        -webkit-appearance: none;
+                                                        appearance: none;
+                                                        height: 24px;
+                                                        width: 100%;
+                                                        position: absolute;
+                                                        background: transparent;
+                                                        pointer-events: none;
+                                                        z-index: 20;
+                                                        top: 0;
+                                                        margin: 0;
+                                                    }
+                                                    .custom-range-slider::-webkit-slider-thumb {
+                                                        -webkit-appearance: none;
+                                                        height: 24px;
+                                                        width: 24px;
+                                                        border-radius: 50%;
+                                                        background: #ffffff;
+                                                        border: 6px solid #D4AF37;
+                                                        cursor: pointer;
+                                                        pointer-events: auto;
+                                                        margin-top: 0;
+                                                        box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+                                                        position: relative;
+                                                        z-index: 30;
+                                                    }
+                                                `}</style>
+
+                                                <div className="flex justify-between items-center mb-6">
+                                                    <span className="text-xl font-black text-gray-800">
+                                                        ₹{minAmount.toLocaleString('en-IN')} – ₹{maxAmount.toLocaleString('en-IN')}
+                                                    </span>
+                                                </div>
+
+                                                <div className={`relative h-6 flex items-center mb-6 ${amountAboveLakh ? 'opacity-40 pointer-events-none' : ''}`}>
+                                                    {/* Background Track */}
+                                                    <div className="absolute w-full h-1 bg-gray-200 rounded-full z-0"></div>
+
+                                                    {/* Active Range Track */}
+                                                    <div
+                                                        className="absolute h-1 bg-[#D4AF37] z-10"
+                                                        style={{
+                                                            left: `${(minAmount / 100000) * 100}%`,
+                                                            right: `${100 - (maxAmount / 100000) * 100}%`
+                                                        }}
+                                                    ></div>
+
+                                                    {/* Min Slider */}
+                                                    <input
+                                                        type="range"
+                                                        min={0}
+                                                        max={100000}
+                                                        step={1000}
+                                                        value={minAmount}
+                                                        onChange={(e) => {
+                                                            const val = Math.min(Number(e.target.value), maxAmount - 1000);
+                                                            setMinAmount(val);
+                                                        }}
+                                                        className="custom-range-slider"
+                                                    />
+
+                                                    {/* Max Slider */}
+                                                    <input
+                                                        type="range"
+                                                        min={0}
+                                                        max={100000}
+                                                        step={1000}
+                                                        value={maxAmount}
+                                                        onChange={(e) => {
+                                                            const val = Math.max(Number(e.target.value), minAmount + 1000);
+                                                            setMaxAmount(val);
+                                                        }}
+                                                        className="custom-range-slider"
+                                                    />
+                                                </div>
+
+                                                {/* Above 1 Lakh Toggle */}
+                                                <button
+                                                    onClick={() => setAmountAboveLakh(!amountAboveLakh)}
+                                                    className={`w-full px-4 py-3 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 ${amountAboveLakh ? 'bg-[#D4AF37] text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
+                                                >
+                                                    {amountAboveLakh ? <CheckCircle size={16} /> : <Circle size={16} />}
+                                                    Show Loans Above ₹1 Lakh
+                                                </button>
                                             </div>
                                         </div>
 
-                                        {/* Date Range */}
+                                        {/* Date Range with CustomDatePicker */}
                                         <div>
                                             <label className="flex items-center gap-1.5 text-[10px] font-black text-[#B8860B] uppercase tracking-widest mb-2">
                                                 <Calendar size={12} />
@@ -728,20 +812,19 @@ export default function GoldLoanPage() {
                                             <div className="grid grid-cols-2 gap-2">
                                                 <div>
                                                     <span className="text-[9px] text-gray-400 font-bold block mb-1">From</span>
-                                                    <input
-                                                        type="date"
-                                                        value={dateFrom}
-                                                        onChange={(e) => setDateFrom(e.target.value)}
-                                                        className="w-full px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-xs font-bold text-gray-800 focus:border-[#D4AF37] outline-none"
+                                                    <CustomDatePicker
+                                                        selected={dateFrom}
+                                                        onChange={(date) => setDateFrom(date)}
+                                                        maxDate={dateTo || new Date()}
                                                     />
                                                 </div>
                                                 <div>
                                                     <span className="text-[9px] text-gray-400 font-bold block mb-1">To</span>
-                                                    <input
-                                                        type="date"
-                                                        value={dateTo}
-                                                        onChange={(e) => setDateTo(e.target.value)}
-                                                        className="w-full px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-xs font-bold text-gray-800 focus:border-[#D4AF37] outline-none"
+                                                    <CustomDatePicker
+                                                        selected={dateTo}
+                                                        onChange={(date) => setDateTo(date)}
+                                                        minDate={dateFrom || undefined}
+                                                        maxDate={new Date()}
                                                     />
                                                 </div>
                                             </div>
@@ -802,13 +885,15 @@ export default function GoldLoanPage() {
                                             onClick={() => {
                                                 setSortBy('date');
                                                 setSortOrder('desc');
-                                                setAmountFilter('all');
+                                                setMinAmount(1000);
+                                                setMaxAmount(100000);
+                                                setAmountAboveLakh(false);
                                                 setOverdueFilter('all');
                                                 setProductFilter('all');
-                                                setDateFrom('');
-                                                setDateTo('');
+                                                setDateFrom(null);
+                                                setDateTo(null);
                                             }}
-                                            className="text-xs font-black text-gray-500 uppercase tracking-widest hover:text-[#D4AF37]"
+                                            className="text-xs font-black text-red-500 uppercase tracking-widest hover:text-red-600 hover:underline"
                                         >
                                             Reset All
                                         </button>
@@ -832,9 +917,14 @@ export default function GoldLoanPage() {
                         {sortBy !== 'date' && (
                             <span className="px-2 py-1 bg-[#D4AF37]/10 text-[#B8860B] rounded-lg text-[10px] font-bold">Sorted by {sortBy}</span>
                         )}
-                        {amountFilter !== 'all' && (
+                        {amountAboveLakh && (
                             <span className="px-2 py-1 bg-[#D4AF37]/10 text-[#B8860B] rounded-lg text-[10px] font-bold">
-                                {amountFilter === 'low' ? '< ₹25K' : amountFilter === 'medium' ? '₹25K-1L' : '> ₹1L'}
+                                &gt; ₹1 Lakh
+                            </span>
+                        )}
+                        {!amountAboveLakh && (minAmount > 1000 || maxAmount < 100000) && (
+                            <span className="px-2 py-1 bg-[#D4AF37]/10 text-[#B8860B] rounded-lg text-[10px] font-bold">
+                                ₹{minAmount.toLocaleString('en-IN')} - ₹{maxAmount.toLocaleString('en-IN')}
                             </span>
                         )}
                         {overdueFilter !== 'all' && (
@@ -847,18 +937,24 @@ export default function GoldLoanPage() {
                         )}
                         {(dateFrom || dateTo) && (
                             <span className="px-2 py-1 bg-[#D4AF37]/10 text-[#B8860B] rounded-lg text-[10px] font-bold">
-                                {dateFrom && dateTo ? `${dateFrom} → ${dateTo}` : dateFrom ? `From ${dateFrom}` : `Until ${dateTo}`}
+                                {dateFrom && dateTo
+                                    ? `${dateFrom.toLocaleDateString('en-IN')} → ${dateTo.toLocaleDateString('en-IN')}`
+                                    : dateFrom
+                                        ? `From ${dateFrom.toLocaleDateString('en-IN')}`
+                                        : `Until ${dateTo?.toLocaleDateString('en-IN')}`}
                             </span>
                         )}
                         <button
                             onClick={() => {
                                 setSortBy('date');
                                 setSortOrder('desc');
-                                setAmountFilter('all');
+                                setMinAmount(1000);
+                                setMaxAmount(100000);
+                                setAmountAboveLakh(false);
                                 setOverdueFilter('all');
                                 setProductFilter('all');
-                                setDateFrom('');
-                                setDateTo('');
+                                setDateFrom(null);
+                                setDateTo(null);
                             }}
                             className="text-[10px] font-black text-red-500 uppercase tracking-widest hover:underline ml-2"
                         >
