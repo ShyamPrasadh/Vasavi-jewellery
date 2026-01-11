@@ -9,7 +9,8 @@ import ConfirmModal from '../components/ConfirmModal';
 import {
     Search, User, Phone, Shield, MapPin,
     Plus, Trash2, X, Printer,
-    Wallet, Check, Eye, ChevronRight, Save, Edit2, ChevronDown
+    Wallet, Check, Eye, ChevronRight, Save, Edit2, ChevronDown,
+    Filter, Calendar, ArrowUpDown, IndianRupee, AlertCircle, Clock
 } from 'lucide-react';
 
 interface AdditionalLoan {
@@ -83,6 +84,16 @@ export default function GoldLoanPage() {
 
     // New Loan Form Visibility
     const [showNewLoanForm, setShowNewLoanForm] = useState(false);
+
+    // Filter State
+    const [showFilterPopup, setShowFilterPopup] = useState(false);
+    const [sortBy, setSortBy] = useState<'date' | 'amount'>('date');
+    const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
+    const [amountFilter, setAmountFilter] = useState<'all' | 'low' | 'medium' | 'high'>('all');
+    const [overdueFilter, setOverdueFilter] = useState<'all' | 'overdue' | 'active'>('all');
+    const [productFilter, setProductFilter] = useState<string>('all');
+    const [dateFrom, setDateFrom] = useState<string>('');
+    const [dateTo, setDateTo] = useState<string>('');
 
     useEffect(() => {
         fetchLoans();
@@ -361,11 +372,71 @@ export default function GoldLoanPage() {
         setShowDetailsModal(true);
     };
 
-    const filteredLoans = loans.filter(loan =>
-        loan.customerName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        loan.billNumber.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        loan.customerPhone?.includes(searchQuery)
-    );
+    const filteredLoans = useMemo(() => {
+        const today = new Date();
+
+        let filtered = loans.filter(loan =>
+            loan.customerName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            loan.billNumber.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            loan.customerPhone?.includes(searchQuery)
+        );
+
+        // Amount filter
+        if (amountFilter !== 'all') {
+            filtered = filtered.filter(loan => {
+                const totalAmount = loan.loanAmount + (loan.additionalLoans?.reduce((sum, a) => sum + a.amount, 0) || 0);
+                if (amountFilter === 'low') return totalAmount < 25000;
+                if (amountFilter === 'medium') return totalAmount >= 25000 && totalAmount < 100000;
+                if (amountFilter === 'high') return totalAmount >= 100000;
+                return true;
+            });
+        }
+
+        // Overdue filter
+        if (overdueFilter !== 'all') {
+            filtered = filtered.filter(loan => {
+                const returnDate = loan.returnDate ? new Date(loan.returnDate) : null;
+                const isOverdue = returnDate && returnDate < today;
+                if (overdueFilter === 'overdue') return isOverdue;
+                if (overdueFilter === 'active') return !isOverdue;
+                return true;
+            });
+        }
+
+        // Product filter
+        if (productFilter !== 'all') {
+            filtered = filtered.filter(loan => loan.productType === productFilter);
+        }
+
+        // Date range filter
+        if (dateFrom) {
+            const fromDate = new Date(dateFrom);
+            filtered = filtered.filter(loan => new Date(loan.loanDate) >= fromDate);
+        }
+        if (dateTo) {
+            const toDate = new Date(dateTo);
+            toDate.setHours(23, 59, 59, 999);
+            filtered = filtered.filter(loan => new Date(loan.loanDate) <= toDate);
+        }
+
+        // Sorting
+        filtered.sort((a, b) => {
+            let comparison = 0;
+            if (sortBy === 'date') {
+                comparison = new Date(b.loanDate).getTime() - new Date(a.loanDate).getTime();
+            } else if (sortBy === 'amount') {
+                const aTotal = a.loanAmount + (a.additionalLoans?.reduce((sum, add) => sum + add.amount, 0) || 0);
+                const bTotal = b.loanAmount + (b.additionalLoans?.reduce((sum, add) => sum + add.amount, 0) || 0);
+                comparison = bTotal - aTotal;
+            }
+            return sortOrder === 'desc' ? comparison : -comparison;
+        });
+
+        return filtered;
+    }, [loans, searchQuery, amountFilter, overdueFilter, productFilter, dateFrom, dateTo, sortBy, sortOrder]);
+
+    // Check if any filter is active
+    const hasActiveFilters = amountFilter !== 'all' || overdueFilter !== 'all' || productFilter !== 'all' || dateFrom || dateTo || sortBy !== 'date';
 
     const productTypes = ['Earring', 'Necklace', 'Chain', 'Bangle', 'Ring', 'Bracelet', 'Pendant', 'Other'];
 
@@ -385,14 +456,14 @@ export default function GoldLoanPage() {
                 </div>
 
                 {/* Search Bar + New Loan Button */}
-                <div className="flex gap-2 md:gap-4 mb-6">
+                <div className="flex gap-2 md:gap-3 mb-6">
                     <div className="relative flex-1">
                         <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                         <input
                             type="text"
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
-                            placeholder="Search..."
+                            placeholder="Search by name, bill, phone..."
                             className="w-full pl-9 pr-3 py-3 md:py-4 bg-white border border-gray-200 rounded-xl md:rounded-2xl font-bold text-sm text-gray-800 focus:ring-2 focus:ring-[#D4AF37]/20 focus:border-[#D4AF37] outline-none shadow-sm"
                         />
                     </div>
@@ -554,51 +625,295 @@ export default function GoldLoanPage() {
                     </div>
                 )}
 
-                {/* Section Header */}
-                <h3 className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-4">
-                    Recent Gold Loans
-                </h3>
+                {/* Section Header with Filter */}
+                <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-xs md:text-sm font-black text-gray-600 uppercase tracking-[0.15em] flex items-center gap-2">
+                        <Wallet size={16} className="text-[#D4AF37]" />
+                        Gold Loans
+                        <span className="text-gray-400 font-bold">({filteredLoans.length})</span>
+                    </h3>
 
-                {/* Loan Cards - Mobile Friendly */}
-                <div className="space-y-3">
+                    {/* Filter Button */}
+                    <div className="relative">
+                        <button
+                            onClick={() => setShowFilterPopup(!showFilterPopup)}
+                            className={`flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl font-black uppercase text-xs tracking-wider transition-all ${showFilterPopup || hasActiveFilters
+                                ? 'bg-[#D4AF37] text-white shadow-lg'
+                                : 'bg-white border border-gray-200 text-gray-600 hover:border-[#D4AF37] shadow-sm'
+                                }`}
+                        >
+                            <Filter size={14} />
+                            <span>Filter</span>
+                            {hasActiveFilters && (
+                                <span className="w-2 h-2 bg-white rounded-full"></span>
+                            )}
+                        </button>
+
+                        {/* Filter Popup */}
+                        {showFilterPopup && (
+                            <>
+                                <div className="fixed inset-0 z-40" onClick={() => setShowFilterPopup(false)}></div>
+                                <div className="absolute right-0 top-full mt-2 z-50 w-80 md:w-96 bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
+                                    <div className="bg-gradient-to-br from-[#D4AF37]/10 to-[#D4AF37]/5 px-5 py-4 border-b border-[#D4AF37]/20">
+                                        <div className="flex items-center justify-between">
+                                            <h3 className="text-sm font-black text-gray-800 uppercase tracking-widest flex items-center gap-2">
+                                                <Filter size={16} className="text-[#D4AF37]" />
+                                                Filter Loans
+                                            </h3>
+                                            <button onClick={() => setShowFilterPopup(false)} className="p-1 hover:bg-gray-100 rounded-lg">
+                                                <X size={16} className="text-gray-400" />
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div className="p-5 space-y-5 max-h-[70vh] overflow-y-auto">
+                                        {/* Sort By */}
+                                        <div>
+                                            <label className="flex items-center gap-1.5 text-[10px] font-black text-[#B8860B] uppercase tracking-widest mb-2">
+                                                <ArrowUpDown size={12} />
+                                                Sort By
+                                            </label>
+                                            <div className="grid grid-cols-2 gap-2">
+                                                <button
+                                                    onClick={() => setSortBy('date')}
+                                                    className={`px-4 py-3 rounded-xl text-xs font-bold transition-all ${sortBy === 'date' ? 'bg-[#D4AF37] text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
+                                                >
+                                                    📅 Date
+                                                </button>
+                                                <button
+                                                    onClick={() => setSortBy('amount')}
+                                                    className={`px-4 py-3 rounded-xl text-xs font-bold transition-all ${sortBy === 'amount' ? 'bg-[#D4AF37] text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
+                                                >
+                                                    💰 Amount
+                                                </button>
+                                            </div>
+                                            <button
+                                                onClick={() => setSortOrder(sortOrder === 'desc' ? 'asc' : 'desc')}
+                                                className="mt-2 w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-xs font-bold text-gray-700 flex items-center justify-center gap-2 hover:bg-gray-100"
+                                            >
+                                                {sortOrder === 'desc' ? '↓ Highest/Newest First' : '↑ Lowest/Oldest First'}
+                                            </button>
+                                        </div>
+
+                                        {/* Amount Range */}
+                                        <div>
+                                            <label className="flex items-center gap-1.5 text-[10px] font-black text-[#B8860B] uppercase tracking-widest mb-2">
+                                                <IndianRupee size={12} />
+                                                Amount Range
+                                            </label>
+                                            <div className="grid grid-cols-2 gap-2">
+                                                {[
+                                                    { value: 'all', label: 'All Amounts' },
+                                                    { value: 'low', label: '< ₹25,000' },
+                                                    { value: 'medium', label: '₹25K - ₹1L' },
+                                                    { value: 'high', label: '> ₹1 Lakh' },
+                                                ].map(opt => (
+                                                    <button
+                                                        key={opt.value}
+                                                        onClick={() => setAmountFilter(opt.value as typeof amountFilter)}
+                                                        className={`px-3 py-2.5 rounded-xl text-xs font-bold transition-all ${amountFilter === opt.value ? 'bg-[#D4AF37] text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
+                                                    >
+                                                        {opt.label}
+                                                    </button>
+                                                ))}
+                                            </div>
+                                        </div>
+
+                                        {/* Date Range */}
+                                        <div>
+                                            <label className="flex items-center gap-1.5 text-[10px] font-black text-[#B8860B] uppercase tracking-widest mb-2">
+                                                <Calendar size={12} />
+                                                Date Range
+                                            </label>
+                                            <div className="grid grid-cols-2 gap-2">
+                                                <div>
+                                                    <span className="text-[9px] text-gray-400 font-bold block mb-1">From</span>
+                                                    <input
+                                                        type="date"
+                                                        value={dateFrom}
+                                                        onChange={(e) => setDateFrom(e.target.value)}
+                                                        className="w-full px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-xs font-bold text-gray-800 focus:border-[#D4AF37] outline-none"
+                                                    />
+                                                </div>
+                                                <div>
+                                                    <span className="text-[9px] text-gray-400 font-bold block mb-1">To</span>
+                                                    <input
+                                                        type="date"
+                                                        value={dateTo}
+                                                        onChange={(e) => setDateTo(e.target.value)}
+                                                        className="w-full px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-xs font-bold text-gray-800 focus:border-[#D4AF37] outline-none"
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {/* Status Filter */}
+                                        <div>
+                                            <label className="flex items-center gap-1.5 text-[10px] font-black text-[#B8860B] uppercase tracking-widest mb-2">
+                                                <AlertCircle size={12} />
+                                                Status
+                                            </label>
+                                            <div className="grid grid-cols-3 gap-2">
+                                                {[
+                                                    { value: 'all', label: 'All' },
+                                                    { value: 'active', label: '✓ Active' },
+                                                    { value: 'overdue', label: '⚠ Overdue' },
+                                                ].map(opt => (
+                                                    <button
+                                                        key={opt.value}
+                                                        onClick={() => setOverdueFilter(opt.value as typeof overdueFilter)}
+                                                        className={`px-3 py-2.5 rounded-xl text-xs font-bold transition-all ${overdueFilter === opt.value ? 'bg-[#D4AF37] text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
+                                                    >
+                                                        {opt.label}
+                                                    </button>
+                                                ))}
+                                            </div>
+                                        </div>
+
+                                        {/* Product Type */}
+                                        <div>
+                                            <label className="flex items-center gap-1.5 text-[10px] font-black text-[#B8860B] uppercase tracking-widest mb-2">
+                                                <Clock size={12} />
+                                                Product Type
+                                            </label>
+                                            <div className="flex flex-wrap gap-2">
+                                                <button
+                                                    onClick={() => setProductFilter('all')}
+                                                    className={`px-3 py-2 rounded-lg text-xs font-bold transition-all ${productFilter === 'all' ? 'bg-[#D4AF37] text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
+                                                >
+                                                    All
+                                                </button>
+                                                {productTypes.map(type => (
+                                                    <button
+                                                        key={type}
+                                                        onClick={() => setProductFilter(type)}
+                                                        className={`px-3 py-2 rounded-lg text-xs font-bold transition-all ${productFilter === type ? 'bg-[#D4AF37] text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
+                                                    >
+                                                        {type}
+                                                    </button>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* Footer */}
+                                    <div className="px-5 py-4 bg-gray-50 border-t border-gray-100 flex items-center justify-between">
+                                        <button
+                                            onClick={() => {
+                                                setSortBy('date');
+                                                setSortOrder('desc');
+                                                setAmountFilter('all');
+                                                setOverdueFilter('all');
+                                                setProductFilter('all');
+                                                setDateFrom('');
+                                                setDateTo('');
+                                            }}
+                                            className="text-xs font-black text-gray-500 uppercase tracking-widest hover:text-[#D4AF37]"
+                                        >
+                                            Reset All
+                                        </button>
+                                        <button
+                                            onClick={() => setShowFilterPopup(false)}
+                                            className="px-6 py-2.5 bg-[#D4AF37] text-white rounded-xl text-xs font-black uppercase tracking-widest hover:bg-[#B8860B] transition-all"
+                                        >
+                                            Apply
+                                        </button>
+                                    </div>
+                                </div>
+                            </>
+                        )}
+                    </div>
+                </div>
+
+                {/* Active Filters Display */}
+                {hasActiveFilters && (
+                    <div className="mb-4 flex items-center gap-2 flex-wrap">
+                        <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Active:</span>
+                        {sortBy !== 'date' && (
+                            <span className="px-2 py-1 bg-[#D4AF37]/10 text-[#B8860B] rounded-lg text-[10px] font-bold">Sorted by {sortBy}</span>
+                        )}
+                        {amountFilter !== 'all' && (
+                            <span className="px-2 py-1 bg-[#D4AF37]/10 text-[#B8860B] rounded-lg text-[10px] font-bold">
+                                {amountFilter === 'low' ? '< ₹25K' : amountFilter === 'medium' ? '₹25K-1L' : '> ₹1L'}
+                            </span>
+                        )}
+                        {overdueFilter !== 'all' && (
+                            <span className={`px-2 py-1 rounded-lg text-[10px] font-bold ${overdueFilter === 'overdue' ? 'bg-red-100 text-red-600' : 'bg-green-100 text-green-600'}`}>
+                                {overdueFilter === 'overdue' ? 'Overdue' : 'Active'}
+                            </span>
+                        )}
+                        {productFilter !== 'all' && (
+                            <span className="px-2 py-1 bg-[#D4AF37]/10 text-[#B8860B] rounded-lg text-[10px] font-bold">{productFilter}</span>
+                        )}
+                        {(dateFrom || dateTo) && (
+                            <span className="px-2 py-1 bg-[#D4AF37]/10 text-[#B8860B] rounded-lg text-[10px] font-bold">
+                                {dateFrom && dateTo ? `${dateFrom} → ${dateTo}` : dateFrom ? `From ${dateFrom}` : `Until ${dateTo}`}
+                            </span>
+                        )}
+                        <button
+                            onClick={() => {
+                                setSortBy('date');
+                                setSortOrder('desc');
+                                setAmountFilter('all');
+                                setOverdueFilter('all');
+                                setProductFilter('all');
+                                setDateFrom('');
+                                setDateTo('');
+                            }}
+                            className="text-[10px] font-black text-red-500 uppercase tracking-widest hover:underline ml-2"
+                        >
+                            Clear All
+                        </button>
+                    </div>
+                )}
+
+                {/* Loan Cards - 2 Column Grid */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     {loading ? (
-                        <div className="flex items-center justify-center py-16">
+                        <div className="col-span-2 flex items-center justify-center py-16">
                             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#D4AF37]"></div>
                         </div>
                     ) : filteredLoans.length === 0 ? (
-                        <div className="text-center py-16 bg-white rounded-2xl border border-gray-100">
+                        <div className="col-span-2 text-center py-16 bg-white rounded-2xl border border-gray-100">
+                            <Filter size={20} className="text-gray-300 mx-auto mb-2" />
                             <p className="text-gray-400 font-bold uppercase text-xs tracking-widest">No loans found</p>
                         </div>
                     ) : (
                         filteredLoans.map((loan) => {
                             const summary = calculateSummary(loan);
+                            const isOverdue = loan.returnDate && new Date(loan.returnDate) < new Date();
+                            const loanDate = new Date(loan.loanDate);
+                            const formattedDate = `${loanDate.getDate().toString().padStart(2, '0')}-${(loanDate.getMonth() + 1).toString().padStart(2, '0')}-${loanDate.getFullYear()}`;
+
                             return (
                                 <div
                                     key={loan.id}
-                                    className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden hover:shadow-md transition-all cursor-pointer group"
+                                    className={`bg-white rounded-xl border p-4 hover:shadow-md transition-all cursor-pointer group ${isOverdue ? 'border-red-200 bg-red-50/30' : 'border-gray-100'}`}
                                     onClick={() => openDetails(loan)}
                                 >
-                                    <div className="p-4 md:p-5 flex items-center gap-4">
-                                        {/* Left: Bill & Name */}
-                                        <div className="flex-1 min-w-0">
-                                            <div className="flex items-center gap-2 mb-1">
-                                                <span className="bg-amber-50 text-[#B8860B] px-2 py-0.5 rounded-md text-[10px] font-black tracking-wider border border-amber-100/50">
-                                                    {loan.billNumber}
-                                                </span>
-                                                <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">
-                                                    {new Date(loan.loanDate).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' })}
-                                                </span>
-                                            </div>
-                                            <p className="font-black text-gray-800 uppercase text-lg md:text-xl tracking-tight truncate group-hover:text-[#D4AF37] transition-colors leading-tight">{loan.customerName}</p>
-                                            <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">{loan.customerPhone || 'No phone'}</p>
+                                    {/* Row 1: Name + Bill Number + Amount */}
+                                    <div className="flex items-center justify-between mb-3">
+                                        <div className="flex items-center gap-2 min-w-0 flex-1">
+                                            <p className="font-black text-gray-800 uppercase text-base truncate group-hover:text-[#D4AF37] transition-colors">
+                                                {loan.customerName}
+                                            </p>
+                                            <span className="text-[10px] text-[#B8860B] font-bold shrink-0">
+                                                {loan.billNumber}
+                                            </span>
                                         </div>
+                                        <p className={`text-xl font-black ml-2 shrink-0 ${isOverdue ? 'text-red-500' : 'text-[#D4AF37]'}`}>
+                                            ₹{summary.totalPayable.toLocaleString('en-IN')}
+                                        </p>
+                                    </div>
 
-                                        {/* Right: Amount & Arrow */}
-                                        <div className="text-right shrink-0">
-                                            <p className="text-[9px] text-gray-400 font-black uppercase tracking-widest leading-none mb-1">Payable</p>
-                                            <p className="text-xl md:text-2xl font-black text-[#D4AF37] tracking-tighter">₹{summary.totalPayable.toLocaleString()}</p>
-                                        </div>
-                                        <ChevronRight size={20} className="text-gray-300 group-hover:text-[#D4AF37] transition-all shrink-0" />
+                                    {/* Row 2: Date + Product Type - Grams */}
+                                    <div className="flex items-center justify-between">
+                                        <p className="text-xs text-gray-400 font-bold">
+                                            {formattedDate}
+                                        </p>
+                                        <span className="text-xs text-gray-400 font-bold uppercase">
+                                            {loan.productType}{loan.productWeight ? ` - ${loan.productWeight}g` : ''}
+                                        </span>
                                     </div>
                                 </div>
                             );

@@ -94,7 +94,7 @@ export default function Sidebar() {
                                     className={`
                                         group flex items-center ${isCollapsed ? 'md:justify-center md:px-0' : 'md:gap-4 md:px-4'} gap-4 px-4 py-3 rounded-xl transition-all duration-200 relative
                                         ${active
-                                            ? 'bg-[#D4AF37] text-white shadow-md shadow-[#D4AF37]/20'
+                                            ? 'bg-[#8B2332] text-white shadow-md shadow-[#8B2332]/20'
                                             : 'text-gray-500 hover:bg-gray-50 hover:text-gray-900'
                                         }
                                     `}

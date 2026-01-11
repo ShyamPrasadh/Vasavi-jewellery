@@ -7,7 +7,7 @@ import { useLanguage } from '@/context/LanguageContext';
 import Link from 'next/link';
 import {
     TrendingUp, Wallet, ChevronRight, Clock, AlertCircle,
-    BarChart3, PieChart, Activity, X
+    BarChart3, PieChart, Activity, X, Filter, ArrowUpDown, Calendar, IndianRupee
 } from 'lucide-react';
 
 interface Loan {
@@ -32,6 +32,13 @@ export default function DashboardPage() {
     const [loading, setLoading] = useState(true);
     const [selectedPeriod, setSelectedPeriod] = useState<PeriodType>('month');
     const [detailModal, setDetailModal] = useState<{ type: string; data: any } | null>(null);
+
+    // Filter states for Recent Loans
+    const [showFilters, setShowFilters] = useState(false);
+    const [sortBy, setSortBy] = useState<'date' | 'amount' | 'name'>('date');
+    const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
+    const [amountFilter, setAmountFilter] = useState<'all' | 'low' | 'medium' | 'high'>('all');
+    const [productFilter, setProductFilter] = useState<string>('all');
 
     useEffect(() => {
         fetchLoans();
@@ -199,6 +206,48 @@ export default function DashboardPage() {
         setDetailModal({ type, data });
     };
 
+    // Get unique product types for filter dropdown
+    const productTypes = useMemo(() => {
+        const types = new Set(loans.map(l => l.productType));
+        return ['all', ...Array.from(types)];
+    }, [loans]);
+
+    // Filtered and sorted recent loans
+    const filteredRecentLoans = useMemo(() => {
+        let filtered = [...stats.filteredLoans];
+
+        // Apply amount filter
+        if (amountFilter !== 'all') {
+            if (amountFilter === 'low') {
+                filtered = filtered.filter(l => l.loanAmount < 25000);
+            } else if (amountFilter === 'medium') {
+                filtered = filtered.filter(l => l.loanAmount >= 25000 && l.loanAmount < 100000);
+            } else if (amountFilter === 'high') {
+                filtered = filtered.filter(l => l.loanAmount >= 100000);
+            }
+        }
+
+        // Apply product filter
+        if (productFilter !== 'all') {
+            filtered = filtered.filter(l => l.productType === productFilter);
+        }
+
+        // Apply sorting
+        filtered.sort((a, b) => {
+            let comparison = 0;
+            if (sortBy === 'date') {
+                comparison = new Date(b.loanDate).getTime() - new Date(a.loanDate).getTime();
+            } else if (sortBy === 'amount') {
+                comparison = b.loanAmount - a.loanAmount;
+            } else if (sortBy === 'name') {
+                comparison = a.customerName.localeCompare(b.customerName);
+            }
+            return sortOrder === 'desc' ? comparison : -comparison;
+        });
+
+        return filtered.slice(0, 10); // Show more loans (10 instead of 5)
+    }, [stats.filteredLoans, sortBy, sortOrder, amountFilter, productFilter]);
+
     return (
         <main className="min-h-screen bg-[#FDFCFB] pb-32 pt-[70px] md:pt-[80px]">
             <Header rates={rates || undefined} />
@@ -222,7 +271,7 @@ export default function DashboardPage() {
                                 key={period}
                                 onClick={() => setSelectedPeriod(period)}
                                 className={`px-3 md:px-4 py-2 rounded-lg text-[10px] md:text-xs font-black uppercase tracking-wider transition-all whitespace-nowrap ${selectedPeriod === period
-                                    ? 'bg-[#D4AF37] text-white shadow-md'
+                                    ? 'bg-[#8B2332] text-white shadow-md'
                                     : 'text-gray-500 hover:text-gray-800'
                                     }`}
                             >
@@ -234,7 +283,7 @@ export default function DashboardPage() {
 
                 {loading ? (
                     <div className="flex items-center justify-center py-20">
-                        <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-[#D4AF37]"></div>
+                        <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-[#8B2332]"></div>
                     </div>
                 ) : (
                     <>
@@ -245,16 +294,16 @@ export default function DashboardPage() {
                                 onClick={() => openDetailModal('loansGiven', stats.filteredLoans)}
                                 className="bg-white rounded-2xl p-4 md:p-5 shadow-sm border border-gray-100 relative overflow-hidden group hover:shadow-lg transition-all cursor-pointer"
                             >
-                                <div className="absolute top-0 right-0 w-16 md:w-20 h-16 md:h-20 bg-gradient-to-bl from-[#D4AF37]/10 to-transparent rounded-bl-full"></div>
+                                <div className="absolute top-0 right-0 w-16 md:w-20 h-16 md:h-20 bg-gradient-to-bl from-[#8B2332]/10 to-transparent rounded-bl-full"></div>
                                 <div className="flex items-center gap-2 mb-2 md:mb-3">
-                                    <div className="p-1.5 md:p-2 bg-[#D4AF37]/10 rounded-lg">
-                                        <Wallet size={16} className="text-[#D4AF37]" />
+                                    <div className="p-1.5 md:p-2 bg-[#8B2332]/10 rounded-lg">
+                                        <Wallet size={16} className="text-[#8B2332]" />
                                     </div>
                                     <span className="text-[9px] md:text-[10px] font-black text-gray-400 uppercase tracking-widest">{t('loansGiven')}</span>
                                 </div>
                                 <p className="text-xl md:text-3xl font-black text-gray-800">{formatCurrency(stats.periodPrincipal)}</p>
                                 <p className="text-[9px] md:text-[10px] text-gray-400 mt-1 font-bold">{stats.totalLoans} {t('transactions')}</p>
-                                <p className="text-[8px] md:text-[9px] text-[#D4AF37] font-bold mt-0.5">{t('principalOnly')}</p>
+                                <p className="text-[8px] md:text-[9px] text-[#8B2332] font-bold mt-0.5">{t('principalOnly')}</p>
                             </div>
 
                             {/* Interest Earned */}
@@ -380,44 +429,189 @@ export default function DashboardPage() {
                             </div>
                         </div>
 
-                        {/* Recent Loans */}
+                        {/* Recent Loans - Enhanced */}
                         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-                            <div className="px-4 md:px-6 py-3 md:py-4 border-b border-gray-100 flex items-center justify-between">
-                                <div className="flex items-center gap-2">
-                                    <Clock size={16} className="text-[#D4AF37]" />
-                                    <h3 className="text-xs md:text-sm font-black text-gray-800 uppercase tracking-widest">{t('recentLoans')}</h3>
+                            {/* Header with Filter Button */}
+                            <div className="px-4 md:px-6 py-4 md:py-5 border-b border-gray-100">
+                                <div className="flex items-center justify-between mb-3">
+                                    <div className="flex items-center gap-3">
+                                        <div className="p-2 bg-[#D4AF37]/10 rounded-xl">
+                                            <Clock size={20} className="text-[#B8860B]" />
+                                        </div>
+                                        <div>
+                                            <h3 className="text-sm md:text-base font-black text-gray-800 uppercase tracking-widest">{t('recentLoans')}</h3>
+                                            <p className="text-[10px] text-gray-400 font-bold">{filteredRecentLoans.length} loans shown</p>
+                                        </div>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                        <button
+                                            onClick={() => setShowFilters(!showFilters)}
+                                            className={`flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition-all ${showFilters ? 'bg-[#D4AF37] text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
+                                        >
+                                            <Filter size={14} />
+                                            <span className="hidden sm:inline">Filter</span>
+                                        </button>
+                                        <Link href="/gold-loan" className="text-[10px] md:text-xs font-black text-[#D4AF37] uppercase tracking-wider flex items-center gap-1 hover:underline">
+                                            {t('viewAll')} <ChevronRight size={14} />
+                                        </Link>
+                                    </div>
                                 </div>
-                                <Link href="/gold-loan" className="text-[10px] md:text-xs font-black text-[#D4AF37] uppercase tracking-wider flex items-center gap-1 hover:underline">
-                                    {t('viewAll')} <ChevronRight size={14} />
-                                </Link>
+
+                                {/* Filter Panel */}
+                                {showFilters && (
+                                    <div className="mt-4 p-5 bg-gradient-to-br from-[#D4AF37]/5 to-[#D4AF37]/10 rounded-2xl border border-[#D4AF37]/20 animate-in fade-in slide-in-from-top-2 duration-200">
+                                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                            {/* Sort By */}
+                                            <div>
+                                                <label className="flex items-center gap-1.5 text-[10px] font-black text-[#B8860B] uppercase tracking-widest mb-2">
+                                                    <Calendar size={12} />
+                                                    Sort By
+                                                </label>
+                                                <div className="relative">
+                                                    <select
+                                                        value={sortBy}
+                                                        onChange={(e) => setSortBy(e.target.value as 'date' | 'amount' | 'name')}
+                                                        className="w-full px-4 py-3 bg-white border-2 border-[#D4AF37]/30 rounded-xl text-sm font-bold text-gray-800 focus:border-[#D4AF37] focus:ring-4 focus:ring-[#D4AF37]/10 outline-none transition-all cursor-pointer appearance-none shadow-sm hover:border-[#D4AF37]/50"
+                                                    >
+                                                        <option value="date">Latest Date</option>
+                                                        <option value="amount">Highest Amount</option>
+                                                        <option value="name">Customer Name</option>
+                                                    </select>
+                                                    <ChevronRight size={16} className="absolute right-3 top-1/2 -translate-y-1/2 text-[#B8860B] rotate-90 pointer-events-none" />
+                                                </div>
+                                            </div>
+
+                                            {/* Sort Order */}
+                                            <div>
+                                                <label className="flex items-center gap-1.5 text-[10px] font-black text-[#B8860B] uppercase tracking-widest mb-2">
+                                                    <ArrowUpDown size={12} />
+                                                    Order
+                                                </label>
+                                                <button
+                                                    onClick={() => setSortOrder(sortOrder === 'desc' ? 'asc' : 'desc')}
+                                                    className={`w-full px-4 py-3 border-2 rounded-xl text-sm font-bold flex items-center justify-center gap-2 transition-all shadow-sm ${sortOrder === 'desc'
+                                                        ? 'bg-[#D4AF37] border-[#D4AF37] text-white'
+                                                        : 'bg-white border-[#D4AF37]/30 text-gray-800 hover:border-[#D4AF37]/50'
+                                                        }`}
+                                                >
+                                                    {sortOrder === 'desc' ? '↓ Descending' : '↑ Ascending'}
+                                                </button>
+                                            </div>
+
+                                            {/* Amount Filter */}
+                                            <div>
+                                                <label className="flex items-center gap-1.5 text-[10px] font-black text-[#B8860B] uppercase tracking-widest mb-2">
+                                                    <IndianRupee size={12} />
+                                                    Amount Range
+                                                </label>
+                                                <div className="relative">
+                                                    <select
+                                                        value={amountFilter}
+                                                        onChange={(e) => setAmountFilter(e.target.value as 'all' | 'low' | 'medium' | 'high')}
+                                                        className="w-full px-4 py-3 bg-white border-2 border-[#D4AF37]/30 rounded-xl text-sm font-bold text-gray-800 focus:border-[#D4AF37] focus:ring-4 focus:ring-[#D4AF37]/10 outline-none transition-all cursor-pointer appearance-none shadow-sm hover:border-[#D4AF37]/50"
+                                                    >
+                                                        <option value="all">All Amounts</option>
+                                                        <option value="low">Under ₹25,000</option>
+                                                        <option value="medium">₹25K - ₹1 Lakh</option>
+                                                        <option value="high">Above ₹1 Lakh</option>
+                                                    </select>
+                                                    <ChevronRight size={16} className="absolute right-3 top-1/2 -translate-y-1/2 text-[#B8860B] rotate-90 pointer-events-none" />
+                                                </div>
+                                            </div>
+
+                                            {/* Product Filter */}
+                                            <div>
+                                                <label className="flex items-center gap-1.5 text-[10px] font-black text-[#B8860B] uppercase tracking-widest mb-2">
+                                                    <PieChart size={12} />
+                                                    Product Type
+                                                </label>
+                                                <div className="relative">
+                                                    <select
+                                                        value={productFilter}
+                                                        onChange={(e) => setProductFilter(e.target.value)}
+                                                        className="w-full px-4 py-3 bg-white border-2 border-[#D4AF37]/30 rounded-xl text-sm font-bold text-gray-800 focus:border-[#D4AF37] focus:ring-4 focus:ring-[#D4AF37]/10 outline-none transition-all cursor-pointer appearance-none shadow-sm hover:border-[#D4AF37]/50"
+                                                    >
+                                                        {productTypes.map(type => (
+                                                            <option key={type} value={type}>{type === 'all' ? 'All Products' : type}</option>
+                                                        ))}
+                                                    </select>
+                                                    <ChevronRight size={16} className="absolute right-3 top-1/2 -translate-y-1/2 text-[#B8860B] rotate-90 pointer-events-none" />
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {/* Active Filters & Clear */}
+                                        {(amountFilter !== 'all' || productFilter !== 'all' || sortBy !== 'date') && (
+                                            <div className="mt-4 pt-4 border-t border-[#D4AF37]/20 flex items-center justify-between">
+                                                <div className="flex items-center gap-2 flex-wrap">
+                                                    {sortBy !== 'date' && (
+                                                        <span className="px-3 py-1 bg-[#D4AF37]/10 text-[#B8860B] rounded-full text-[10px] font-bold">
+                                                            Sorted by {sortBy}
+                                                        </span>
+                                                    )}
+                                                    {amountFilter !== 'all' && (
+                                                        <span className="px-3 py-1 bg-[#D4AF37]/10 text-[#B8860B] rounded-full text-[10px] font-bold">
+                                                            {amountFilter === 'low' ? '< ₹25K' : amountFilter === 'medium' ? '₹25K-1L' : '> ₹1L'}
+                                                        </span>
+                                                    )}
+                                                    {productFilter !== 'all' && (
+                                                        <span className="px-3 py-1 bg-[#D4AF37]/10 text-[#B8860B] rounded-full text-[10px] font-bold">
+                                                            {productFilter}
+                                                        </span>
+                                                    )}
+                                                </div>
+                                                <button
+                                                    onClick={() => { setAmountFilter('all'); setProductFilter('all'); setSortBy('date'); }}
+                                                    className="px-4 py-2 bg-[#D4AF37] text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-[#B8860B] transition-all shadow-md"
+                                                >
+                                                    Reset All
+                                                </button>
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
                             </div>
-                            <div className="divide-y divide-gray-50">
-                                {stats.recentLoans.map(loan => (
+
+                            {/* Loans List - Larger Display */}
+                            <div className="divide-y divide-gray-100">
+                                {filteredRecentLoans.map(loan => (
                                     <div
                                         key={loan.id}
-                                        className="px-4 md:px-6 py-3 md:py-4 flex items-center justify-between hover:bg-gray-50/50 transition-all cursor-pointer"
+                                        className="px-4 md:px-6 py-4 md:py-5 flex items-center justify-between hover:bg-gray-50/50 transition-all cursor-pointer group"
                                         onClick={() => openDetailModal('loanDetail', loan)}
                                     >
-                                        <div className="flex items-center gap-3 md:gap-4">
-                                            <div className="w-8 h-8 md:w-10 md:h-10 bg-[#D4AF37]/10 rounded-xl flex items-center justify-center">
-                                                <span className="text-[#D4AF37] font-black text-xs md:text-sm">{loan.customerName.charAt(0)}</span>
+                                        <div className="flex items-center gap-4 md:gap-5">
+                                            <div className="w-12 h-12 md:w-14 md:h-14 bg-[#D4AF37]/10 rounded-2xl flex items-center justify-center">
+                                                <span className="text-[#B8860B] font-black text-lg md:text-xl">{loan.customerName.charAt(0)}</span>
                                             </div>
                                             <div>
-                                                <p className="font-black text-gray-800 uppercase text-xs md:text-sm">{loan.customerName}</p>
-                                                <p className="text-[9px] md:text-[10px] text-gray-400 font-bold">{loan.billNumber} • {loan.productType}</p>
+                                                <p className="font-black text-gray-800 uppercase text-sm md:text-base group-hover:text-[#D4AF37] transition-colors">{loan.customerName}</p>
+                                                <div className="flex items-center gap-2 mt-1">
+                                                    <span className="bg-gray-100 text-gray-600 px-2 py-0.5 rounded-md text-[10px] font-bold">{loan.billNumber}</span>
+                                                    <span className="bg-[#D4AF37]/10 text-[#B8860B] px-2 py-0.5 rounded-md text-[10px] font-bold">{loan.productType}</span>
+                                                </div>
+                                                <p className="text-[10px] text-gray-400 font-bold mt-1 flex items-center gap-1">
+                                                    <Calendar size={10} />
+                                                    {new Date(loan.loanDate).toLocaleDateString(language === 'ta' ? 'ta-IN' : 'en-IN', { day: '2-digit', month: 'short', year: '2-digit' })}
+                                                </p>
                                             </div>
                                         </div>
                                         <div className="text-right">
-                                            <p className="font-black text-[#D4AF37] text-sm md:text-base">₹{loan.loanAmount.toLocaleString()}</p>
-                                            <p className="text-[9px] md:text-[10px] text-gray-400 font-bold">
-                                                {new Date(loan.loanDate).toLocaleDateString(language === 'ta' ? 'ta-IN' : 'en-IN', { day: '2-digit', month: 'short' })}
+                                            <p className="font-black text-[#D4AF37] text-lg md:text-xl">₹{loan.loanAmount.toLocaleString()}</p>
+                                            <p className="text-[10px] text-gray-400 font-bold mt-1">
+                                                {loan.interestRate}% p.m.
                                             </p>
+                                            <ChevronRight size={16} className="text-gray-300 group-hover:text-[#D4AF37] transition-all ml-auto mt-1" />
                                         </div>
                                     </div>
                                 ))}
-                                {stats.recentLoans.length === 0 && (
-                                    <div className="px-6 py-12 text-center">
-                                        <p className="text-gray-400 font-bold text-sm">{t('noLoansYet')}</p>
+                                {filteredRecentLoans.length === 0 && (
+                                    <div className="px-6 py-16 text-center">
+                                        <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                            <Filter size={24} className="text-gray-400" />
+                                        </div>
+                                        <p className="text-gray-500 font-bold text-sm">{t('noLoansYet')}</p>
+                                        <p className="text-gray-400 text-xs mt-1">Try adjusting your filters</p>
                                     </div>
                                 )}
                             </div>
