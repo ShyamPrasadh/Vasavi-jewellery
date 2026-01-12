@@ -38,33 +38,50 @@ export async function PUT(
     try {
         const { id } = await params;
         const body = await request.json();
-        const {
-            customerName,
-            customerPhone,
-            customerAadhaar,
-            customerAddress,
-            loanAmount,
-            productType,
-            productWeight,
-            loanDate,
-            returnDate,
-            interestRate
-        } = body;
+
+        // Prepare update data structure - support partial updates
+        const updateData: any = {};
+
+        if (body.customerName !== undefined) updateData.customerName = body.customerName;
+        if (body.customerPhone !== undefined) updateData.customerPhone = body.customerPhone;
+        if (body.customerAadhaar !== undefined) updateData.customerAadhaar = body.customerAadhaar;
+        if (body.customerAddress !== undefined) updateData.customerAddress = body.customerAddress;
+        if (body.loanAmount !== undefined) updateData.loanAmount = parseFloat(body.loanAmount);
+        if (body.productType !== undefined) updateData.productType = body.productType;
+        if (body.productWeight !== undefined) updateData.productWeight = body.productWeight ? parseFloat(body.productWeight) : null;
+        if (body.loanDate !== undefined) updateData.loanDate = new Date(body.loanDate);
+        if (body.returnDate !== undefined) updateData.returnDate = body.returnDate ? new Date(body.returnDate) : null;
+        if (body.interestRate !== undefined) updateData.interestRate = parseFloat(body.interestRate);
+        if (body.status !== undefined) updateData.status = body.status;
+
+        // Handle additional loans if provided (Nested Writes)
+        if (body.additionalLoans) {
+            const incomingLoans = body.additionalLoans;
+            const incomingIds = incomingLoans.map((l: any) => l.id).filter((id: any) => id);
+
+            updateData.additionalLoans = {
+                // Delete missing ones
+                deleteMany: {
+                    id: { notIn: incomingIds }
+                },
+                // Update existing or Create new
+                upsert: incomingLoans.map((loan: any) => ({
+                    where: { id: loan.id || 'non_existent_id' },
+                    update: {
+                        amount: parseFloat(loan.amount),
+                        date: new Date(loan.date)
+                    },
+                    create: {
+                        amount: parseFloat(loan.amount),
+                        date: new Date(loan.date)
+                    }
+                }))
+            };
+        }
 
         const loan = await prisma.loan.update({
             where: { id },
-            data: {
-                customerName,
-                customerPhone,
-                customerAadhaar,
-                customerAddress,
-                loanAmount: parseFloat(loanAmount),
-                productType,
-                productWeight: productWeight ? parseFloat(productWeight) : null,
-                loanDate: new Date(loanDate),
-                returnDate: returnDate ? new Date(returnDate) : null,
-                interestRate: parseFloat(interestRate)
-            },
+            data: updateData,
             include: {
                 additionalLoans: true
             }
@@ -73,7 +90,7 @@ export async function PUT(
         return NextResponse.json(loan);
     } catch (error: any) {
         console.error('Error updating loan:', error);
-        return NextResponse.json({ error: 'Failed to update loan' }, { status: 500 });
+        return NextResponse.json({ error: 'Failed to update loan', details: error instanceof Error ? error.message : String(error) }, { status: 500 });
     }
 }
 

@@ -21,6 +21,7 @@ model Loan {
   interestRate    Float
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
+  status          String   @default("active") // active, settled
   
   // Relation to additional loan entries
   additionalLoans AdditionalLoan[]

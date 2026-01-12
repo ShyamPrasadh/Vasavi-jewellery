@@ -262,13 +262,13 @@ export default function CustomDatePicker({ selected, onChange, align = 'left', c
             `}</style>
 
             <div
-                className="relative flex items-center bg-gray-50 border border-gray-200 rounded-xl transition-all group w-full overflow-hidden date-input-field focus-within:bg-white focus-within:border-[#D4AF37] focus-within:ring-2 focus-within:ring-[#D4AF37]/10"
+                className="relative flex items-center bg-white border border-gray-200 rounded-xl transition-all group w-full overflow-hidden date-input-field focus-within:bg-white focus-within:border-[#D4AF37] focus-within:ring-2 focus-within:ring-[#D4AF37]/10"
             >
                 <div
                     onClick={() => setIsOpen(!isOpen)}
                     className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 group-hover:text-[#D4AF37] transition-colors cursor-pointer z-10"
                 >
-                    <Calendar size={14} />
+                    <Calendar size={18} />
                 </div>
                 <input
                     type="text"
@@ -276,7 +276,7 @@ export default function CustomDatePicker({ selected, onChange, align = 'left', c
                     onChange={handleInputChange}
                     onFocus={() => setIsOpen(true)}
                     placeholder="DD-MM-YYYY"
-                    className="w-full pl-10 pr-4 py-4 bg-transparent outline-none font-bold text-gray-800 text-lg leading-none placeholder:text-gray-300"
+                    className="w-full pl-10 pr-4 py-3.5 bg-transparent outline-none font-bold text-gray-800 leading-none placeholder:text-gray-300"
                 />
             </div>
 
