@@ -105,9 +105,18 @@ export default function Sidebar() {
                                         className="flex-shrink-0"
                                         strokeWidth={active ? 2.5 : 2}
                                     />
-                                    <span className={`text-xs font-black uppercase tracking-widest whitespace-nowrap transition-all duration-300 ${isCollapsed ? 'md:w-0 md:opacity-0 md:hidden' : 'md:w-auto md:opacity-100'}`}>
+                                    <span className={`text-xs font-black uppercase tracking-widest whitespace-nowrap transition-all duration-300 ${isCollapsed ? 'md:hidden' : 'md:w-auto md:opacity-100'}`}>
                                         {item.name}
                                     </span>
+
+                                    {/* Tooltip for collapsed mode */}
+                                    {isCollapsed && (
+                                        <div className="absolute left-full ml-4 px-3 py-2 bg-[#333333] text-white text-[10px] font-bold uppercase tracking-widest rounded-lg opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200 pointer-events-none whitespace-nowrap z-50 shadow-xl border border-gray-700">
+                                            {item.name}
+                                            {/* Little arrow */}
+                                            <div className="absolute top-1/2 -left-1 -translate-y-1/2 border-4 border-transparent border-r-[#333333]"></div>
+                                        </div>
+                                    )}
                                 </Link>
                             );
                         })}
@@ -115,16 +124,6 @@ export default function Sidebar() {
 
                     {/* Footer / User Profile Mock */}
                     <div className="mt-auto pt-6 border-t border-gray-100">
-                        <div className={`flex items-center ${isCollapsed ? 'md:justify-center' : 'md:gap-3 md:px-2'} gap-3 px-2`}>
-                            <div className="h-10 w-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-400 flex-shrink-0">
-                                <Coins size={18} />
-                            </div>
-                            <div className={`overflow-hidden transition-all duration-300 ${isCollapsed ? 'md:w-0 md:opacity-0' : 'md:w-auto md:opacity-100'}`}>
-                                <p className="text-xs font-bold text-gray-800 whitespace-nowrap">Dashboard</p>
-                                <p className="text-[10px] text-gray-400 whitespace-nowrap">v1.2.0</p>
-                            </div>
-                        </div>
-
                         {/* Collapsible Toggle for Desktop */}
                         <button
                             onClick={toggleSidebar}
