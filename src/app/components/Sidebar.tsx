@@ -24,7 +24,7 @@ export default function Sidebar() {
 
     const menuItems = [
         {
-            name: 'Dashboard',
+            name: t('dashboard'),
             path: '/dashboard',
             mode: null,
             icon: LayoutDashboard
@@ -42,7 +42,7 @@ export default function Sidebar() {
             icon: Percent
         },
         {
-            name: 'Gold Loan',
+            name: t('goldLoan'),
             path: '/gold-loan',
             mode: null,
             icon: Coins

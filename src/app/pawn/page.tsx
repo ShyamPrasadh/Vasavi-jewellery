@@ -128,10 +128,10 @@ function PawnCalculatorContent() {
             <div className="max-w-7xl mx-auto px-4 md:px-6 mt-6 md:mt-8">
                 <div className="mb-8">
                     <h1 className="text-2xl md:text-3xl font-black text-gray-800 uppercase tracking-tight">
-                        {isShopMode ? 'Pawn Shop' : 'Pawn Calculator'}
+                        {isShopMode ? t('pawnShop') : t('pawnCalculator')}
                     </h1>
                     <p className="text-[10px] md:text-xs font-bold text-[#D4AF37] uppercase tracking-[0.2em] mt-1">
-                        {isShopMode ? 'Manage Records & Settlement' : 'Interest & Settlement Calculator'}
+                        {isShopMode ? t('manageRecordsSettlement') : t('interestSettlementCalculator')}
                     </p>
                 </div>
 
@@ -156,7 +156,7 @@ function PawnCalculatorContent() {
                                             type="text"
                                             value={customerName}
                                             onChange={(e) => setCustomerName(e.target.value.replace(/[^a-zA-Z\s]/g, ''))}
-                                            placeholder="Enter Full Name"
+                                            placeholder={t('enterName')}
                                             className="w-full pl-12 pr-4 py-4.5 bg-white border border-gray-200 rounded-2xl focus:ring-4 focus:ring-[#D4AF37]/10 focus:border-[#D4AF37] outline-none transition-all font-bold text-lg text-gray-800 shadow-sm"
                                         />
                                     </div>
@@ -169,7 +169,7 @@ function PawnCalculatorContent() {
                                             type="tel"
                                             value={customerPhone}
                                             onChange={(e) => setCustomerPhone(e.target.value.replace(/\D/g, '').slice(0, 10))}
-                                            placeholder="Enter Phone Number"
+                                            placeholder={t('digitNumber10')}
                                             className="w-full pl-12 pr-4 py-4.5 bg-white border border-gray-200 rounded-2xl focus:ring-4 focus:ring-[#D4AF37]/10 focus:border-[#D4AF37] outline-none transition-all font-bold text-lg text-gray-800 shadow-sm"
                                         />
                                     </div>
@@ -202,7 +202,7 @@ function PawnCalculatorContent() {
                                         rows={3}
                                         value={customerAddress}
                                         onChange={(e) => setCustomerAddress(e.target.value)}
-                                        placeholder="Enter Full Address"
+                                        placeholder={t('fullAddress')}
                                         className="w-full pl-12 pr-4 py-4.5 bg-white border border-gray-200 rounded-2xl focus:ring-4 focus:ring-[#D4AF37]/10 focus:border-[#D4AF37] outline-none transition-all font-bold text-lg text-gray-800 resize-none shadow-sm"
                                     />
                                 </div>
@@ -244,7 +244,7 @@ function PawnCalculatorContent() {
                                             className="w-full pl-12 pr-10 py-4.5 bg-white border border-gray-200 rounded-2xl focus:ring-4 focus:ring-[#D4AF37]/10 focus:border-[#D4AF37] outline-none transition-all font-bold text-lg text-gray-800 appearance-none cursor-pointer shadow-sm"
                                         >
                                             {['Earring', 'Coin', 'Ring', 'Necklace', 'Haram', 'Chain'].map(item => (
-                                                <option key={item} value={item}>{item}</option>
+                                                <option key={item} value={item}>{t(item as any)}</option>
                                             ))}
                                         </select>
                                         <ChevronRight size={20} className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 rotate-90" />
@@ -557,7 +557,7 @@ function PawnCalculatorContent() {
                                     <div className="p-2 bg-[#D4AF37]/10 rounded-xl text-[#D4AF37]">
                                         <Printer size={20} />
                                     </div>
-                                    <h3 className="text-sm md:text-lg font-black text-gray-800 uppercase tracking-widest">Receipt Preview</h3>
+                                    <h3 className="text-sm md:text-lg font-black text-gray-800 uppercase tracking-widest">{t('receiptPreview')}</h3>
                                 </div>
                                 <div className="flex gap-3 w-full md:w-auto">
                                     <button
@@ -565,8 +565,8 @@ function PawnCalculatorContent() {
                                         className="flex-1 md:flex-none bg-[#D4AF37] text-white px-4 md:px-6 py-3 md:py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-[#B8860B] transition-all shadow-lg shadow-amber-200"
                                     >
                                         <Printer size={14} />
-                                        <span className="hidden sm:inline">Print</span>
-                                        <span className="sm:hidden">Print</span>
+                                        <span className="hidden sm:inline">{t('print')}</span>
+                                        <span className="sm:hidden">{t('print')}</span>
                                     </button>
                                     <button
                                         onClick={() => setShowPrintModal(false)}
@@ -592,8 +592,8 @@ function PawnCalculatorContent() {
                                             </div>
                                         </div>
                                         <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest text-gray-500">
-                                            <p>Bill No: <span className="text-gray-900 ml-1">{billNumber}</span></p>
-                                            <p>Date: <span className="text-gray-900 ml-1">{new Date().toLocaleDateString('en-GB')}</span></p>
+                                            <p>{t('billNo')}: <span className="text-gray-900 ml-1">{billNumber}</span></p>
+                                            <p>{t('date')}: <span className="text-gray-900 ml-1">{new Date().toLocaleDateString(t('all') === 'அனைத்தும்' ? 'ta-IN' : 'en-GB')}</span></p>
                                         </div>
                                     </div>
 
@@ -603,11 +603,11 @@ function PawnCalculatorContent() {
                                             <div className="space-y-4">
                                                 <h4 className="text-[11px] font-black text-[#D4AF37] uppercase tracking-[0.2em] border-b border-[#D4AF37]/20 pb-2">{t('customerDetails')}</h4>
                                                 <div className="space-y-2.5">
-                                                    <div className="flex justify-between text-xs"><span className="text-gray-400 font-bold uppercase tracking-widest">Name:</span> <span className="text-gray-800 font-black uppercase">{customerName || 'N/A'}</span></div>
-                                                    <div className="flex justify-between text-xs"><span className="text-gray-400 font-bold uppercase tracking-widest">Phone:</span> <span className="text-gray-800 font-black">{customerPhone || 'N/A'}</span></div>
-                                                    <div className="flex justify-between text-xs"><span className="text-gray-400 font-bold uppercase tracking-widest">Aadhaar:</span> <span className="text-gray-800 font-black">{customerAadhaar || 'N/A'}</span></div>
+                                                    <div className="flex justify-between text-xs"><span className="text-gray-400 font-bold uppercase tracking-widest">{t('fullName')}:</span> <span className="text-gray-800 font-black uppercase">{customerName || 'N/A'}</span></div>
+                                                    <div className="flex justify-between text-xs"><span className="text-gray-400 font-bold uppercase tracking-widest">{t('phoneNumber')}:</span> <span className="text-gray-800 font-black">{customerPhone || 'N/A'}</span></div>
+                                                    <div className="flex justify-between text-xs"><span className="text-gray-400 font-bold uppercase tracking-widest">{t('aadhaarNumber')}:</span> <span className="text-gray-800 font-black">{customerAadhaar || 'N/A'}</span></div>
                                                     <div className="flex flex-col gap-1 mt-2">
-                                                        <span className="text-gray-400 text-[10px] font-bold uppercase tracking-widest">Address:</span>
+                                                        <span className="text-gray-400 text-[10px] font-bold uppercase tracking-widest">{t('address')}:</span>
                                                         <span className="text-gray-800 font-bold text-xs uppercase leading-relaxed">{customerAddress || 'N/A'}</span>
                                                     </div>
                                                 </div>
@@ -615,10 +615,10 @@ function PawnCalculatorContent() {
                                             <div className="space-y-4">
                                                 <h4 className="text-[11px] font-black text-[#D4AF37] uppercase tracking-[0.2em] border-b border-[#D4AF37]/20 pb-2">{t('assetDetails')}</h4>
                                                 <div className="space-y-2.5">
-                                                    <div className="flex justify-between text-xs"><span className="text-gray-400 font-bold uppercase tracking-widest">Product:</span> <span className="text-gray-800 font-black uppercase">{productType}</span></div>
-                                                    <div className="flex justify-between text-xs"><span className="text-gray-400 font-bold uppercase tracking-widest">Loan Date:</span> <span className="text-gray-800 font-black">{startDate}</span></div>
-                                                    <div className="flex justify-between text-xs"><span className="text-gray-600 font-bold uppercase tracking-widest">Return Date:</span> <span className="text-red-600 font-black">{returnDate}</span></div>
-                                                    <div className="flex justify-between text-xs"><span className="text-gray-400 font-bold uppercase tracking-widest">Rate:</span> <span className="text-gray-800 font-black">{interestRate}% / m</span></div>
+                                                    <div className="flex justify-between text-xs"><span className="text-gray-400 font-bold uppercase tracking-widest">{t('product')}:</span> <span className="text-gray-800 font-black uppercase">{t(productType as any)}</span></div>
+                                                    <div className="flex justify-between text-xs"><span className="text-gray-400 font-bold uppercase tracking-widest">{t('loanDate')}:</span> <span className="text-gray-800 font-black">{startDate}</span></div>
+                                                    <div className="flex justify-between text-xs"><span className="text-gray-600 font-bold uppercase tracking-widest">{t('returnDateLabel')}:</span> <span className="text-red-600 font-black">{returnDate}</span></div>
+                                                    <div className="flex justify-between text-xs"><span className="text-gray-400 font-bold uppercase tracking-widest">{t('rate')}:</span> <span className="text-gray-800 font-black">{interestRate}{t('perMonth')}</span></div>
                                                 </div>
                                             </div>
                                         </div>
@@ -630,10 +630,10 @@ function PawnCalculatorContent() {
                                         <table className="w-full text-xs">
                                             <thead>
                                                 <tr className="bg-gray-50 border-y border-gray-100 uppercase tracking-widest font-black text-gray-500">
-                                                    <th className="py-3 px-2 text-left">PRINCIPAL</th>
-                                                    <th className="py-3 px-2 text-center">LOAN DATE</th>
-                                                    <th className="py-3 px-2 text-center">DURATION</th>
-                                                    <th className="py-3 px-2 text-right">INTEREST</th>
+                                                    <th className="py-3 px-2 text-left">{t('principal')}</th>
+                                                    <th className="py-3 px-2 text-center">{t('loanDate')}</th>
+                                                    <th className="py-3 px-2 text-center">{t('duration')}</th>
+                                                    <th className="py-3 px-2 text-right">{t('interest')}</th>
                                                 </tr>
                                             </thead>
                                             <tbody className="divide-y divide-gray-50">
@@ -650,10 +650,7 @@ function PawnCalculatorContent() {
                                             </tbody>
                                             <tfoot>
                                                 <tr className="border-t-2 border-gray-100 font-black bg-gray-50/50">
-                                                    <td colSpan={3} className="py-4 px-2 text-gray-800 uppercase tracking-widest text-[10px]">Grand Total Payable</td>
-                                                    {/* Total Principal and Interest are already in the summary, just showing Total Payable here as per previous design, but maybe aligned? */}
-                                                    {/* Previous design had 3 columns colspan=2. Now we have 4 columns. */}
-                                                    {/* Let's keep total amount at the end. */}
+                                                    <td colSpan={3} className="py-4 px-2 text-gray-800 uppercase tracking-widest text-[10px]">{t('grandTotalPayable')}</td>
                                                     <td className="py-4 px-2 text-right text-[#D4AF37] text-sm">₹{Math.round(calculations.totalAmount).toLocaleString()}</td>
                                                 </tr>
                                             </tfoot>
@@ -662,12 +659,12 @@ function PawnCalculatorContent() {
 
                                     {/* Terms & Conditions */}
                                     <div className="mb-12 space-y-3">
-                                        <h4 className="text-[10px] font-black text-gray-800 uppercase tracking-widest border-b border-gray-100 pb-1">Terms & Conditions</h4>
+                                        <h4 className="text-[10px] font-black text-gray-800 uppercase tracking-widest border-b border-gray-100 pb-1">{t('termsConditions')}</h4>
                                         <ol className="text-[9px] text-gray-500 space-y-1.5 leading-relaxed font-medium">
-                                            <li>1. Interest is calculated at {interestRate}% per month on the principal amount from the date of pledge.</li>
-                                            <li>2. The pledge period is for 1 year. Items not redeemed within 1 year may be subject to auction.</li>
-                                            <li>3. Original receipt and identification are mandatory for the redemption of pledged articles.</li>
-                                            <li>4. The management is not responsible for any damage due to natural wear or items left beyond 1 year.</li>
+                                            <li>1. {t('term1', { rate: interestRate })}</li>
+                                            <li>2. {t('term2')}</li>
+                                            <li>3. {t('term3')}</li>
+                                            <li>4. {t('term4')}</li>
                                         </ol>
                                     </div>
 
@@ -675,11 +672,11 @@ function PawnCalculatorContent() {
                                     <div className="grid grid-cols-2 gap-20 pt-10">
                                         <div className="text-center">
                                             <div className="border-b border-gray-300 w-full mb-2 h-10"></div>
-                                            <p className="text-[9px] font-black text-gray-400 uppercase tracking-widest">Customer Signature</p>
+                                            <p className="text-[9px] font-black text-gray-400 uppercase tracking-widest">{t('customerSignature')}</p>
                                         </div>
                                         <div className="text-center relative">
                                             <div className="border-b border-gray-300 w-full mb-2 h-10"></div>
-                                            <p className="text-[9px] font-black text-gray-400 uppercase tracking-widest">For Sri Vasavi Jewellery</p>
+                                            <p className="text-[9px] font-black text-gray-400 uppercase tracking-widest">{t('forSriVasaviJewellery')}</p>
                                         </div>
                                     </div>
                                 </div>

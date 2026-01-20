@@ -56,10 +56,10 @@ export default function CalculatorPage() {
       <div className="max-w-7xl mx-auto px-4 md:px-6 mt-6 md:mt-8">
         <div className="mb-8">
           <h1 className="text-2xl md:text-3xl font-black text-gray-800 uppercase tracking-tight">
-            Gold Calculator
+            {t('goldCalculator')}
           </h1>
           <p className="text-[10px] md:text-xs font-bold text-[#D4AF37] uppercase tracking-[0.2em] mt-1">
-            Live Price & Wastage Calculator
+            {t('livePriceWastageCalculator')}
           </p>
         </div>
 
@@ -78,7 +78,7 @@ export default function CalculatorPage() {
                 className="w-full pl-8 py-2 bg-transparent border-b-2 border-gray-100 focus:border-[#D4AF37] outline-none transition-all font-bold text-lg text-gray-800 appearance-none cursor-pointer"
               >
                 {['Ring', 'Earring', 'Chain', 'Haram', 'Necklace', 'Coin'].map((item) => (
-                  <option key={item} value={item}>{item}</option>
+                  <option key={item} value={item}>{t(item as any)}</option>
                 ))}
               </select>
               <div className="absolute right-0 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">

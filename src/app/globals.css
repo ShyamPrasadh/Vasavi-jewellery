@@ -51,32 +51,49 @@ body {
   background-color: #B8860B;
 }
 
-/* Tamil Language Specific Styles */
-.lang-ta {
-  font-size: 1.1em;
-  /* Overall font boost for Tamil */
-}
-
+/* Tamil Language Specific Styles - Maintain Same Dimensions as English */
 .lang-ta * {
-  letter-spacing: normal !important;
-  /* Reset tracking for Tamil text */
+  letter-spacing: 0 !important;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* Specific overrides for common small text in Tamil */
-.lang-ta .text-\[10px\],
-.lang-ta .text-\[11px\],
-.lang-ta .text-xs {
-  font-size: 0.85rem !important;
-  /* Increase small text sizes */
+/* Completely exclude header from any Tamil modifications */
+.lang-ta header,
+.lang-ta header * {
+  letter-spacing: inherit !important;
+  font-size: inherit !important;
+  font-weight: inherit !important;
+  line-height: inherit !important;
+  padding: inherit !important;
+  margin: inherit !important;
 }
 
-.lang-ta .text-sm {
-  font-size: 0.95rem !important;
+/* Very minimal adjustments for Tamil - NO font-weight changes */
+.lang-ta .text-\[10px\]:not(header *),
+.lang-ta .text-\[11px\]:not(header *),
+.lang-ta .text-xs:not(header *) {
+  line-height: 1.4 !important;
 }
 
-.lang-ta .tracking-widest,
-.lang-ta .tracking-\[0\.5em\],
-.lang-ta .tracking-\[0\.2em\] {
-  letter-spacing: 0.02em !important;
-  /* Minimal tracking for icons/special cases */
+.lang-ta .text-sm:not(header *) {
+  line-height: 1.4 !important;
+}
+
+.lang-ta .text-base:not(header *),
+.lang-ta .text-lg:not(header *) {
+  line-height: 1.4 !important;
+}
+
+/* Prevent layout shifts in forms and inputs */
+.lang-ta input:not(header *),
+.lang-ta textarea:not(header *),
+.lang-ta button:not(header *) {
+  line-height: inherit !important;
+}
+
+.lang-ta .tracking-widest:not(header *),
+.lang-ta .tracking-\[0\.5em\]:not(header *),
+.lang-ta .tracking-\[0\.2em\]:not(header *) {
+  letter-spacing: 0 !important;
 }

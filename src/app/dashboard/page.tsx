@@ -440,7 +440,7 @@ export default function DashboardPage() {
                                         </div>
                                         <div>
                                             <h3 className="text-sm md:text-base font-black text-gray-800 uppercase tracking-widest">{t('recentLoans')}</h3>
-                                            <p className="text-[10px] text-gray-400 font-bold">{filteredRecentLoans.length} loans shown</p>
+                                            <p className="text-[10px] text-gray-400 font-bold">{filteredRecentLoans.length} {t('loansShown')}</p>
                                         </div>
                                     </div>
                                     <div className="flex items-center gap-2">
@@ -449,7 +449,7 @@ export default function DashboardPage() {
                                             className={`flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition-all ${showFilters ? 'bg-[#D4AF37] text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
                                         >
                                             <Filter size={14} />
-                                            <span className="hidden sm:inline">Filter</span>
+                                            <span className="hidden sm:inline">{t('filter')}</span>
                                         </button>
                                         <Link href="/gold-loan" className="text-[10px] md:text-xs font-black text-[#D4AF37] uppercase tracking-wider flex items-center gap-1 hover:underline">
                                             {t('viewAll')} <ChevronRight size={14} />
@@ -465,7 +465,7 @@ export default function DashboardPage() {
                                             <div>
                                                 <label className="flex items-center gap-1.5 text-[10px] font-black text-[#B8860B] uppercase tracking-widest mb-2">
                                                     <Calendar size={12} />
-                                                    Sort By
+                                                    {t('sortBy')}
                                                 </label>
                                                 <div className="relative">
                                                     <select
@@ -473,9 +473,9 @@ export default function DashboardPage() {
                                                         onChange={(e) => setSortBy(e.target.value as 'date' | 'amount' | 'name')}
                                                         className="w-full px-4 py-3 bg-white border-2 border-[#D4AF37]/30 rounded-xl text-sm font-bold text-gray-800 focus:border-[#D4AF37] focus:ring-4 focus:ring-[#D4AF37]/10 outline-none transition-all cursor-pointer appearance-none shadow-sm hover:border-[#D4AF37]/50"
                                                     >
-                                                        <option value="date">Latest Date</option>
-                                                        <option value="amount">Highest Amount</option>
-                                                        <option value="name">Customer Name</option>
+                                                        <option value="date">{t('latestDate')}</option>
+                                                        <option value="amount">{t('highestAmount')}</option>
+                                                        <option value="name">{t('customerName')}</option>
                                                     </select>
                                                     <ChevronRight size={16} className="absolute right-3 top-1/2 -translate-y-1/2 text-[#B8860B] rotate-90 pointer-events-none" />
                                                 </div>
@@ -485,7 +485,7 @@ export default function DashboardPage() {
                                             <div>
                                                 <label className="flex items-center gap-1.5 text-[10px] font-black text-[#B8860B] uppercase tracking-widest mb-2">
                                                     <ArrowUpDown size={12} />
-                                                    Order
+                                                    {t('order')}
                                                 </label>
                                                 <button
                                                     onClick={() => setSortOrder(sortOrder === 'desc' ? 'asc' : 'desc')}
@@ -494,7 +494,7 @@ export default function DashboardPage() {
                                                         : 'bg-white border-[#D4AF37]/30 text-gray-800 hover:border-[#D4AF37]/50'
                                                         }`}
                                                 >
-                                                    {sortOrder === 'desc' ? '↓ Descending' : '↑ Ascending'}
+                                                    {sortOrder === 'desc' ? `↓ ${t('descending')}` : `↑ ${t('ascending')}`}
                                                 </button>
                                             </div>
 
@@ -502,7 +502,7 @@ export default function DashboardPage() {
                                             <div>
                                                 <label className="flex items-center gap-1.5 text-[10px] font-black text-[#B8860B] uppercase tracking-widest mb-2">
                                                     <IndianRupee size={12} />
-                                                    Amount Range
+                                                    {t('amountRange')}
                                                 </label>
                                                 <div className="relative">
                                                     <select
@@ -510,10 +510,10 @@ export default function DashboardPage() {
                                                         onChange={(e) => setAmountFilter(e.target.value as 'all' | 'low' | 'medium' | 'high')}
                                                         className="w-full px-4 py-3 bg-white border-2 border-[#D4AF37]/30 rounded-xl text-sm font-bold text-gray-800 focus:border-[#D4AF37] focus:ring-4 focus:ring-[#D4AF37]/10 outline-none transition-all cursor-pointer appearance-none shadow-sm hover:border-[#D4AF37]/50"
                                                     >
-                                                        <option value="all">All Amounts</option>
-                                                        <option value="low">Under ₹25,000</option>
-                                                        <option value="medium">₹25K - ₹1 Lakh</option>
-                                                        <option value="high">Above ₹1 Lakh</option>
+                                                        <option value="all">{t('allAmounts')}</option>
+                                                        <option value="low">{t('under25k')}</option>
+                                                        <option value="medium">{t('btw25k1L')}</option>
+                                                        <option value="high">{t('above1L')}</option>
                                                     </select>
                                                     <ChevronRight size={16} className="absolute right-3 top-1/2 -translate-y-1/2 text-[#B8860B] rotate-90 pointer-events-none" />
                                                 </div>
@@ -523,7 +523,7 @@ export default function DashboardPage() {
                                             <div>
                                                 <label className="flex items-center gap-1.5 text-[10px] font-black text-[#B8860B] uppercase tracking-widest mb-2">
                                                     <PieChart size={12} />
-                                                    Product Type
+                                                    {t('productType')}
                                                 </label>
                                                 <div className="relative">
                                                     <select
@@ -532,7 +532,7 @@ export default function DashboardPage() {
                                                         className="w-full px-4 py-3 bg-white border-2 border-[#D4AF37]/30 rounded-xl text-sm font-bold text-gray-800 focus:border-[#D4AF37] focus:ring-4 focus:ring-[#D4AF37]/10 outline-none transition-all cursor-pointer appearance-none shadow-sm hover:border-[#D4AF37]/50"
                                                     >
                                                         {productTypes.map(type => (
-                                                            <option key={type} value={type}>{type === 'all' ? 'All Products' : type}</option>
+                                                            <option key={type} value={type}>{type === 'all' ? t('allProducts') : t(type as any)}</option>
                                                         ))}
                                                     </select>
                                                     <ChevronRight size={16} className="absolute right-3 top-1/2 -translate-y-1/2 text-[#B8860B] rotate-90 pointer-events-none" />
@@ -546,17 +546,17 @@ export default function DashboardPage() {
                                                 <div className="flex items-center gap-2 flex-wrap">
                                                     {sortBy !== 'date' && (
                                                         <span className="px-3 py-1 bg-[#D4AF37]/10 text-[#B8860B] rounded-full text-[10px] font-bold">
-                                                            Sorted by {sortBy}
+                                                            {t('sortedBy')} {t(sortBy === 'amount' ? 'highestAmount' : 'customerName')}
                                                         </span>
                                                     )}
                                                     {amountFilter !== 'all' && (
                                                         <span className="px-3 py-1 bg-[#D4AF37]/10 text-[#B8860B] rounded-full text-[10px] font-bold">
-                                                            {amountFilter === 'low' ? '< ₹25K' : amountFilter === 'medium' ? '₹25K-1L' : '> ₹1L'}
+                                                            {amountFilter === 'low' ? t('under25k') : amountFilter === 'medium' ? t('btw25k1L') : t('above1L')}
                                                         </span>
                                                     )}
                                                     {productFilter !== 'all' && (
                                                         <span className="px-3 py-1 bg-[#D4AF37]/10 text-[#B8860B] rounded-full text-[10px] font-bold">
-                                                            {productFilter}
+                                                            {t(productFilter as any)}
                                                         </span>
                                                     )}
                                                 </div>
@@ -564,7 +564,7 @@ export default function DashboardPage() {
                                                     onClick={() => { setAmountFilter('all'); setProductFilter('all'); setSortBy('date'); }}
                                                     className="px-4 py-2 bg-[#D4AF37] text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-[#B8860B] transition-all shadow-md"
                                                 >
-                                                    Reset All
+                                                    {t('resetAll')}
                                                 </button>
                                             </div>
                                         )}
@@ -599,7 +599,7 @@ export default function DashboardPage() {
                                         <div className="text-right">
                                             <p className="font-black text-[#D4AF37] text-lg md:text-xl">₹{loan.loanAmount.toLocaleString()}</p>
                                             <p className="text-[10px] text-gray-400 font-bold mt-1">
-                                                {loan.interestRate}% p.m.
+                                                {loan.interestRate}{t('perMonth')}
                                             </p>
                                             <ChevronRight size={16} className="text-gray-300 group-hover:text-[#D4AF37] transition-all ml-auto mt-1" />
                                         </div>
@@ -611,7 +611,7 @@ export default function DashboardPage() {
                                             <Filter size={24} className="text-gray-400" />
                                         </div>
                                         <p className="text-gray-500 font-bold text-sm">{t('noLoansYet')}</p>
-                                        <p className="text-gray-400 text-xs mt-1">Try adjusting your filters</p>
+                                        <p className="text-gray-400 text-xs mt-1">{t('tryAdjustFilters')}</p>
                                     </div>
                                 )}
                             </div>
@@ -682,7 +682,7 @@ export default function DashboardPage() {
                                                     </div>
                                                 </div>
                                             ))}
-                                            {detailModal.data.upcoming.length === 0 && <p className="text-sm text-gray-400 text-center py-4">None</p>}
+                                            {detailModal.data.upcoming.length === 0 && <p className="text-sm text-gray-400 text-center py-4">{t('none')}</p>}
                                         </div>
                                     </div>
                                     <div>
@@ -702,7 +702,7 @@ export default function DashboardPage() {
                                                     </div>
                                                 </div>
                                             ))}
-                                            {detailModal.data.overdue.length === 0 && <p className="text-sm text-gray-400 text-center py-4">None</p>}
+                                            {detailModal.data.overdue.length === 0 && <p className="text-sm text-gray-400 text-center py-4">{t('none')}</p>}
                                         </div>
                                     </div>
                                 </div>
@@ -730,7 +730,7 @@ export default function DashboardPage() {
                                         </div>
                                     </div>
                                     <div className="p-4 bg-[#D4AF37]/10 rounded-xl">
-                                        <p className="text-[10px] text-[#B8860B] font-bold uppercase mb-1">Bill Number</p>
+                                        <p className="text-[10px] text-[#B8860B] font-bold uppercase mb-1">{t('billNumber')}</p>
                                         <p className="font-black text-[#B8860B] text-lg">{detailModal.data.billNumber}</p>
                                     </div>
                                     <Link

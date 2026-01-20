@@ -97,10 +97,9 @@ export default function ReferenceTablePage() {
                                                     {row.Coin ? (
                                                         <span className="flex flex-col">
                                                             <span className="text-lg md:text-xl">₹{row.Coin.lab}</span>
-                                                            <span className="text-[9px] md:text-[10px] text-gray-400 uppercase tracking-tighter">{t('fixedLab')}</span>
                                                         </span>
                                                     ) : (
-                                                        <span className="text-xs text-gray-300">₹{(row.weight * 100).toLocaleString()} (Calc)</span>
+                                                        <span className="text-lg md:text-xl">₹{(row.weight * 100).toLocaleString()}</span>
                                                     )}
                                                 </td>
                                                 <td className="p-4 md:p-6 border-b border-gray-100 border-r border-gray-100 text-center">
@@ -110,7 +109,7 @@ export default function ReferenceTablePage() {
                                                                 {row['Ring/Earring'].waste < 1 ? row['Ring/Earring'].waste.toFixed(3) : row['Ring/Earring'].waste + 'g'}
                                                             </span>
                                                             <span className="text-[9px] md:text-[10px] bg-[#333333] text-white px-2 py-0.5 rounded-md font-bold mt-1 inline-block">
-                                                                ₹{row['Ring/Earring'].lab} LAB
+                                                                ₹{row['Ring/Earring'].lab} {t('labourCharge')}
                                                             </span>
                                                         </div>
                                                     ) : <span className="text-gray-200">─</span>}
@@ -122,7 +121,7 @@ export default function ReferenceTablePage() {
                                                                 {row['Chain'].waste < 1 ? row['Chain'].waste.toFixed(3) : row['Chain'].waste + 'g'}
                                                             </span>
                                                             <span className="text-[9px] md:text-[10px] bg-[#333333] text-white px-2 py-0.5 rounded-md font-bold mt-1 inline-block">
-                                                                ₹{row['Chain'].lab} LAB
+                                                                ₹{row['Chain'].lab} {t('labourCharge')}
                                                             </span>
                                                         </div>
                                                     ) : <span className="text-gray-200">─</span>}
@@ -134,7 +133,7 @@ export default function ReferenceTablePage() {
                                                                 {row['Haram/Necklace'].waste < 1 ? row['Haram/Necklace'].waste.toFixed(3) : row['Haram/Necklace'].waste + 'g'}
                                                             </span>
                                                             <span className="text-[9px] md:text-[10px] bg-[#333333] text-white px-2 py-0.5 rounded-md font-bold mt-1 inline-block">
-                                                                ₹{row['Haram/Necklace'].lab} LAB
+                                                                ₹{row['Haram/Necklace'].lab} {t('labourCharge')}
                                                             </span>
                                                         </div>
                                                     ) : <span className="text-gray-200">─</span>}

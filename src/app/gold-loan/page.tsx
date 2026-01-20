@@ -485,10 +485,10 @@ export default function GoldLoanPage() {
                 {/* Page Title */}
                 <div className="mb-8">
                     <h1 className="text-2xl md:text-3xl font-black text-gray-800 uppercase tracking-tight">
-                        Gold Loan
+                        {t('goldLoan')}
                     </h1>
                     <p className="text-[10px] md:text-xs font-bold text-[#D4AF37] uppercase tracking-[0.2em] mt-1">
-                        Manage Loans & Records
+                        {t('manageLoansRecords')}
                     </p>
                 </div>
 
@@ -500,7 +500,7 @@ export default function GoldLoanPage() {
                             type="text"
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
-                            placeholder="Search by name, bill, phone..."
+                            placeholder={t('searchPlaceholder')}
                             className="w-full pl-9 pr-3 py-3 md:py-4 bg-white border border-gray-200 rounded-xl md:rounded-2xl font-bold text-sm text-gray-800 focus:ring-2 focus:ring-[#D4AF37]/20 focus:border-[#D4AF37] outline-none shadow-sm"
                         />
                     </div>
@@ -509,7 +509,7 @@ export default function GoldLoanPage() {
                         className={`flex items-center justify-center gap-1 md:gap-2 px-4 md:px-6 py-3 md:py-4 rounded-xl md:rounded-2xl font-black uppercase text-xs tracking-wider transition-all shadow-md ${showNewLoanForm ? 'bg-gray-600 text-white' : 'bg-[#D4AF37] text-white'}`}
                     >
                         {showNewLoanForm ? <X size={16} /> : <Plus size={16} />}
-                        <span className="hidden sm:inline">{showNewLoanForm ? 'Cancel' : 'New'}</span>
+                        <span className="hidden sm:inline">{showNewLoanForm ? t('cancel') : t('new')}</span>
                     </button>
                 </div>
 
@@ -518,24 +518,24 @@ export default function GoldLoanPage() {
                     <div className="bg-white rounded-2xl md:rounded-3xl shadow-xl border border-gray-100 overflow-hidden mb-6 animate-in fade-in slide-in-from-top-2 duration-200">
                         <div className="bg-[#333333] text-white px-4 md:px-6 py-3 md:py-4 flex items-center gap-2">
                             <Plus size={18} className="text-[#D4AF37]" />
-                            <h2 className="text-xs md:text-sm font-black uppercase tracking-widest">New Loan</h2>
+                            <h2 className="text-xs md:text-sm font-black uppercase tracking-widest">{t('newLoan')}</h2>
                         </div>
 
                         <div className="p-4 md:p-8 space-y-8">
                             {/* Row 1: Customer Info */}
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
                                 <div>
-                                    <label className="block text-xs font-black text-gray-500 uppercase tracking-wider mb-2 leading-none">Customer Name *</label>
+                                    <label className="block text-xs font-black text-gray-500 uppercase tracking-wider mb-2 leading-none">{t('fullName')} *</label>
                                     <input
                                         type="text"
                                         value={customerName}
                                         onChange={(e) => setCustomerName(e.target.value.replace(/[^a-zA-Z\s]/g, ''))}
-                                        placeholder="Enter name"
+                                        placeholder={t('enterName')}
                                         className="w-full px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl text-base font-bold text-gray-800 focus:bg-white focus:border-[#D4AF37] focus:ring-4 focus:ring-[#D4AF37]/5 outline-none transition-all placeholder:text-gray-300"
                                     />
                                 </div>
                                 <div>
-                                    <label className="block text-xs font-black text-gray-500 uppercase tracking-wider mb-2 leading-none">Phone Number *</label>
+                                    <label className="block text-xs font-black text-gray-500 uppercase tracking-wider mb-2 leading-none">{t('phoneNumber')} *</label>
                                     <input
                                         type="tel"
                                         inputMode="numeric"
@@ -552,13 +552,13 @@ export default function GoldLoanPage() {
                                                 }
                                             }
                                         }}
-                                        placeholder="10 digit number"
+                                        placeholder={t('digitNumber10')}
                                         maxLength={10}
                                         className="w-full px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl text-base font-bold text-gray-800 focus:bg-white focus:border-[#D4AF37] focus:ring-4 focus:ring-[#D4AF37]/5 outline-none transition-all placeholder:text-gray-300"
                                     />
                                 </div>
                                 <div>
-                                    <label className="block text-xs font-black text-gray-500 uppercase tracking-wider mb-2 leading-none">Aadhaar Number *</label>
+                                    <label className="block text-xs font-black text-gray-500 uppercase tracking-wider mb-2 leading-none">{t('aadhaarNumber')} *</label>
                                     <input
                                         type="text"
                                         inputMode="numeric"
@@ -576,7 +576,7 @@ export default function GoldLoanPage() {
                                                 }
                                             }
                                         }}
-                                        placeholder="0000 0000 0000"
+                                        placeholder={t('digitNumber12')}
                                         maxLength={14}
                                         className="w-full px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl text-base font-bold text-gray-800 focus:bg-white focus:border-[#D4AF37] focus:ring-4 focus:ring-[#D4AF37]/5 outline-none transition-all placeholder:text-gray-300"
                                     />
@@ -585,11 +585,11 @@ export default function GoldLoanPage() {
 
                             {/* Row 2: Address */}
                             <div>
-                                <label className="block text-[11px] font-black text-gray-500 uppercase tracking-widest mb-1.5 leading-none">Address *</label>
+                                <label className="block text-[11px] font-black text-gray-500 uppercase tracking-widest mb-1.5 leading-none">{t('address')} *</label>
                                 <textarea
                                     value={customerAddress}
                                     onChange={(e) => setCustomerAddress(e.target.value)}
-                                    placeholder="Full address..."
+                                    placeholder={t('fullAddress')}
                                     rows={2}
                                     className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-base font-bold text-gray-800 focus:bg-white focus:border-[#D4AF37] focus:ring-4 focus:ring-[#D4AF37]/5 outline-none transition-all placeholder:text-gray-300 resize-none"
                                 />
@@ -598,7 +598,7 @@ export default function GoldLoanPage() {
                             {/* Row 3: Loan Details */}
                             <div className="grid grid-cols-2 lg:grid-cols-4 gap-5">
                                 <div>
-                                    <label className="block text-[11px] font-black text-gray-500 uppercase tracking-widest mb-1.5 leading-none">Amount *</label>
+                                    <label className="block text-[11px] font-black text-gray-500 uppercase tracking-widest mb-1.5 leading-none">{t('amount')} *</label>
                                     <div className="relative">
                                         <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 font-bold">₹</span>
                                         <input
@@ -611,7 +611,7 @@ export default function GoldLoanPage() {
                                     </div>
                                 </div>
                                 <div>
-                                    <label className="block text-[11px] font-black text-gray-500 uppercase tracking-widest mb-1.5 leading-none">Product *</label>
+                                    <label className="block text-[11px] font-black text-gray-500 uppercase tracking-widest mb-1.5 leading-none">{t('product')} *</label>
                                     <div className="relative">
                                         <select
                                             value={productType}
@@ -626,7 +626,7 @@ export default function GoldLoanPage() {
                                     </div>
                                 </div>
                                 <div>
-                                    <label className="block text-[11px] font-black text-gray-500 uppercase tracking-widest mb-1.5 leading-none">Weight (g) *</label>
+                                    <label className="block text-[11px] font-black text-gray-500 uppercase tracking-widest mb-1.5 leading-none">{t('weightGramsShort')} *</label>
                                     <input
                                         type="text"
                                         inputMode="decimal"
@@ -637,7 +637,7 @@ export default function GoldLoanPage() {
                                     />
                                 </div>
                                 <div>
-                                    <label className="block text-[11px] font-black text-gray-500 uppercase tracking-widest mb-1.5 leading-none">Rate % *</label>
+                                    <label className="block text-[11px] font-black text-gray-500 uppercase tracking-widest mb-1.5 leading-none">{t('ratePercent')} *</label>
                                     <input
                                         type="text"
                                         inputMode="decimal"
@@ -651,7 +651,7 @@ export default function GoldLoanPage() {
                             {/* Row 4: Dates */}
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-5 pb-2">
                                 <div>
-                                    <label className="block text-[11px] font-black text-gray-500 uppercase tracking-widest mb-1.5 leading-none">Loan Date *</label>
+                                    <label className="block text-[11px] font-black text-gray-500 uppercase tracking-widest mb-1.5 leading-none">{t('loanDate')} *</label>
                                     <CustomDatePicker
                                         selected={loanDate ? new Date(loanDate) : null}
                                         onChange={(date) => date && setLoanDate(date.toISOString().split('T')[0])}
@@ -659,7 +659,7 @@ export default function GoldLoanPage() {
                                     />
                                 </div>
                                 <div>
-                                    <label className="block text-[11px] font-black text-gray-500 uppercase tracking-widest mb-1.5 leading-none">Est. Return *</label>
+                                    <label className="block text-[11px] font-black text-gray-500 uppercase tracking-widest mb-1.5 leading-none">{t('estReturn')} *</label>
                                     <CustomDatePicker
                                         selected={returnDate ? new Date(returnDate) : null}
                                         onChange={(date) => date && setReturnDate(date.toISOString().split('T')[0])}
@@ -675,7 +675,7 @@ export default function GoldLoanPage() {
                                 className={`w-full ${isSaving ? 'bg-gray-400' : 'bg-[#D4AF37] hover:bg-[#B8860B]'} text-white py-4 rounded-2xl font-black uppercase tracking-widest text-sm transition-all flex items-center justify-center gap-2 shadow-lg shadow-amber-200/30`}
                             >
                                 <Printer size={18} />
-                                {isSaving ? 'Saving...' : 'Save & Print'}
+                                {isSaving ? t('saving') : t('savePrint')}
                             </button>
                         </div>
                     </div>
@@ -685,7 +685,7 @@ export default function GoldLoanPage() {
                 <div className="flex items-center justify-between mb-4">
                     <h3 className="text-xs md:text-sm font-black text-gray-600 uppercase tracking-[0.15em] flex items-center gap-2">
                         <Wallet size={16} className="text-[#D4AF37]" />
-                        Active Gold Loans
+                        {t('activeGoldLoans')}
                         <span className="text-gray-400 font-bold">({filteredLoans.length})</span>
                     </h3>
 
@@ -713,15 +713,15 @@ export default function GoldLoanPage() {
                         <div className="relative">
                             <button
                                 onClick={() => setShowFilterPopup(!showFilterPopup)}
-                                className={`flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl font-black uppercase text-xs tracking-wider transition-all h-[40px] ${showFilterPopup || hasActiveFilters
+                                className={`flex items-center justify-center gap-2 px-3 md:px-4 py-2.5 rounded-xl font-black uppercase text-xs tracking-wider transition-all h-[40px] ${showFilterPopup || hasActiveFilters
                                     ? 'bg-[#D4AF37] text-white shadow-lg'
                                     : 'bg-white border border-gray-200 text-gray-600 hover:border-[#D4AF37] shadow-sm'
                                     }`}
                             >
                                 <Filter size={14} />
-                                <span>Filter</span>
+                                <span className="hidden sm:inline">{t('all')}</span>
                                 {hasActiveFilters && (
-                                    <span className="w-2 h-2 bg-white rounded-full"></span>
+                                    <span className="w-2 h-2 bg-white rounded-full scale-75 md:scale-100"></span>
                                 )}
                             </button>
                         </div>
@@ -736,7 +736,7 @@ export default function GoldLoanPage() {
                                     <div className="flex items-center justify-between">
                                         <h3 className="text-sm font-black text-gray-800 uppercase tracking-widest flex items-center gap-2">
                                             <Filter size={16} className="text-[#D4AF37]" />
-                                            Filter Loans
+                                            {t('filterLoans')}
                                         </h3>
                                         <button onClick={() => setShowFilterPopup(false)} className="p-1 hover:bg-gray-100 rounded-lg">
                                             <X size={16} className="text-gray-400" />
@@ -749,27 +749,27 @@ export default function GoldLoanPage() {
                                     <div>
                                         <label className="flex items-center gap-1.5 text-[10px] font-black text-[#B8860B] uppercase tracking-widest mb-2">
                                             <ArrowUpDown size={12} />
-                                            Sort By
+                                            {t('sortBy')}
                                         </label>
                                         <div className="grid grid-cols-2 gap-2">
                                             <button
                                                 onClick={() => setSortBy('date')}
                                                 className={`px-4 py-3 rounded-xl text-xs font-bold transition-all ${sortBy === 'date' ? 'bg-[#D4AF37] text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
                                             >
-                                                📅 Date
+                                                {t('date')}
                                             </button>
                                             <button
                                                 onClick={() => setSortBy('amount')}
                                                 className={`px-4 py-3 rounded-xl text-xs font-bold transition-all ${sortBy === 'amount' ? 'bg-[#D4AF37] text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
                                             >
-                                                💰 Amount
+                                                {t('amount')}
                                             </button>
                                         </div>
                                         <button
                                             onClick={() => setSortOrder(sortOrder === 'desc' ? 'asc' : 'desc')}
                                             className="mt-2 w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-xs font-bold text-gray-700 flex items-center justify-center gap-2 hover:bg-gray-100"
                                         >
-                                            {sortOrder === 'desc' ? '↓ Highest/Newest First' : '↑ Lowest/Oldest First'}
+                                            {sortOrder === 'desc' ? t('highestNewestFirst') : t('lowestOldestFirst')}
                                         </button>
                                     </div>
 
@@ -777,7 +777,7 @@ export default function GoldLoanPage() {
                                     <div>
                                         <label className="flex items-center gap-1.5 text-[10px] font-black text-[#B8860B] uppercase tracking-widest mb-3">
                                             <IndianRupee size={12} />
-                                            Amount Range
+                                            {t('amountRange')}
                                         </label>
 
                                         {/* Above 1 Lakh Toggle */}
@@ -877,7 +877,7 @@ export default function GoldLoanPage() {
                                                 className={`w-full px-4 py-3 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 ${amountAboveLakh ? 'bg-[#D4AF37] text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
                                             >
                                                 {amountAboveLakh ? <CheckCircle size={16} /> : <Circle size={16} />}
-                                                Show Loans Above ₹1 Lakh
+                                                {t('showLoansAbove1Lakh')}
                                             </button>
                                         </div>
                                     </div>
@@ -886,11 +886,11 @@ export default function GoldLoanPage() {
                                     <div>
                                         <label className="flex items-center gap-1.5 text-[10px] font-black text-[#B8860B] uppercase tracking-widest mb-2">
                                             <Calendar size={12} />
-                                            Date Range
+                                            {t('loanDate')}
                                         </label>
                                         <div className="grid grid-cols-2 gap-2">
                                             <div>
-                                                <span className="text-[9px] text-gray-400 font-bold block mb-1">From</span>
+                                                <span className="text-[9px] text-gray-400 font-bold block mb-1">{t('from')}</span>
                                                 <CustomDatePicker
                                                     selected={dateFrom}
                                                     onChange={(date) => setDateFrom(date)}
@@ -898,7 +898,7 @@ export default function GoldLoanPage() {
                                                 />
                                             </div>
                                             <div>
-                                                <span className="text-[9px] text-gray-400 font-bold block mb-1">To</span>
+                                                <span className="text-[9px] text-gray-400 font-bold block mb-1">{t('to')}</span>
                                                 <CustomDatePicker
                                                     selected={dateTo}
                                                     onChange={(date) => setDateTo(date)}
@@ -913,7 +913,7 @@ export default function GoldLoanPage() {
                                     <div>
                                         <label className="flex items-center gap-1.5 text-[10px] font-black text-[#B8860B] uppercase tracking-widest mb-2">
                                             <AlertCircle size={12} />
-                                            Status
+                                            {t('status')}
                                         </label>
                                         <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
                                             {[
@@ -927,7 +927,7 @@ export default function GoldLoanPage() {
                                                     onClick={() => setOverdueFilter(opt.value as typeof overdueFilter)}
                                                     className={`px-3 py-2.5 rounded-xl text-xs font-bold transition-all ${overdueFilter === opt.value ? 'bg-[#D4AF37] text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
                                                 >
-                                                    {opt.label}
+                                                    {t(opt.value === 'all' ? 'all' : opt.value as any)}
                                                 </button>
                                             ))}
                                         </div>
@@ -937,14 +937,14 @@ export default function GoldLoanPage() {
                                     <div>
                                         <label className="flex items-center gap-1.5 text-[10px] font-black text-[#B8860B] uppercase tracking-widest mb-2">
                                             <Clock size={12} />
-                                            Product Type
+                                            {t('productType')}
                                         </label>
                                         <div className="flex flex-wrap gap-2">
                                             <button
                                                 onClick={() => setProductFilter('all')}
                                                 className={`px-3 py-2 rounded-lg text-xs font-bold transition-all ${productFilter === 'all' ? 'bg-[#D4AF37] text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
                                             >
-                                                All
+                                                {t('all')}
                                             </button>
                                             {productTypes.map(type => (
                                                 <button
@@ -975,13 +975,13 @@ export default function GoldLoanPage() {
                                         }}
                                         className="text-xs font-black text-red-500 uppercase tracking-widest hover:text-red-600 hover:underline"
                                     >
-                                        Reset All
+                                        {t('resetAll')}
                                     </button>
                                     <button
                                         onClick={() => setShowFilterPopup(false)}
                                         className="px-6 py-2.5 bg-[#D4AF37] text-white rounded-xl text-xs font-black uppercase tracking-widest hover:bg-[#B8860B] transition-all"
                                     >
-                                        Apply
+                                        {t('apply')}
                                     </button>
                                 </div>
                             </div>
@@ -1009,7 +1009,7 @@ export default function GoldLoanPage() {
                             )}
                             {overdueFilter !== 'all' && (
                                 <span className={`px-2 py-1 rounded-lg text-[10px] font-bold ${overdueFilter === 'overdue' ? 'bg-red-100 text-red-600' : 'bg-green-100 text-green-600'}`}>
-                                    {overdueFilter === 'overdue' ? 'Overdue' : overdueFilter === 'settled' ? 'Settled' : 'Active'}
+                                    {overdueFilter === 'overdue' ? t('overdue') : overdueFilter === 'settled' ? t('closed') : t('active')}
                                 </span>
                             )}
                             {productFilter !== 'all' && (
@@ -1039,7 +1039,7 @@ export default function GoldLoanPage() {
                                 className="text-[10px] font-black text-red-500 uppercase tracking-widest hover:underline ml-2"
                             >
 
-                                Clear All
+                                {t('clearAll')}
                             </button>
                         </div>
                     )
@@ -1057,7 +1057,7 @@ export default function GoldLoanPage() {
                             ) : filteredLoans.length === 0 ? (
                                 <div className="col-span-2 text-center py-16 bg-white rounded-2xl border border-gray-100">
                                     <Filter size={20} className="text-gray-300 mx-auto mb-2" />
-                                    <p className="text-gray-400 font-bold uppercase text-xs tracking-widest">No loans found</p>
+                                    <p className="text-gray-400 font-bold uppercase text-xs tracking-widest">{t('noLoansFound')}</p>
                                 </div>
                             ) : (
                                 filteredLoans.map((loan) => {
@@ -1082,16 +1082,16 @@ export default function GoldLoanPage() {
                                                 <div className="flex gap-1">
                                                     {loan.status === 'settled' ? (
                                                         <span className="px-2 py-0.5 rounded-full border border-gray-200 text-[9px] font-black text-gray-400 uppercase tracking-widest bg-white">
-                                                            CLOSED
+                                                            {t('closed')}
                                                         </span>
                                                     ) : (
                                                         <>
                                                             <span className="px-2 py-0.5 rounded-full border border-green-200 text-[9px] font-black text-green-700 uppercase tracking-widest bg-white shadow-sm">
-                                                                ACTIVE
+                                                                {t('active')}
                                                             </span>
                                                             {isOverdue && (
                                                                 <span className="px-2 py-0.5 rounded-full border border-red-200 text-[9px] font-black text-red-600 uppercase tracking-widest bg-white shadow-sm">
-                                                                    OVERDUE
+                                                                    {t('overdue')}
                                                                 </span>
                                                             )}
                                                         </>
@@ -1113,18 +1113,18 @@ export default function GoldLoanPage() {
                                                     </div>
                                                     <div className="text-right">
                                                         <p className="text-lg font-black text-gray-800">₹{summary.totalPrincipal.toLocaleString('en-IN')}</p>
-                                                        <p className="text-[9px] font-bold text-gray-400 uppercase tracking-widest">PRINCIPAL</p>
+                                                        <p className="text-[9px] font-bold text-gray-400 uppercase tracking-widest">{t('principal')}</p>
                                                     </div>
                                                 </div>
 
                                                 <div className="border-t border-gray-100 pt-3 flex items-center justify-between">
                                                     <div>
-                                                        <p className="text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-0.5">Pledged On</p>
+                                                        <p className="text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-0.5">{t('loanDate')}</p>
                                                         <p className="text-xs font-black text-gray-700">{formattedDate}</p>
                                                     </div>
                                                     <div className="text-right">
                                                         <p className={`text-[9px] font-bold uppercase tracking-widest mb-0.5 ${loan.status === 'settled' ? 'text-gray-400' : 'text-[#B8860B]'}`}>
-                                                            {loan.status === 'settled' ? 'Interest Paid' : 'Interest Due'}
+                                                            {loan.status === 'settled' ? t('closed') : t('active')}
                                                         </p>
                                                         <p className={`text-xs font-black ${loan.status === 'settled' ? 'text-gray-500' : 'text-[#B8860B]'}`}>
                                                             ₹{summary.totalInterest.toLocaleString()}
@@ -1147,10 +1147,10 @@ export default function GoldLoanPage() {
                                             <th className="px-6 py-4">Bill #</th>
                                             <th className="px-6 py-4">Customer</th>
                                             <th className="px-6 py-4">Product</th>
-                                            <th className="px-6 py-4">Pledged On</th>
-                                            <th className="px-6 py-4 text-right">Principal</th>
-                                            <th className="px-6 py-4 text-right">Interest</th>
-                                            <th className="px-6 py-4 text-center">Status</th>
+                                            <th className="px-6 py-4">{t('date')}</th>
+                                            <th className="px-6 py-4 text-right">{t('principal')}</th>
+                                            <th className="px-6 py-4 text-right">{t('interest')}</th>
+                                            <th className="px-6 py-4 text-center">{t('status')}</th>
                                             <th className="px-6 py-4"></th>
                                         </tr>
                                     </thead>
@@ -1209,16 +1209,16 @@ export default function GoldLoanPage() {
                                                             <div className="flex flex-col items-center gap-1">
                                                                 {loan.status === 'settled' ? (
                                                                     <span className="px-2 py-0.5 rounded-full bg-gray-100 text-[9px] font-black text-gray-400 uppercase tracking-widest border border-gray-200">
-                                                                        CLOSED
+                                                                        {t('closed')}
                                                                     </span>
                                                                 ) : (
                                                                     <>
                                                                         <span className="px-2 py-0.5 rounded-full bg-green-50 text-[9px] font-black text-green-600 uppercase tracking-widest border border-green-100">
-                                                                            ACTIVE
+                                                                            {t('active')}
                                                                         </span>
                                                                         {isOverdue && (
                                                                             <span className="px-2 py-0.5 rounded-full bg-red-50 text-[9px] font-black text-red-600 uppercase tracking-widest border border-red-100">
-                                                                                OVERDUE
+                                                                                {t('overdue')}
                                                                             </span>
                                                                         )}
                                                                     </>
@@ -1275,23 +1275,23 @@ export default function GoldLoanPage() {
                                         {/* Large Summary Cards */}
                                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
                                             <div className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 text-center flex flex-col justify-center h-full">
-                                                <p className="text-[10px] md:text-xs font-black text-gray-400 uppercase tracking-widest mb-1">Principal</p>
+                                                <p className="text-[10px] md:text-xs font-black text-gray-400 uppercase tracking-widest mb-1">{t('principal')}</p>
                                                 <p className="text-3xl md:text-4xl font-black text-gray-800">₹{summary.totalPrincipal.toLocaleString()}</p>
                                             </div>
                                             <div className={`p-4 rounded-2xl text-center border flex flex-col justify-center h-full ${viewingLoan.status === 'settled' ? 'bg-gray-50 border-gray-200' : 'bg-gradient-to-br from-orange-50 to-orange-100 border-orange-200'}`}>
                                                 <p className={`text-[10px] md:text-xs font-black uppercase tracking-widest mb-1 ${viewingLoan.status === 'settled' ? 'text-gray-500' : 'text-orange-600'}`}>
-                                                    {viewingLoan.status === 'settled' ? 'INTEREST PAID' : 'Interest Due'}
+                                                    {viewingLoan.status === 'settled' ? t('closed') : t('active')}
                                                 </p>
                                                 <p className={`text-3xl md:text-4xl font-black ${viewingLoan.status === 'settled' ? 'text-gray-700' : 'text-orange-600'}`}>₹{summary.totalInterest.toLocaleString()}</p>
                                             </div>
                                             <div className="bg-gradient-to-br from-[#D4AF37]/20 to-[#D4AF37]/30 p-4 rounded-2xl text-center border border-[#D4AF37]/40 flex flex-col justify-center h-full">
-                                                <p className="text-[10px] md:text-xs font-black text-[#B8860B] uppercase tracking-widest mb-1">{viewingLoan.status === 'settled' ? 'TOTAL PAID' : 'Total Payable'}</p>
+                                                <p className="text-[10px] md:text-xs font-black text-[#B8860B] uppercase tracking-widest mb-1">{viewingLoan.status === 'settled' ? t('closed') : t('totalPayable')}</p>
                                                 <p className="text-3xl md:text-4xl font-black text-[#B8860B]">₹{summary.totalPayable.toLocaleString()}</p>
                                             </div>
                                             <div className={`p-4 rounded-2xl text-center border flex flex-col justify-center h-full ${viewingLoan.status === 'settled' ? 'bg-emerald-50 border-emerald-200' : 'bg-blue-50 border-blue-200'}`}>
-                                                <p className={`text-[10px] md:text-xs font-black uppercase tracking-widest mb-1 ${viewingLoan.status === 'settled' ? 'text-emerald-600' : 'text-blue-600'}`}>Status</p>
+                                                <p className={`text-[10px] md:text-xs font-black uppercase tracking-widest mb-1 ${viewingLoan.status === 'settled' ? 'text-emerald-600' : 'text-blue-600'}`}>{t('status')}</p>
                                                 <p className={`text-2xl md:text-3xl font-black ${viewingLoan.status === 'settled' ? 'text-emerald-600' : 'text-blue-600'}`}>
-                                                    {viewingLoan.status === 'settled' ? 'CLOSED' : 'ACTIVE'}
+                                                    {viewingLoan.status === 'settled' ? t('closed') : t('active')}
                                                 </p>
                                             </div>
                                         </div>
@@ -1303,12 +1303,12 @@ export default function GoldLoanPage() {
                                                 <div className="px-6 py-4 bg-gray-50 border-b border-gray-100">
                                                     <h4 className="text-xs font-black text-gray-600 uppercase tracking-widest flex items-center gap-2">
                                                         <User size={16} className="text-[#D4AF37]" />
-                                                        Customer Details
+                                                        {t('customerDetails')}
                                                     </h4>
                                                 </div>
                                                 <div className="p-6 space-y-5">
                                                     <div className="space-y-1">
-                                                        <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">Name</span>
+                                                        <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">{t('fullName')}</span>
                                                         {editForm.id === viewingLoan.id ? (
                                                             <input
                                                                 type="text"
@@ -1321,7 +1321,7 @@ export default function GoldLoanPage() {
                                                         )}
                                                     </div>
                                                     <div className="space-y-1">
-                                                        <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">Phone</span>
+                                                        <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">{t('phoneNumber')}</span>
                                                         {editForm.id === viewingLoan.id ? (
                                                             <input
                                                                 type="tel"
@@ -1337,7 +1337,7 @@ export default function GoldLoanPage() {
                                                         )}
                                                     </div>
                                                     <div className="space-y-1">
-                                                        <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">Aadhaar</span>
+                                                        <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">{t('aadhaarNumber')}</span>
                                                         {editForm.id === viewingLoan.id ? (
                                                             <input
                                                                 type="text"
@@ -1357,7 +1357,7 @@ export default function GoldLoanPage() {
                                                         )}
                                                     </div>
                                                     <div className="space-y-1">
-                                                        <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">Address</span>
+                                                        <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">{t('address')}</span>
                                                         {editForm.id === viewingLoan.id ? (
                                                             <textarea
                                                                 value={editForm.customerAddress || ''}
@@ -1377,12 +1377,12 @@ export default function GoldLoanPage() {
                                                 <div className="px-6 py-4 bg-gray-50 border-b border-gray-100">
                                                     <h4 className="text-xs font-black text-gray-600 uppercase tracking-widest flex items-center gap-2">
                                                         <Wallet size={16} className="text-[#D4AF37]" />
-                                                        Asset Details
+                                                        {t('assetDetails')}
                                                     </h4>
                                                 </div>
                                                 <div className="p-6 space-y-5">
                                                     <div className="space-y-1">
-                                                        <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">Product</span>
+                                                        <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">{t('productType')}</span>
                                                         {editForm.id === viewingLoan.id ? (
                                                             <div className="relative">
                                                                 <select value={editForm.productType || ''} onChange={(e) => setEditForm({ ...editForm, productType: e.target.value })} className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl font-bold text-gray-800 outline-none focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37] transition-all appearance-none">
@@ -1402,7 +1402,7 @@ export default function GoldLoanPage() {
                                                         )}
                                                     </div>
                                                     <div className="space-y-1">
-                                                        <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">Weight (g)</span>
+                                                        <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">{t('weightGramsShort')}</span>
                                                         {editForm.id === viewingLoan.id ? (
                                                             <input
                                                                 type="text"
@@ -1417,7 +1417,7 @@ export default function GoldLoanPage() {
                                                         )}
                                                     </div>
                                                     <div className="space-y-1">
-                                                        <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">Interest Rate</span>
+                                                        <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">{t('rate')}</span>
                                                         {editForm.id === viewingLoan.id ? (
                                                             <div className="relative">
                                                                 <input type="text" inputMode="decimal" value={editForm.interestRate || ''} onChange={(e) => setEditForm({ ...editForm, interestRate: parseFloat(e.target.value.replace(/[^\d.]/g, '')) || 0 })} className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl font-bold text-gray-800 outline-none focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37] transition-all pr-12" />
@@ -1428,7 +1428,7 @@ export default function GoldLoanPage() {
                                                         )}
                                                     </div>
                                                     <div className="space-y-1 relative z-[150]">
-                                                        <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">Expected Return</span>
+                                                        <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">{t('estReturn')}</span>
                                                         {editForm.id === viewingLoan.id ? (
                                                             <div className="relative z-[150]">
                                                                 <CustomDatePicker
@@ -1454,10 +1454,10 @@ export default function GoldLoanPage() {
                                             <div className="px-6 py-4 bg-gray-50 border-b border-gray-100 flex items-center justify-between">
                                                 <h4 className="text-xs font-black text-gray-600 uppercase tracking-widest flex items-center gap-2">
                                                     <IndianRupee size={16} className="text-[#D4AF37]" />
-                                                    Loan Details ({1 + (viewingLoan.additionalLoans?.length || 0)})
+                                                    {t('loanDetails')} ({1 + (viewingLoan.additionalLoans?.length || 0)})
                                                 </h4>
                                                 <div className="px-3 py-1.5 rounded-lg bg-gray-900 border border-gray-800 text-[10px] font-black uppercase text-amber-500 flex items-center gap-2 shadow-sm">
-                                                    <span className="text-gray-400">Rate:</span>
+                                                    <span className="text-gray-400">{t('rate')}:</span>
                                                     {editForm.id === viewingLoan.id ? (
                                                         <div className="relative w-12 h-5">
                                                             <input
@@ -1470,7 +1470,7 @@ export default function GoldLoanPage() {
                                                     ) : (
                                                         <span className="text-white">{viewingLoan.interestRate}%</span>
                                                     )}
-                                                    <span className="text-gray-500">/ Month</span>
+                                                    <span className="text-gray-500">/ {t('month')}</span>
                                                 </div>
                                             </div>
 
@@ -1478,10 +1478,10 @@ export default function GoldLoanPage() {
                                                 {/* Column Headers - Hidden on Mobile */}
                                                 <div className="hidden md:grid grid-cols-12 gap-4 px-4 mb-2 text-[10px] font-black text-gray-400 uppercase tracking-widest">
                                                     <div className="col-span-1">#</div>
-                                                    <div className="col-span-3">Principal</div>
-                                                    <div className="col-span-4">Date</div>
-                                                    <div className="col-span-2">Months</div>
-                                                    <div className="col-span-2 text-right">Interest</div>
+                                                    <div className="col-span-3">{t('principal')}</div>
+                                                    <div className="col-span-4">{t('date')}</div>
+                                                    <div className="col-span-2">{t('duration')}</div>
+                                                    <div className="col-span-2 text-right">{t('interest')}</div>
                                                 </div>
 
                                                 <div className="space-y-3">
@@ -1728,17 +1728,17 @@ export default function GoldLoanPage() {
                                                 <div className="flex flex-col md:flex-row items-center justify-between gap-4">
                                                     <div className="flex items-center gap-6">
                                                         <div className="flex flex-col">
-                                                            <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Total Principal</span>
+                                                            <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">{t('totalPrincipal')}</span>
                                                             <span className="text-lg font-black text-gray-800">₹{summary.totalPrincipal.toLocaleString()}</span>
                                                         </div>
                                                         <div className="w-px h-8 bg-gray-200"></div>
                                                         <div className="flex flex-col">
-                                                            <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">{viewingLoan.status === 'settled' ? 'Interest Paid' : 'Total Interest'}</span>
+                                                            <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">{viewingLoan.status === 'settled' ? t('closed') : t('totalInterest')}</span>
                                                             <span className={`text-lg font-black ${viewingLoan.status === 'settled' ? 'text-gray-800' : 'text-amber-600'}`}>₹{summary.totalInterest.toLocaleString()}</span>
                                                         </div>
                                                     </div>
                                                     <div className="flex items-center gap-3 bg-white px-4 py-2 rounded-xl shadow-sm border border-gray-200">
-                                                        <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">{viewingLoan.status === 'settled' ? 'Total Paid' : 'Total Payable'}</span>
+                                                        <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">{viewingLoan.status === 'settled' ? t('closed') : t('totalPayable')}</span>
                                                         <span className="text-xl font-black text-[#D4AF37]">₹{summary.totalPayable.toLocaleString()}</span>
                                                     </div>
                                                 </div>
@@ -1751,13 +1751,13 @@ export default function GoldLoanPage() {
                                                 <div className="px-6 py-4 bg-gray-50 border-b border-gray-100 flex items-center justify-between">
                                                     <h4 className="text-xs font-black text-gray-600 uppercase tracking-widest flex items-center gap-2">
                                                         <Plus size={16} className="text-[#D4AF37]" />
-                                                        Add Extra Loan
+                                                        {t('addExtraLoan')}
                                                     </h4>
                                                 </div>
                                                 <div className="p-6 overflow-visible">
                                                     <div className="flex flex-col md:flex-row gap-4">
                                                         <div className="flex-1">
-                                                            <label className="text-[10px] font-black text-gray-400 uppercase mb-2 block">Amount</label>
+                                                            <label className="text-[10px] font-black text-gray-400 uppercase mb-2 block">{t('amount')}</label>
                                                             <div className="relative">
                                                                 <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 font-bold">₹</span>
                                                                 <input
@@ -1771,7 +1771,7 @@ export default function GoldLoanPage() {
                                                             </div>
                                                         </div>
                                                         <div className="flex-1 relative z-[100]">
-                                                            <label className="text-[10px] font-black text-gray-400 uppercase mb-2 block">Date</label>
+                                                            <label className="text-[10px] font-black text-gray-400 uppercase mb-2 block">{t('date')}</label>
                                                             <div className="relative z-[100]">
                                                                 <CustomDatePicker
                                                                     selected={newAddDate ? new Date(newAddDate) : new Date()}
@@ -1788,7 +1788,7 @@ export default function GoldLoanPage() {
                                                                 onClick={handleAddAdditional}
                                                                 className="w-full md:w-auto h-full px-8 py-3 bg-[#333] text-white rounded-xl font-black text-xs uppercase tracking-widest hover:bg-black transition-all flex items-center justify-center gap-2 shadow-lg"
                                                             >
-                                                                <Plus size={14} /> Add Loan
+                                                                <Plus size={14} /> {t('addExtraLoan')}
                                                             </button>
                                                         </div>
                                                     </div>
@@ -1835,13 +1835,13 @@ export default function GoldLoanPage() {
                                                     }}
                                                     className="flex-1 py-4 bg-emerald-600 text-white rounded-2xl font-black text-sm uppercase flex items-center justify-center gap-2 hover:bg-emerald-700 transition-all"
                                                 >
-                                                    <Save size={18} /> Save Changes
+                                                    <Save size={18} /> {t('saveChanges')}
                                                 </button>
                                                 <button
                                                     onClick={() => setEditForm({})}
                                                     className="flex-1 py-4 bg-gray-400 text-white rounded-2xl font-black text-sm uppercase flex items-center justify-center gap-2 hover:bg-gray-500 transition-all"
                                                 >
-                                                    Cancel
+                                                    {t('cancel')}
                                                 </button>
                                             </>
                                         ) : (
@@ -1854,7 +1854,7 @@ export default function GoldLoanPage() {
                                                         })}
                                                         className="flex-1 py-4 bg-blue-500 text-white rounded-2xl font-black text-sm uppercase flex items-center justify-center gap-2 hover:bg-blue-600 transition-all"
                                                     >
-                                                        Edit Details
+                                                        {t('editDetails')}
                                                     </button>
                                                 )}
                                                 {viewingLoan.status === 'settled' ? (
@@ -1866,7 +1866,7 @@ export default function GoldLoanPage() {
                                                         }}
                                                         className="flex-1 py-4 bg-gray-800 text-white rounded-2xl font-black text-sm uppercase flex items-center justify-center gap-2 hover:bg-black transition-all shadow-lg"
                                                     >
-                                                        <Printer size={18} /> Receipt
+                                                        <Printer size={18} /> {t('receipt')}
                                                     </button>
                                                 ) : (
                                                     <button
