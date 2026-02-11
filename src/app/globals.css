@@ -52,22 +52,13 @@ body {
 }
 
 /* Tamil Language Specific Styles - Maintain Same Dimensions as English */
-.lang-ta * {
+/* Exclude header completely to maintain pixel-perfect stability during language switch */
+.lang-ta *:not(header):not(header *) {
   letter-spacing: 0 !important;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Completely exclude header from any Tamil modifications */
-.lang-ta header,
-.lang-ta header * {
-  letter-spacing: inherit !important;
-  font-size: inherit !important;
-  font-weight: inherit !important;
-  line-height: inherit !important;
-  padding: inherit !important;
-  margin: inherit !important;
-}
 
 /* Very minimal adjustments for Tamil - NO font-weight changes */
 .lang-ta .text-\[10px\]:not(header *),
