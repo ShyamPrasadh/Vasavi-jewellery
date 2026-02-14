@@ -27,6 +27,7 @@ model Loan {
   additionalLoans AdditionalLoan[]
 }
 
+
 model AdditionalLoan {
   id        String   @id @default(cuid())
   amount    Float
@@ -35,3 +36,15 @@ model AdditionalLoan {
   loan      Loan     @relation(fields: [loanId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
 }
+
+model GoldRateCache {
+  id            String   @id @default("default")
+  rate24k       Float
+  rate22k       Float
+  lastFetchDate String   
+  fetchCount    Int      @default(0)
+  timestamp     BigInt   
+  updatedAt     DateTime @updatedAt
+}
+
+

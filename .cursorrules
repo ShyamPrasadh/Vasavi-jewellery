@@ -1,0 +1,3 @@
+This project has specific rules. Please follow them:
+
+1) **DO NOT** make direct calls to the external Gold API (`https://www.goldapi.io/api/XAU/INR`)during code edits. This call is centralized and restricted in `src/app/api/gold-rate/route.ts` only. .
