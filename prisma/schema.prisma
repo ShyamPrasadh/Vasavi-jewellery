@@ -44,6 +44,7 @@ model GoldRateCache {
   lastFetchDate String   
   fetchCount    Int      @default(0)
   timestamp     BigInt   
+  isFetching    Boolean  @default(false)
   updatedAt     DateTime @updatedAt
 }
 
