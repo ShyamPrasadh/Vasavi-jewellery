@@ -4,33 +4,18 @@ import Header from '../components/Header';
 import { RATE_DATA } from '../data';
 import Link from 'next/link';
 import { ArrowLeft, Calculator as CalcIcon } from 'lucide-react';
-import { useState, useEffect } from 'react';
 import { useLanguage } from '@/context/LanguageContext';
 import { useSidebar } from '@/context/SidebarContext';
+import { useGoldRates } from '@/hooks/useGoldRates';
 
 export default function ReferenceTablePage() {
-    const [rates, setRates] = useState({ k22: 7520, k24: 8200 });
+    const { rates } = useGoldRates();
     const { t } = useLanguage();
     const { isCollapsed } = useSidebar();
 
-    useEffect(() => {
-        const fetchRates = async () => {
-            try {
-                const res = await fetch('/api/gold-rate');
-                const data = await res.json();
-                if (data.k22 && data.k24) {
-                    setRates({ k22: data.k22, k24: data.k24 });
-                }
-            } catch (err) {
-                console.error("Failed to sync rates:", err);
-            }
-        };
-        fetchRates();
-    }, []);
-
     return (
         <main className={`fixed top-0 left-0 right-0 bottom-0 bg-white flex flex-col overflow-hidden transition-all duration-300 ${isCollapsed ? 'md:left-[88px]' : 'md:left-[280px]'}`}>
-            <Header rates={rates} />
+            <Header rates={rates || undefined} />
 
             {/* Content Container - Starts after Header */}
             <div className="flex-1 flex flex-col pt-[70px] md:pt-[90px] min-h-0">
