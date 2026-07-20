@@ -189,7 +189,7 @@ export default function CalculatorPage() {
                     <span className="text-[11px] font-black text-gray-500 uppercase tracking-widest">{t('wastageCost')}</span>
                     <span className="text-[10px] text-gray-400 font-bold uppercase tracking-tight">({calculations.wasteGrams}g × ₹{calculations.numGoldRate.toLocaleString()})</span>
                   </div>
-                  <span className="text-lg font-black text-gray-800 font-serif-gold">₹{calculations.wastageCost.toLocaleString()}</span>
+                  <span className="text-lg font-black text-gray-800">₹{calculations.wastageCost.toLocaleString()}</span>
                 </div>
 
                 <div className="flex justify-between py-2 border-b border-gray-50 group">
