@@ -11,6 +11,7 @@ interface CustomDatePickerProps {
     className?: string;
     maxDate?: Date; // Maximum allowed date
     minDate?: Date; // Minimum allowed date
+    variant?: 'box' | 'underline';
 }
 
 const MONTHS = [
@@ -22,7 +23,15 @@ const START_YEAR = 2000;
 const YEARS = Array.from({ length: 51 }, (_, i) => START_YEAR + i);
 const MONTHS_RECURRING = [...MONTHS, ...MONTHS, ...MONTHS];
 
-export default function CustomDatePicker({ selected, onChange, align = 'left', className = '', maxDate, minDate }: CustomDatePickerProps) {
+export default function CustomDatePicker({
+    selected,
+    onChange,
+    align = 'left',
+    className = '',
+    maxDate,
+    minDate,
+    variant = 'box'
+}: CustomDatePickerProps) {
     const [isOpen, setIsOpen] = useState(false);
     const [wheelDate, setWheelDate] = useState<Date>(selected || new Date());
     const [pickerPosition, setPickerPosition] = useState({ top: 0, left: 0 });
@@ -262,13 +271,20 @@ export default function CustomDatePicker({ selected, onChange, align = 'left', c
             `}</style>
 
             <div
-                className="relative flex items-center bg-white border border-gray-200 rounded-xl transition-all group w-full overflow-hidden date-input-field focus-within:bg-white focus-within:border-[#D4AF37] focus-within:ring-2 focus-within:ring-[#D4AF37]/10"
+                className={`relative flex items-center transition-all group w-full overflow-hidden date-input-field
+                    ${variant === 'underline'
+                        ? 'bg-transparent border-b border-gray-100 hover:border-gray-200 focus-within:border-[#A67C00]'
+                        : 'bg-white border border-gray-200 rounded-2xl focus-within:bg-white focus-within:border-[#D4AF37] focus-within:ring-4 focus-within:ring-[#D4AF37]/10 shadow-sm'
+                    }
+                `}
             >
                 <div
                     onClick={() => setIsOpen(!isOpen)}
-                    className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 group-hover:text-[#D4AF37] transition-colors cursor-pointer z-10"
+                    className={`absolute top-1/2 -translate-y-1/2 text-gray-400 group-hover:text-[#A67C00] transition-colors cursor-pointer z-10
+                        ${variant === 'underline' ? 'left-0' : 'left-4'}
+                    `}
                 >
-                    <Calendar size={18} />
+                    <Calendar size={variant === 'underline' ? 14 : 18} />
                 </div>
                 <input
                     type="text"
@@ -276,7 +292,9 @@ export default function CustomDatePicker({ selected, onChange, align = 'left', c
                     onChange={handleInputChange}
                     onFocus={() => setIsOpen(true)}
                     placeholder="DD-MM-YYYY"
-                    className="w-full pl-10 pr-4 py-3.5 bg-transparent outline-none font-bold text-gray-800 leading-none placeholder:text-gray-300"
+                    className={`w-full bg-transparent outline-none font-bold text-gray-800 leading-none placeholder:text-gray-300
+                        ${variant === 'underline' ? 'pl-7 py-2 text-lg' : 'pl-12 pr-4 py-4.5 text-lg'}
+                    `}
                 />
             </div>
 

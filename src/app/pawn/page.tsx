@@ -5,9 +5,9 @@ import Header from '../components/Header';
 import { useGoldRates } from '@/hooks/useGoldRates';
 import CustomDatePicker from '../components/CustomDatePicker';
 import {
-    Calculator as CalcIcon, Calendar, TrendingUp, Wallet, Plus, Trash2,
-    Info, Printer, Download, X, Percent, List, User, Phone,
-    Shield, MapPin, Box, Briefcase, ChevronRight, Store
+    Calendar, Plus, Trash2,
+    Printer, X, Percent, User, Phone,
+    Shield, MapPin, Box, ChevronRight, Store
 } from 'lucide-react';
 import Link from 'next/link';
 import { useLanguage } from '@/context/LanguageContext';
@@ -122,15 +122,15 @@ function PawnCalculatorContent() {
     };
 
     return (
-        <main className="min-h-screen bg-[#FDFCFB] pb-32 pt-[70px] md:pt-[80px]">
+        <main className="min-h-screen bg-white pb-32 pt-[54px] md:pt-[60px]">
             <Header rates={rates || undefined} />
 
-            <div className="max-w-7xl mx-auto px-4 md:px-6 mt-6 md:mt-8">
-                <div className="mb-8">
-                    <h1 className="text-2xl md:text-3xl font-black text-gray-800 uppercase tracking-tight">
+            <div className="max-w-7xl px-4 md:px-5 mt-0.5 md:mt-1">
+                <div className="mb-6 pt-[10px]">
+                    <h1 className="text-[16px] md:text-[20px] text-gray-900 uppercase font-heading">
                         {isShopMode ? t('pawnShop') : t('pawnCalculator')}
                     </h1>
-                    <p className="text-[10px] md:text-xs font-bold text-[#D4AF37] uppercase tracking-[0.2em] mt-1">
+                    <p className="text-[9px] md:text-[10px] font-bold text-[#8B2332] uppercase tracking-[0.1em] mt-0.5">
                         {isShopMode ? t('manageRecordsSettlement') : t('interestSettlementCalculator')}
                     </p>
                 </div>
@@ -144,7 +144,7 @@ function PawnCalculatorContent() {
                                 <div className="p-2 bg-[#D4AF37]/10 rounded-lg text-[#D4AF37]">
                                     <User size={20} />
                                 </div>
-                                <h3 className="text-sm font-black uppercase tracking-widest text-gray-800">{t('customerDetails')}</h3>
+                                <h3 className="text-sm uppercase text-gray-800 font-heading">{t('customerDetails')}</h3>
                             </div>
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -215,7 +215,7 @@ function PawnCalculatorContent() {
                                 <div className="p-2 bg-[#D4AF37]/10 rounded-lg text-[#D4AF37]">
                                     <Box size={20} />
                                 </div>
-                                <h3 className="text-sm font-black uppercase tracking-widest text-gray-800">{t('assetDetails')}</h3>
+                                <h3 className="text-sm uppercase text-gray-800 font-heading">{t('assetDetails')}</h3>
                             </div>
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -312,234 +312,221 @@ function PawnCalculatorContent() {
                         </div>
                     </div>
                 ) : (
-                    /* Calculator Mode View */
-                    <div className="animate-in fade-in slide-in-from-bottom-6 duration-500">
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mb-10">
-                            {/* Loan Amount Card */}
-                            <div className="col-span-1 bg-white p-5 rounded-3xl shadow-sm border border-gray-100 relative overflow-hidden group">
-                                <div className="absolute top-0 left-0 w-1 h-full bg-[#D4AF37]"></div>
-                                <label className="block text-xs font-black text-gray-600 uppercase tracking-widest mb-3">{t('loanAmount')}</label>
-                                <div className="relative h-[40px] flex items-center">
-                                    <span className="absolute left-0 top-1/2 -translate-y-1/2 text-sm font-bold text-gray-500">₹</span>
-                                    <input
-                                        type="text"
-                                        inputMode="decimal"
-                                        value={principal}
-                                        onFocus={(e) => { if (principal === '0') setPrincipal(''); }}
-                                        onBlur={(e) => { if (principal === '') setPrincipal('0'); }}
-                                        onChange={(e) => {
-                                            const val = e.target.value.replace(/\D/g, '');
-                                            setPrincipal(val);
-                                        }}
-                                        className="w-full pl-8 py-2 bg-transparent border-b-2 border-gray-100 focus:border-[#D4AF37] outline-none transition-all font-bold text-lg text-gray-800 leading-none h-full"
-                                    />
+                    /* Calculator Mode View — Two Column Layout */
+                    <div className="animate-in fade-in slide-in-from-bottom-6 duration-500 mt-2 md:mt-4">
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 mb-10 items-stretch">
+                            {/* Left Column — Input Sections */}
+                            <div className="flex flex-col gap-6">
+                                {/* Title Grouping for Inputs */}
+                                <div className="flex flex-col gap-6">
+                                    {/* Loan Amount Card */}
+                                    <div className="bg-white p-6 rounded-2xl shadow-[0_2px_15px_rgba(0,0,0,0.02)] border border-gray-50 flex flex-col gap-3">
+                                        <label className="text-[10px] font-black text-gray-800 uppercase tracking-[0.2em]">{t('loanAmount')}</label>
+                                        <div className="relative flex items-center group">
+                                            <span className="absolute left-0 text-lg font-bold text-gray-400 transition-colors group-focus-within:text-[#8B2332]">₹</span>
+                                            <input
+                                                type="text"
+                                                inputMode="decimal"
+                                                value={principal}
+                                                onFocus={() => { if (principal === '0') setPrincipal(''); }}
+                                                onBlur={() => { if (principal === '') setPrincipal('0'); }}
+                                                onChange={(e) => setPrincipal(e.target.value.replace(/\D/g, ''))}
+                                                className="w-full pl-6 py-2 bg-transparent border-b border-gray-100 focus:border-[#8B2332] outline-none transition-all font-bold text-xl text-gray-800"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    {/* Interest Rate Card */}
+                                    <div className="bg-white p-6 rounded-2xl shadow-[0_2px_15px_rgba(0,0,0,0.02)] border border-gray-50 flex flex-col gap-3">
+                                        <label className="text-[10px] font-black text-gray-800 uppercase tracking-[0.2em]">{t('monthlyInterestRate')}</label>
+                                        <div className="relative flex items-center group">
+                                            <Percent size={16} className="absolute left-0 text-gray-400 transition-colors group-focus-within:text-[#8B2332]" />
+                                            <input
+                                                type="text"
+                                                inputMode="decimal"
+                                                value={interestRate}
+                                                onChange={(e) => {
+                                                    const val = e.target.value;
+                                                    if (val === '' || /^\d*\.?\d*$/.test(val)) setInterestRate(val);
+                                                }}
+                                                className="w-full pl-8 py-2 bg-transparent border-b border-gray-100 focus:border-[#8B2332] outline-none transition-all font-bold text-xl text-gray-800"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Loan Date Card (Spans full width of left col but now only half of page) */}
+                                <div className="bg-white p-6 rounded-2xl shadow-[0_2px_15px_rgba(0,0,0,0.02)] border border-gray-50 flex flex-col gap-3">
+                                    <label className="text-[10px] font-black text-gray-800 uppercase tracking-[0.2em]">{t('loanDate')}</label>
+                                    <div className="relative w-full">
+                                        <CustomDatePicker
+                                            variant="underline"
+                                            selected={new Date(startDate)}
+                                            onChange={(date) => {
+                                                if (date) {
+                                                    const dateString = date.getFullYear() + '-' + String(date.getMonth() + 1).padStart(2, '0') + '-' + String(date.getDate()).padStart(2, '0');
+                                                    setStartDate(dateString);
+                                                }
+                                            }}
+                                        />
+                                    </div>
+                                </div>
+                                {/* Extra Cash Section Moved Here */}
+                                <div className="mt-4 border-t border-gray-100 pt-8">
+                                    <div className="flex items-center gap-3 mb-6">
+                                        <div className="w-10 h-10 rounded-2xl bg-[#A67C00]/10 flex items-center justify-center text-[#A67C00] shrink-0 font-black text-lg">
+                                            ₹
+                                        </div>
+                                        <div>
+                                            <h3 className="text-base text-gray-800 uppercase font-heading">{t('additionalLoans')}</h3>
+                                            <p className="text-[10px] text-gray-500 font-bold uppercase tracking-widest">{t('addEntry')}</p>
+                                        </div>
+                                        <button
+                                            onClick={addExtraCash}
+                                            className="ml-auto flex items-center justify-center gap-2 bg-[#111827] text-white px-5 py-2.5 rounded-xl hover:bg-black active:scale-[0.98] transition-all duration-200 text-[10px] font-black uppercase tracking-widest"
+                                        >
+                                            <Plus size={14} />
+                                            <span className="hidden sm:inline">{t('addEntry')}</span>
+                                        </button>
+                                    </div>
+
+                                    <div className="flex flex-col gap-4">
+                                        {extraCash.map((cash) => (
+                                            <div key={cash.id} className="bg-white p-5 rounded-2xl shadow-[0_2px_15px_rgba(0,0,0,0.02)] border border-gray-50 relative group animate-in fade-in slide-in-from-bottom-4 duration-300">
+                                                <div className="flex flex-col gap-5">
+                                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                                        <div className="flex flex-col gap-2">
+                                                            <label className="block text-[9px] font-black text-gray-800 uppercase tracking-[0.2em]">{t('loanAmount')}</label>
+                                                            <div className="relative flex items-center group/icon">
+                                                                <span className="absolute left-0 text-sm font-bold text-gray-400 transition-colors group-hover/icon:text-[#8B2332] group-focus-within/icon:text-[#8B2332]">₹</span>
+                                                                <input
+                                                                    type="text"
+                                                                    inputMode="decimal"
+                                                                    value={cash.amount}
+                                                                    onFocus={() => { if (cash.amount === '0') updateExtraCash(cash.id, 'amount', ''); }}
+                                                                    onBlur={() => { if (cash.amount === '') updateExtraCash(cash.id, 'amount', '0'); }}
+                                                                    onChange={(e) => updateExtraCash(cash.id, 'amount', e.target.value.replace(/\D/g, ''))}
+                                                                    className="w-full pl-5 py-1.5 bg-transparent border-b border-gray-100 hover:border-gray-200 focus:border-[#8B2332] outline-none transition-all duration-200 font-bold text-lg text-gray-800 leading-none"
+                                                                />
+                                                            </div>
+                                                        </div>
+                                                        <div className="flex flex-col gap-2">
+                                                            <label className="block text-[9px] font-black text-gray-800 uppercase tracking-[0.2em]">{t('loanDate')}</label>
+                                                            <div className="relative w-full">
+                                                                <CustomDatePicker
+                                                                    variant="underline"
+                                                                    selected={cash.date ? new Date(parseInt(cash.date.split('-')[0]), parseInt(cash.date.split('-')[1]) - 1, parseInt(cash.date.split('-')[2])) : null}
+                                                                    onChange={(date) => {
+                                                                        if (date) {
+                                                                            const dateString = date.getFullYear() + '-' + String(date.getMonth() + 1).padStart(2, '0') + '-' + String(date.getDate()).padStart(2, '0');
+                                                                            updateExtraCash(cash.id, 'date', dateString);
+                                                                        }
+                                                                    }}
+                                                                />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div className="flex items-center justify-between border-t border-gray-50 pt-4">
+                                                        <div className="flex items-center gap-2">
+                                                            <Calendar size={12} className="text-gray-400" />
+                                                            <span className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">
+                                                                {t('durationMonths', { months: calculations.extraBreakdown.find(b => b.id === cash.id)?.months.toFixed(2) || '0.00' })}
+                                                            </span>
+                                                        </div>
+                                                        <div className="flex items-center gap-4">
+                                                            <div className="flex items-center gap-2">
+                                                                <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{t('interest')}:</span>
+                                                                <span className="text-sm font-black text-[#8B2332]">
+                                                                    ₹{Math.round(calculations.extraBreakdown.find(b => b.id === cash.id)?.interest || 0).toLocaleString()}
+                                                                </span>
+                                                            </div>
+                                                            <button
+                                                                onClick={() => removeExtraCash(cash.id)}
+                                                                className="p-1.5 text-gray-300 hover:text-red-500 hover:bg-red-50 rounded-xl transition-all duration-200"
+                                                            >
+                                                                <Trash2 size={16} />
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
                                 </div>
                             </div>
 
-                            {/* Loan Date Card */}
-                            <div className="col-span-1 bg-white p-5 rounded-3xl shadow-sm border border-gray-100 relative group overflow-visible">
-                                <div className="absolute inset-0 rounded-3xl overflow-hidden pointer-events-none">
-                                    <div className="absolute top-0 left-0 w-1 h-full bg-[#D4AF37]"></div>
+                            {/* Right Column — Summary & Results (The longer card) */}
+                            <div className="bg-white rounded-[32px] shadow-[0_8px_30px_rgba(0,0,0,0.04)] border border-gray-50 overflow-hidden flex flex-col">
+                                <div className="pt-8 px-8 pb-6 border-b border-gray-50 flex items-center justify-between">
+                                    <span className="text-[10px] font-black text-gray-800 uppercase tracking-[0.2em]">{t('totalPayable')}</span>
+                                    <div className="flex items-baseline gap-1 text-[#8B2332]">
+                                        <span className="text-xl font-bold opacity-80">₹</span>
+                                        <span className="text-4xl font-black tracking-tighter">
+                                            {Math.round(calculations.totalAmount).toLocaleString()}
+                                        </span>
+                                    </div>
                                 </div>
-                                <label className="block text-xs font-black text-gray-600 uppercase tracking-widest mb-3">{t('loanDate')}</label>
-                                <div className="relative w-full overflow-visible">
-                                    <CustomDatePicker
-                                        selected={new Date(startDate)}
-                                        onChange={(date) => {
-                                            if (date) {
-                                                const dateString = date.getFullYear() + '-' + String(date.getMonth() + 1).padStart(2, '0') + '-' + String(date.getDate()).padStart(2, '0');
-                                                setStartDate(dateString);
-                                            }
-                                        }}
-                                    />
-                                </div>
-                            </div>
 
-                            {/* Interest Rate Card */}
-                            <div className="col-span-1 bg-white p-5 rounded-3xl shadow-sm border border-gray-100 relative overflow-hidden group">
-                                <div className="absolute top-0 left-0 w-1 h-full bg-[#D4AF37]"></div>
-                                <label className="block text-xs font-black text-gray-600 uppercase tracking-widest mb-3">{t('monthlyInterestRate')}</label>
-                                <div className="relative h-[40px] flex items-center">
-                                    <Percent size={14} className="absolute left-0 top-1/2 -translate-y-1/2 text-gray-500" />
-                                    <input
-                                        type="text"
-                                        inputMode="decimal"
-                                        value={interestRate}
-                                        onChange={(e) => {
-                                            const val = e.target.value;
-                                            if (val === '' || /^\d*\.?\d*$/.test(val)) setInterestRate(val);
-                                        }}
-                                        className="w-full pl-8 py-2 bg-transparent border-b-2 border-gray-100 focus:border-[#D4AF37] outline-none transition-all font-bold text-lg text-gray-800 leading-none h-full"
-                                    />
+                                <div className="p-8 pt-6 flex-1 flex flex-col gap-6">
+                                    <div className="flex flex-col gap-4 border-b border-gray-50 pb-6">
+                                        <div className="flex items-center justify-between">
+                                            <span className="text-[10px] font-black text-gray-800 uppercase tracking-[0.2em]">{t('totalPrincipal')}</span>
+                                            <span className="text-lg font-bold text-gray-800">₹{calculations.totalPrincipal.toLocaleString()}</span>
+                                        </div>
+                                        <div className="flex items-center justify-between">
+                                            <span className="text-[10px] font-black text-gray-800 uppercase tracking-[0.2em]">{t('totalInterest')}</span>
+                                            <span className="text-lg font-bold text-gray-800">₹{Math.round(calculations.interestAmount).toLocaleString()}</span>
+                                        </div>
+                                    </div>
+
+                                    {/* Table Breakdown */}
+                                    <div className="border border-[#D4AF37]/20 rounded-2xl overflow-hidden">
+                                        <table className="w-full text-left border-collapse bg-white table-fixed">
+                                            <thead>
+                                                <tr className="border-b border-gray-50 bg-gray-50/30">
+                                                    <th className="w-1/4 py-4 px-4 text-[9px] font-black text-gray-400 uppercase tracking-[0.2em]">{t('principal')}</th>
+                                                    <th className="w-1/4 py-4 px-2 text-[9px] font-black text-gray-400 uppercase tracking-[0.2em] text-center">{t('rate')}</th>
+                                                    <th className="w-1/4 py-4 px-2 text-[9px] font-black text-gray-400 uppercase tracking-[0.2em] text-center">{t('duration')}</th>
+                                                    <th className="w-1/4 py-4 px-4 text-[9px] font-black text-gray-400 uppercase tracking-[0.2em] text-right">{t('interest')}</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody className="divide-y divide-gray-50">
+                                                {calculations.allEntries.map((entry, idx) => (
+                                                    <tr key={idx} className="group hover:bg-gray-50/50 transition-colors">
+                                                        <td className="py-5 px-4 text-sm font-black text-gray-900 tracking-tight truncate">
+                                                            ₹{entry.amount.toLocaleString()}
+                                                        </td>
+                                                        <td className="py-5 px-2 text-sm font-bold text-gray-500 text-center">
+                                                            {entry.rate}%
+                                                        </td>
+                                                        <td className="py-5 px-2 text-sm font-bold text-gray-500 text-center">
+                                                            {entry.months.toFixed(2)}m
+                                                        </td>
+                                                        <td className="py-5 px-4 text-sm font-black text-[#A67C00] text-right">
+                                                            ₹{Math.round(entry.interest).toLocaleString()}
+                                                        </td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                    <div className="mt-auto pt-4">
+                                        <button
+                                            onClick={() => setShowPrintModal(true)}
+                                            className="w-full bg-black text-white py-4 rounded-2xl hover:scale-[1.01] active:scale-[0.98] transition-all flex items-center justify-center gap-4 font-black uppercase tracking-[0.25em] text-xs shadow-xl shadow-gray-200"
+                                        >
+                                            <Printer size={18} className="text-white" />
+                                            {t('printBill')}
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 )}
 
-                {/* Extra Cash Section */}
-                <div className="mb-12">
-                    <div className="flex flex-col md:flex-row md:items-center justify-between mb-6 px-2 gap-4">
-                        <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-2xl bg-[#D4AF37]/10 flex items-center justify-center text-[#D4AF37] shrink-0 font-black text-lg">
-                                ₹
-                            </div>
-                            <div>
-                                <h3 className="text-lg font-black text-gray-800 uppercase tracking-wider">{t('additionalLoans')}</h3>
-                                <p className="text-[11px] text-gray-600 font-bold uppercase tracking-widest">{t('addEntry')}</p>
-                            </div>
-                        </div>
-                        <button
-                            onClick={addExtraCash}
-                            className="w-full md:w-auto flex items-center justify-center gap-2 bg-[#333333] text-white px-6 py-3 rounded-xl hover:bg-black transition-all shadow-lg shadow-gray-200 text-[11px] font-black uppercase tracking-widest"
-                        >
-                            <Plus size={14} />
-                            {t('addEntry')}
-                        </button>
-                    </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        {extraCash.map((cash) => (
-                            <div key={cash.id} className="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 relative group animate-in fade-in slide-in-from-bottom-4 duration-300">
-                                <div className="absolute inset-0 rounded-3xl overflow-hidden pointer-events-none">
-                                    <div className="absolute top-0 left-0 w-1 h-full bg-[#D4AF37]"></div>
-                                </div>
-                                <div className="flex items-start justify-between mb-6">
-                                    <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                        <div className="flex flex-col">
-                                            <label className="block text-xs font-black text-gray-600 uppercase tracking-widest mb-3">{t('loanAmount')}</label>
-                                            <div className="relative h-[40px] flex items-center">
-                                                <span className="absolute left-0 top-1/2 -translate-y-1/2 text-gray-600 font-bold text-sm">₹</span>
-                                                <input
-                                                    type="text"
-                                                    inputMode="decimal"
-                                                    value={cash.amount}
-                                                    onFocus={(e) => { if (cash.amount === '0') updateExtraCash(cash.id, 'amount', ''); }}
-                                                    onBlur={(e) => { if (cash.amount === '') updateExtraCash(cash.id, 'amount', '0'); }}
-                                                    onChange={(e) => updateExtraCash(cash.id, 'amount', e.target.value.replace(/\D/g, ''))}
-                                                    className="w-full pl-8 py-2 bg-transparent border-b-2 border-gray-100 focus:border-[#D4AF37] outline-none transition-all font-bold text-lg text-gray-800 leading-none h-full"
-                                                />
-                                            </div>
-                                        </div>
-                                        <div className="flex flex-col">
-                                            <label className="block text-xs font-black text-gray-600 uppercase tracking-widest mb-3">{t('loanDate')}</label>
-                                            <CustomDatePicker
-                                                selected={cash.date ? new Date(parseInt(cash.date.split('-')[0]), parseInt(cash.date.split('-')[1]) - 1, parseInt(cash.date.split('-')[2])) : null}
-                                                onChange={(date) => {
-                                                    if (date) {
-                                                        const dateString = date.getFullYear() + '-' + String(date.getMonth() + 1).padStart(2, '0') + '-' + String(date.getDate()).padStart(2, '0');
-                                                        updateExtraCash(cash.id, 'date', dateString);
-                                                    }
-                                                }}
-                                            />
-                                        </div>
-                                    </div>
-                                    <button
-                                        onClick={() => removeExtraCash(cash.id)}
-                                        className="ml-4 p-2 text-gray-500 hover:text-red-500 hover:bg-red-50 rounded-xl transition-all"
-                                    >
-                                        <Trash2 size={18} />
-                                    </button>
-                                </div>
-
-                                {/* Mini breakdown for this entry */}
-                                <div className="flex items-center justify-between pt-4 border-t border-dashed border-gray-100">
-                                    <div className="flex items-center gap-2">
-                                        <Calendar size={12} className="text-gray-600" />
-                                        <span className="text-[11px] font-bold text-gray-600 uppercase tracking-widest">
-                                            {t('durationMonths', { months: calculations.extraBreakdown.find(b => b.id === cash.id)?.months.toFixed(2) || '0.00' })}
-                                        </span>
-                                    </div>
-                                    <div className="flex items-center gap-2">
-                                        <span className="text-[11px] font-bold text-gray-600 uppercase tracking-widest">{t('interest')}:</span>
-                                        <span className="text-sm font-black text-[#D4AF37]">
-                                            ₹{Math.round(calculations.extraBreakdown.find(b => b.id === cash.id)?.interest || 0).toLocaleString()}
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                        ))}
-
-                    </div>
-                </div >
-
-                <div className="print:hidden space-y-8 mt-10">
-                    {/* Combined Summary & Settlement Card */}
-                    <div className="bg-white rounded-3xl shadow-xl shadow-gray-200/50 border border-gray-100 overflow-hidden flex flex-col">
-                        <div className="bg-[#333333] text-white px-6 py-3 flex items-center justify-between">
-                            <div className="flex items-center gap-3">
-                                <CalcIcon size={20} className="text-[#D4AF37]" />
-                                <h2 className="text-base font-black uppercase tracking-widest text-white">{t('loanSummarySettlement')}</h2>
-                            </div>
-                            <div className="hidden md:flex items-center gap-2 px-3 py-1 bg-white/10 rounded-full border border-white/5">
-                                <Info size={12} className="text-[#D4AF37]" />
-                                <span className="text-[10px] uppercase font-bold tracking-tight">{t('rateMonth', { rate: interestRate })}</span>
-                            </div>
-                        </div>
-
-                        <div className="grid grid-cols-1 lg:grid-cols-5 divide-y lg:divide-y-0 lg:divide-x divide-gray-100">
-                            {/* Detailed Breakdown Section */}
-                            <div className="lg:col-span-3 p-6">
-                                <div className="overflow-x-auto">
-                                    <table className="w-full text-left text-sm border-collapse">
-                                        <thead>
-                                            <tr className="text-xs text-gray-600 uppercase tracking-widest border-b border-gray-50 bg-gray-50/50">
-                                                <th className="p-3 font-black">{t('principal')}</th>
-                                                <th className="p-3 font-black">{t('rate')}</th>
-                                                <th className="p-3 font-black">{t('duration')}</th>
-                                                <th className="p-3 font-black text-right">{t('interest')}</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody className="divide-y divide-gray-50">
-                                            {calculations.allEntries.map((entry, idx) => (
-                                                <tr key={idx} className="group/row hover:bg-gray-50/50 transition-colors">
-                                                    <td className="p-3 font-bold text-gray-800">₹{entry.amount.toLocaleString()}</td>
-                                                    <td className="p-3 text-gray-500 font-medium">{entry.rate}%</td>
-                                                    <td className="p-3 text-gray-500 font-medium">{entry.months.toFixed(2)}m</td>
-                                                    <td className="p-3 font-bold text-[#D4AF37] text-right">₹{Math.round(entry.interest).toLocaleString()}</td>
-                                                </tr>
-                                            ))}
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-
-                            {/* Final Settlement Section */}
-                            <div className="lg:col-span-2 p-6 bg-[#FDFCFB]">
-                                <h4 className="text-[11px] font-black text-gray-600 uppercase tracking-widest mb-6 flex items-center gap-2">
-                                    <Wallet size={14} className="text-gray-500" />
-                                    {t('finalSettlement')}
-                                </h4>
-
-                                <div className="space-y-3 mb-6">
-                                    <div className="flex justify-between items-center py-2 border-b border-dashed border-gray-200">
-                                        <span className="text-xs font-black text-gray-600 uppercase tracking-widest">{t('totalPrincipal')}</span>
-                                        <span className="text-sm font-black text-gray-800">₹{calculations.totalPrincipal.toLocaleString()}</span>
-                                    </div>
-                                    <div className="flex justify-between items-center py-2 border-b border-dashed border-gray-200">
-                                        <span className="text-xs font-black text-gray-600 uppercase tracking-widest">{t('totalInterest')}</span>
-                                        <span className="text-sm font-black text-[#D4AF37]">₹{Math.round(calculations.interestAmount).toLocaleString()}</span>
-                                    </div>
-                                    <div className="pt-4 flex flex-col items-center justify-center p-5 bg-white rounded-2xl border border-gray-100 relative group overflow-hidden">
-                                        <div className="absolute top-0 left-0 w-1 h-full bg-[#D4AF37] rounded-l-2xl"></div>
-                                        <p className="text-gray-500 uppercase text-[11px] font-black tracking-[0.2em] mb-1">{t('totalPayable')}</p>
-                                        <div className="relative inline-block">
-                                            <p className="text-3xl font-black text-gray-800 tracking-tighter">₹{Math.round(calculations.totalAmount).toLocaleString()}</p>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <button
-                                    onClick={() => setShowPrintModal(true)}
-                                    className="w-full bg-[#D4AF37] text-white py-4 rounded-2xl hover:bg-[#B8860B] hover:scale-[1.01] active:scale-95 transition-all flex items-center justify-center gap-3 font-black uppercase tracking-[0.15em] text-sm mb-4"
-                                >
-                                    <Printer size={18} />
-                                    {t('printBill')}
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
                 <p className="mt-12 text-center text-[10px] text-gray-300 font-black uppercase tracking-[0.4em] print:hidden">
                     {t('sriVasaviJewellery')}
@@ -557,7 +544,7 @@ function PawnCalculatorContent() {
                                     <div className="p-2 bg-[#D4AF37]/10 rounded-xl text-[#D4AF37]">
                                         <Printer size={20} />
                                     </div>
-                                    <h3 className="text-sm md:text-lg font-black text-gray-800 uppercase tracking-widest">{t('receiptPreview')}</h3>
+                                    <h3 className="text-sm md:text-lg text-gray-800 uppercase font-heading">{t('receiptPreview')}</h3>
                                 </div>
                                 <div className="flex gap-3 w-full md:w-auto">
                                     <button
@@ -601,7 +588,7 @@ function PawnCalculatorContent() {
                                     {isShopMode && (
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-10 pb-10 border-b border-dashed border-gray-200">
                                             <div className="space-y-4">
-                                                <h4 className="text-[11px] font-black text-[#D4AF37] uppercase tracking-[0.2em] border-b border-[#D4AF37]/20 pb-2">{t('customerDetails')}</h4>
+                                                <h4 className="text-[11px] text-[#D4AF37] uppercase border-b border-[#D4AF37]/20 pb-2 font-heading">{t('customerDetails')}</h4>
                                                 <div className="space-y-2.5">
                                                     <div className="flex justify-between text-xs"><span className="text-gray-400 font-bold uppercase tracking-widest">{t('fullName')}:</span> <span className="text-gray-800 font-black uppercase">{customerName || 'N/A'}</span></div>
                                                     <div className="flex justify-between text-xs"><span className="text-gray-400 font-bold uppercase tracking-widest">{t('phoneNumber')}:</span> <span className="text-gray-800 font-black">{customerPhone || 'N/A'}</span></div>
@@ -613,7 +600,7 @@ function PawnCalculatorContent() {
                                                 </div>
                                             </div>
                                             <div className="space-y-4">
-                                                <h4 className="text-[11px] font-black text-[#D4AF37] uppercase tracking-[0.2em] border-b border-[#D4AF37]/20 pb-2">{t('assetDetails')}</h4>
+                                                <h4 className="text-[11px] text-[#D4AF37] uppercase border-b border-[#D4AF37]/20 pb-2 font-heading">{t('assetDetails')}</h4>
                                                 <div className="space-y-2.5">
                                                     <div className="flex justify-between text-xs"><span className="text-gray-400 font-bold uppercase tracking-widest">{t('product')}:</span> <span className="text-gray-800 font-black uppercase">{t(productType as any)}</span></div>
                                                     <div className="flex justify-between text-xs"><span className="text-gray-400 font-bold uppercase tracking-widest">{t('loanDate')}:</span> <span className="text-gray-800 font-black">{startDate}</span></div>
@@ -626,7 +613,7 @@ function PawnCalculatorContent() {
 
                                     {/* Entry Breakdown Table */}
                                     <div className="mb-10">
-                                        <h4 className="text-[11px] font-black text-gray-800 uppercase tracking-[0.2em] mb-4">{t('loanSummarySettlement')}</h4>
+                                        <h4 className="text-[11px] text-gray-800 uppercase mb-4 font-heading">{t('loanSummarySettlement')}</h4>
                                         <table className="w-full text-xs">
                                             <thead>
                                                 <tr className="bg-gray-50 border-y border-gray-100 uppercase tracking-widest font-black text-gray-500">
@@ -659,7 +646,7 @@ function PawnCalculatorContent() {
 
                                     {/* Terms & Conditions */}
                                     <div className="mb-12 space-y-3">
-                                        <h4 className="text-[10px] font-black text-gray-800 uppercase tracking-widest border-b border-gray-100 pb-1">{t('termsConditions')}</h4>
+                                        <h4 className="text-[10px] text-gray-800 uppercase border-b border-gray-100 pb-1 font-heading">{t('termsConditions')}</h4>
                                         <ol className="text-[9px] text-gray-500 space-y-1.5 leading-relaxed font-medium">
                                             <li>1. {t('term1', { rate: interestRate })}</li>
                                             <li>2. {t('term2')}</li>

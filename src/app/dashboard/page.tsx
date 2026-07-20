@@ -249,17 +249,17 @@ export default function DashboardPage() {
     }, [stats.filteredLoans, sortBy, sortOrder, amountFilter, productFilter]);
 
     return (
-        <main className="min-h-screen bg-[#FDFCFB] pb-32 pt-[70px] md:pt-[80px]">
+        <main className="min-h-screen bg-white pb-32 pt-[54px] md:pt-[60px]">
             <Header rates={rates || undefined} />
 
-            <div className="max-w-7xl mx-auto px-4 md:px-6 mt-6 md:mt-8">
+            <div className="max-w-7xl px-4 md:px-5 mt-0.5 md:mt-1">
                 {/* Page Header */}
                 <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6 md:mb-8">
-                    <div>
-                        <h1 className="text-2xl md:text-3xl font-black text-gray-800 uppercase tracking-tight">
+                    <div className="pt-[10px]">
+                        <h1 className="text-[16px] md:text-[20px] text-gray-900 uppercase font-heading">
                             {t('dashboard')}
                         </h1>
-                        <p className="text-[10px] md:text-xs font-bold text-[#D4AF37] uppercase tracking-[0.2em] mt-1">
+                        <p className="text-[9px] md:text-[10px] font-bold text-[#8B2332] uppercase tracking-[0.1em] mt-0.5">
                             {t('businessOverview')}
                         </p>
                     </div>
@@ -371,7 +371,7 @@ export default function DashboardPage() {
                                 <div className="flex items-center justify-between mb-4 md:mb-6">
                                     <div className="flex items-center gap-2">
                                         <Activity size={16} className="text-[#D4AF37]" />
-                                        <h3 className="text-xs md:text-sm font-black text-gray-800 uppercase tracking-widest">{t('monthlyTrend')}</h3>
+                                        <h3 className="text-xs md:text-sm text-gray-800 uppercase font-heading">{t('monthlyTrend')}</h3>
                                     </div>
                                     <span className="text-[9px] md:text-[10px] font-bold text-gray-400 uppercase">{t('last6Months')}</span>
                                 </div>
@@ -399,7 +399,7 @@ export default function DashboardPage() {
                             <div className="bg-white rounded-2xl p-4 md:p-6 shadow-sm border border-gray-100">
                                 <div className="flex items-center gap-2 mb-4 md:mb-6">
                                     <PieChart size={16} className="text-[#D4AF37]" />
-                                    <h3 className="text-xs md:text-sm font-black text-gray-800 uppercase tracking-widest">{t('byProduct')}</h3>
+                                    <h3 className="text-xs md:text-sm text-gray-800 uppercase font-heading">{t('byProduct')}</h3>
                                 </div>
                                 <div className="space-y-2 md:space-y-3">
                                     {Object.entries(stats.productCounts).length === 0 ? (
@@ -439,7 +439,7 @@ export default function DashboardPage() {
                                             <Clock size={20} className="text-[#B8860B]" />
                                         </div>
                                         <div>
-                                            <h3 className="text-sm md:text-base font-black text-gray-800 uppercase tracking-widest">{t('recentLoans')}</h3>
+                                            <h3 className="text-sm md:text-base text-gray-800 uppercase font-heading">{t('recentLoans')}</h3>
                                             <p className="text-[10px] text-gray-400 font-bold">{filteredRecentLoans.length} {t('loansShown')}</p>
                                         </div>
                                     </div>
@@ -629,7 +629,7 @@ export default function DashboardPage() {
                 <div className="fixed inset-0 z-[100] bg-black/50 backdrop-blur-sm flex items-center justify-center p-4" onClick={() => setDetailModal(null)}>
                     <div className="bg-white rounded-2xl max-w-2xl w-full max-h-[80vh] overflow-hidden shadow-2xl" onClick={e => e.stopPropagation()}>
                         <div className="px-6 py-4 bg-[#333333] text-white flex items-center justify-between">
-                            <h3 className="font-black uppercase tracking-widest text-sm">
+                            <h3 className="uppercase text-sm font-heading">
                                 {detailModal.type === 'loansGiven' && t('loansGiven')}
                                 {detailModal.type === 'interest' && t('interestEarned')}
                                 {detailModal.type === 'outstanding' && t('outstanding')}
@@ -666,7 +666,7 @@ export default function DashboardPage() {
                             {detailModal.type === 'alerts' && (
                                 <div className="space-y-6">
                                     <div>
-                                        <h4 className="text-xs font-black text-orange-500 uppercase tracking-widest mb-3">{t('dueSoon')} ({detailModal.data.upcoming.length})</h4>
+                                        <h4 className="text-xs text-orange-500 uppercase mb-3 font-heading">{t('dueSoon')} ({detailModal.data.upcoming.length})</h4>
                                         <div className="space-y-2">
                                             {detailModal.data.upcoming.map((loan: Loan) => (
                                                 <div key={loan.id} className="flex items-center justify-between p-3 bg-orange-50 rounded-xl border border-orange-100">
@@ -686,7 +686,7 @@ export default function DashboardPage() {
                                         </div>
                                     </div>
                                     <div>
-                                        <h4 className="text-xs font-black text-red-500 uppercase tracking-widest mb-3">{t('overdue')} ({detailModal.data.overdue.length})</h4>
+                                        <h4 className="text-xs text-red-500 uppercase mb-3 font-heading">{t('overdue')} ({detailModal.data.overdue.length})</h4>
                                         <div className="space-y-2">
                                             {detailModal.data.overdue.map((loan: Loan) => (
                                                 <div key={loan.id} className="flex items-center justify-between p-3 bg-red-50 rounded-xl border border-red-100">

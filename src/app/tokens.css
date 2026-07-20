@@ -1,0 +1,206 @@
+/* ============================================
+   VASAVI JEWELLERY — DESIGN TOKENS
+   3-Layer Token Architecture
+   ============================================
+   Layer 1: Brand primitives (--ds-*)
+   Layer 2: Project aliases (--color-*, --space-*, etc.)
+   Layer 3: Components reference Layer 2 only
+   ============================================ */
+
+:root {
+    /* ──────────────────────────────────────────
+     LAYER 1: BRAND PRIMITIVES (--ds-*)
+     Raw values. Never referenced by components.
+     ────────────────────────────────────────── */
+
+    /* Gold palette */
+    --ds-gold: #A67C00;
+    --ds-gold-dark: #8C6B00;
+    --ds-gold-hover: #B8860B;
+    --ds-gold-light: #F4E4BC;
+    --ds-gold-muted: #F9F5EC;
+
+    /* Maroon palette */
+    --ds-maroon: #8B2332;
+    --ds-maroon-hover: #A02A3C;
+
+    /* Neutrals */
+    --ds-white: #FFFFFF;
+    --ds-bg: #FDFCFB;
+    --ds-bg-alt: #F9FAFB;
+    /* gray-50 */
+    --ds-text: #1A202C;
+    --ds-text-secondary: #6B7280;
+    /* gray-500 */
+    --ds-text-muted: #9CA3AF;
+    /* gray-400 */
+    --ds-text-faint: #D1D5DB;
+    /* gray-300 */
+    --ds-border: #E5E7EB;
+    /* gray-200 */
+    --ds-border-light: #F3F4F6;
+    /* gray-100 */
+    --ds-dark: #111827;
+    /* gray-900 */
+    --ds-dark-hover: #000000;
+
+    /* Danger */
+    --ds-danger: #EF4444;
+    /* red-500 */
+    --ds-danger-hover: #DC2626;
+    /* red-600 */
+    --ds-danger-light: #FEE2E2;
+    /* red-100 */
+    --ds-danger-text: #DC2626;
+    /* red-600 */
+
+    /* Success */
+    --ds-success: #22C55E;
+    /* green-500 */
+    --ds-success-light: #4ADE80;
+    /* green-400 */
+
+    /* Warning */
+    --ds-warning: #F59E0B;
+    /* amber-500 */
+    --ds-warning-light: #FBBF24;
+    /* amber-400 */
+
+    /* ──────────────────────────────────────────
+     LAYER 2: PROJECT ALIASES
+     Components reference ONLY these.
+     ────────────────────────────────────────── */
+
+    /* --- Colors: Brand --- */
+    --color-gold: var(--ds-gold, #A67C00);
+    --color-gold-hover: var(--ds-gold-hover, #B8860B);
+    --color-gold-dark: var(--ds-gold-dark, #8C6B00);
+    --color-gold-light: var(--ds-gold-light, #F4E4BC);
+    --color-gold-muted: var(--ds-gold-muted, #F9F5EC);
+
+    --color-maroon: var(--ds-maroon, #8B2332);
+    --color-maroon-hover: var(--ds-maroon-hover, #A02A3C);
+
+    /* --- Colors: Neutral --- */
+    --color-bg: var(--ds-bg, #FDFCFB);
+    --color-bg-alt: var(--ds-bg-alt, #F9FAFB);
+    --color-bg-card: var(--ds-white, #FFFFFF);
+
+    --color-text: var(--ds-text, #1A202C);
+    --color-text-secondary: var(--ds-text-secondary, #6B7280);
+    --color-text-muted: var(--ds-text-muted, #9CA3AF);
+    --color-text-faint: var(--ds-text-faint, #D1D5DB);
+
+    --color-border: var(--ds-border, #E5E7EB);
+    --color-border-light: var(--ds-border-light, #F3F4F6);
+    --color-border-focus: var(--ds-gold, #A67C00);
+
+    --color-dark: var(--ds-dark, #111827);
+    --color-dark-hover: var(--ds-dark-hover, #000000);
+
+    /* --- Colors: Feedback --- */
+    --color-danger: var(--ds-danger, #EF4444);
+    --color-danger-hover: var(--ds-danger-hover, #DC2626);
+    --color-danger-light: var(--ds-danger-light, #FEE2E2);
+    --color-danger-text: var(--ds-danger-text, #DC2626);
+
+    --color-success: var(--ds-success, #22C55E);
+    --color-success-light: var(--ds-success-light, #4ADE80);
+    --color-warning: var(--ds-warning, #F59E0B);
+    --color-warning-light: var(--ds-warning-light, #FBBF24);
+
+    /* --- Spacing (4px base grid) --- */
+    --space-0: 0px;
+    --space-50: 2px;
+    --space-100: 4px;
+    --space-150: 6px;
+    --space-200: 8px;
+    --space-300: 12px;
+    --space-400: 16px;
+    --space-500: 20px;
+    --space-600: 24px;
+    --space-700: 32px;
+    --space-800: 40px;
+    --space-900: 48px;
+    --space-1000: 64px;
+
+    /* --- Typography: Families --- */
+    --font-display: 'Playfair Display', serif;
+    --font-heading: 'Figtree', sans-serif;
+    --font-body: 'Inter', sans-serif;
+    --font-label: var(--font-poppins, 'Poppins'), sans-serif;
+    --font-mono: 'SF Mono', 'Fira Code', monospace;
+
+    /* --- Typography: Sizes --- */
+    --font-size-2xs: 7px;
+    --font-size-xs: 9px;
+    --font-size-sm: 10px;
+    --font-size-base: 11px;
+    --font-size-md: 12px;
+    --font-size-lg: 14px;
+    --font-size-xl: 16px;
+    --font-size-2xl: 18px;
+    --font-size-3xl: 22px;
+    --font-size-4xl: 28px;
+    --font-size-5xl: 36px;
+
+    /* --- Typography: Weights --- */
+    --font-weight-normal: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+    --font-weight-black: 900;
+
+    /* --- Typography: Tracking --- */
+    --tracking-tight: -0.025em;
+    --tracking-normal: 0;
+    --tracking-wide: 0.05em;
+    --tracking-wider: 0.1em;
+    --tracking-widest: 0.15em;
+    --tracking-ultra: 0.2em;
+
+    /* --- Border Radius --- */
+    --radius-sm: 6px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    --radius-xl: 16px;
+    --radius-2xl: 24px;
+    --radius-full: 9999px;
+
+    /* --- Elevation / Shadows --- */
+    --shadow-none: none;
+    --shadow-card: 0 2px 12px rgba(0, 0, 0, 0.03);
+    --shadow-dropdown: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(0, 0, 0, 0.05);
+    --shadow-modal: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+
+    /* --- Z-Index --- */
+    --z-base: 1;
+    --z-dropdown: 30;
+    --z-sidebar: 40;
+    --z-header: 55;
+    --z-modal-bg: 90;
+    --z-modal: 100;
+    --z-tooltip: 200;
+    --z-toast: 300;
+    --z-picker: 99999;
+
+    /* --- Motion / Transitions --- */
+    --duration-instant: 0ms;
+    --duration-fast: 150ms;
+    --duration-normal: 200ms;
+    --duration-slow: 300ms;
+    --duration-slower: 500ms;
+    --ease-default: cubic-bezier(0.4, 0, 0.2, 1);
+    --ease-in: cubic-bezier(0.4, 0, 1, 1);
+    --ease-out: cubic-bezier(0, 0, 0.2, 1);
+    --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+    /* --- Interactive States (micro-interactions) --- */
+    --hover-scale: 1.0;
+    /* No scale by default; override per component if needed */
+    --active-scale: 0.98;
+    /* Subtle press-down on all clickable elements */
+    --active-scale-lg: 0.95;
+    /* Stronger press for mobile FABs */
+}

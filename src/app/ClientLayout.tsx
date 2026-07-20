@@ -20,12 +20,12 @@ function LayoutContent({ children }: { children: React.ReactNode }) {
     const { isCollapsed } = useSidebar();
 
     return (
-        <div className="flex min-h-screen bg-[#FDFCFB]">
+        <div className="flex min-h-screen bg-white">
             <Suspense fallback={<div className="w-[280px] bg-white h-screen border-r border-gray-100 hidden md:block" />}>
                 <Sidebar />
             </Suspense>
             <main
-                className={`flex-1 transition-all duration-300 ${isCollapsed ? 'md:ml-[88px]' : 'md:ml-[280px]'}`}
+                className={`flex-1 transition-all duration-300 ${isCollapsed ? 'md:ml-[64px]' : 'md:ml-[280px]'}`}
             >
                 {children}
             </main>

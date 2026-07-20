@@ -14,20 +14,20 @@ export default function ReferenceTablePage() {
     const { isCollapsed } = useSidebar();
 
     return (
-        <main className={`fixed top-0 left-0 right-0 bottom-0 bg-white flex flex-col overflow-hidden transition-all duration-300 ${isCollapsed ? 'md:left-[88px]' : 'md:left-[280px]'}`}>
+        <main className={`fixed top-0 left-0 right-0 bottom-0 bg-white flex flex-col overflow-hidden transition-all duration-300 ${isCollapsed ? 'md:left-[64px]' : 'md:left-[280px]'}`}>
             <Header rates={rates || undefined} />
 
             {/* Content Container - Starts after Header */}
-            <div className="flex-1 flex flex-col pt-[70px] md:pt-[90px] min-h-0">
+            <div className="flex-1 flex flex-col pt-[54px] md:pt-[60px] min-h-0">
 
                 {/* Fixed Title Section */}
-                <div className="bg-white px-4 py-4 md:py-6 border-b border-gray-100 flex-shrink-0">
-                    <div className="max-w-7xl mx-auto px-4 md:px-6 flex flex-col md:flex-row md:justify-between md:items-center gap-4 md:gap-6">
-                        <div>
-                            <h2 className="text-2xl md:text-3xl font-black text-gray-800 uppercase tracking-tight">
+                <div className="bg-white px-4 py-1 md:py-1.5 border-b border-gray-100 flex-shrink-0">
+                    <div className="max-w-7xl px-4 md:px-5 flex flex-col md:flex-row md:justify-between md:items-center gap-1 md:gap-2">
+                        <div className="pt-[10px]">
+                            <h1 className="text-[16px] md:text-[20px] text-gray-900 uppercase font-heading">
                                 {t('referenceRateTable')}
-                            </h2>
-                            <p className="text-[10px] md:text-xs font-bold text-[#D4AF37] uppercase tracking-[0.2em] mt-1">
+                            </h1>
+                            <p className="text-[9px] md:text-[10px] font-bold text-[#8B2332] uppercase tracking-[0.1em] mt-0.5">
                                 {t('standardWastageLabour')}
                             </p>
                         </div>
@@ -39,8 +39,8 @@ export default function ReferenceTablePage() {
                 </div>
 
                 {/* Scrollable Content Area */}
-                <div className="flex-1 overflow-y-auto px-4 md:px-6 py-4 md:py-8">
-                    <div className="max-w-7xl mx-auto space-y-8">
+                <div className="flex-1 overflow-y-auto px-4 md:px-5 py-4 md:py-8">
+                    <div className="max-w-7xl space-y-8">
 
                         {/* Table Container */}
                         <div className="rounded-2xl md:rounded-3xl border border-gray-100 shadow-xl bg-white overflow-hidden">
@@ -49,7 +49,7 @@ export default function ReferenceTablePage() {
                                     <thead className="sticky top-0 z-30">
                                         <tr className="bg-[#333333] text-white">
                                             <th
-                                                className="p-4 md:p-6 font-black uppercase text-[10px] md:text-xs tracking-[0.15em] md:tracking-[0.2em] border-r border-gray-700 bg-[#333333] text-left sticky left-0 z-40 min-w-[100px] md:min-w-[140px]"
+                                                className="p-2 md:p-3 font-black uppercase text-[10px] md:text-xs tracking-[0.15em] md:tracking-[0.2em] border-r border-gray-700 bg-[#333333] text-left sticky left-0 z-40 min-w-[100px] md:min-w-[140px]"
                                             >
                                                 {t('weight')}
                                             </th>
@@ -138,7 +138,7 @@ export default function ReferenceTablePage() {
                                 </div>
                                 <div className="relative z-10 flex flex-col md:flex-row justify-between items-center gap-6">
                                     <div className="text-center md:text-left">
-                                        <h3 className="text-lg md:text-xl font-black uppercase tracking-widest text-[#D4AF37]">{t('policyNote')}</h3>
+                                        <h3 className="text-lg md:text-xl uppercase text-[#D4AF37] font-heading">{t('policyNote')}</h3>
                                         <p className="mt-2 text-gray-400 text-[10px] md:text-sm max-w-xl leading-relaxed">
                                             {t('policyNoteDescription')}
                                         </p>

@@ -478,16 +478,16 @@ export default function GoldLoanPage() {
     };
 
     return (
-        <main className="min-h-screen bg-[#FDFCFB] pb-32 pt-[70px] md:pt-[80px]">
+        <main className="min-h-screen bg-white pb-32 pt-[54px] md:pt-[60px]">
             <Header rates={rates || undefined} />
 
-            <div className="max-w-7xl mx-auto px-4 md:px-6 mt-6 md:mt-8">
+            <div className="max-w-7xl px-4 md:px-5 mt-0.5 md:mt-1">
                 {/* Page Title */}
-                <div className="mb-8">
-                    <h1 className="text-2xl md:text-3xl font-black text-gray-800 uppercase tracking-tight">
+                <div className="mb-6 md:mb-8 pt-[10px]">
+                    <h1 className="text-[16px] md:text-[20px] text-gray-900 uppercase font-heading">
                         {t('goldLoan')}
                     </h1>
-                    <p className="text-[10px] md:text-xs font-bold text-[#D4AF37] uppercase tracking-[0.2em] mt-1">
+                    <p className="text-[9px] md:text-[10px] font-bold text-[#8B2332] uppercase tracking-[0.1em] mt-0.5">
                         {t('manageLoansRecords')}
                     </p>
                 </div>
@@ -518,7 +518,7 @@ export default function GoldLoanPage() {
                     <div className="bg-white rounded-2xl md:rounded-3xl shadow-xl border border-gray-100 overflow-hidden mb-6 animate-in fade-in slide-in-from-top-2 duration-200">
                         <div className="bg-[#333333] text-white px-4 md:px-6 py-3 md:py-4 flex items-center gap-2">
                             <Plus size={18} className="text-[#D4AF37]" />
-                            <h2 className="text-xs md:text-sm font-black uppercase tracking-widest">{t('newLoan')}</h2>
+                            <h2 className="text-xs md:text-sm uppercase font-heading">{t('newLoan')}</h2>
                         </div>
 
                         <div className="p-4 md:p-8 space-y-8">
@@ -683,7 +683,7 @@ export default function GoldLoanPage() {
 
                 {/* Section Header with Filter */}
                 <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-xs md:text-sm font-black text-gray-600 uppercase tracking-[0.15em] flex items-center gap-2">
+                    <h3 className="text-xs md:text-sm text-gray-600 uppercase flex items-center gap-2 font-heading">
                         <Wallet size={16} className="text-[#D4AF37]" />
                         {t('activeGoldLoans')}
                         <span className="text-gray-400 font-bold">({filteredLoans.length})</span>
@@ -734,7 +734,7 @@ export default function GoldLoanPage() {
                             <div className="fixed inset-y-0 right-0 z-[100] w-full md:w-96 bg-white shadow-2xl border-l border-gray-100 overflow-hidden animate-in slide-in-from-right duration-300 flex flex-col h-full">
                                 <div className="bg-gradient-to-br from-[#D4AF37]/10 to-[#D4AF37]/5 px-5 py-4 border-b border-[#D4AF37]/20 flex-shrink-0">
                                     <div className="flex items-center justify-between">
-                                        <h3 className="text-sm font-black text-gray-800 uppercase tracking-widest flex items-center gap-2">
+                                        <h3 className="text-sm text-gray-800 uppercase flex items-center gap-2 font-heading">
                                             <Filter size={16} className="text-[#D4AF37]" />
                                             {t('filterLoans')}
                                         </h3>
@@ -1103,7 +1103,7 @@ export default function GoldLoanPage() {
                                             <div className="p-4">
                                                 <div className="flex justify-between items-start mb-4">
                                                     <div>
-                                                        <h3 className="font-black text-gray-800 uppercase text-sm mb-1 line-clamp-1">{loan.customerName}</h3>
+                                                        <h3 className="text-gray-800 uppercase text-sm mb-1 line-clamp-1 font-heading">{loan.customerName}</h3>
                                                         <div className="flex items-center gap-1.5 text-[10px] font-bold text-gray-400 uppercase tracking-wider">
                                                             <span className="text-[#D4AF37]">●</span>
                                                             {loan.productType}
@@ -1261,7 +1261,7 @@ export default function GoldLoanPage() {
                                         </button>
                                         <div>
                                             <p className="text-[10px] text-gray-400 font-bold tracking-widest uppercase">{viewingLoan.billNumber}</p>
-                                            <h3 className="text-lg font-black uppercase text-white tracking-wide">{viewingLoan.customerName}</h3>
+                                            <h3 className="text-lg uppercase text-white font-heading">{viewingLoan.customerName}</h3>
                                         </div>
                                     </div>
                                     <div className="flex gap-2">
@@ -1301,7 +1301,7 @@ export default function GoldLoanPage() {
                                             {/* Customer Details Card */}
                                             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
                                                 <div className="px-6 py-4 bg-gray-50 border-b border-gray-100">
-                                                    <h4 className="text-xs font-black text-gray-600 uppercase tracking-widest flex items-center gap-2">
+                                                    <h4 className="text-xs text-gray-600 uppercase flex items-center gap-2 font-heading">
                                                         <User size={16} className="text-[#D4AF37]" />
                                                         {t('customerDetails')}
                                                     </h4>
@@ -1375,7 +1375,7 @@ export default function GoldLoanPage() {
                                             {/* Asset Details Card */}
                                             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
                                                 <div className="px-6 py-4 bg-gray-50 border-b border-gray-100">
-                                                    <h4 className="text-xs font-black text-gray-600 uppercase tracking-widest flex items-center gap-2">
+                                                    <h4 className="text-xs text-gray-600 uppercase flex items-center gap-2 font-heading">
                                                         <Wallet size={16} className="text-[#D4AF37]" />
                                                         {t('assetDetails')}
                                                     </h4>
@@ -1452,7 +1452,7 @@ export default function GoldLoanPage() {
                                         {/* Loan Details List */}
                                         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-visible mb-6 relative z-[50]">
                                             <div className="px-6 py-4 bg-gray-50 border-b border-gray-100 flex items-center justify-between">
-                                                <h4 className="text-xs font-black text-gray-600 uppercase tracking-widest flex items-center gap-2">
+                                                <h4 className="text-xs text-gray-600 uppercase flex items-center gap-2 font-heading">
                                                     <IndianRupee size={16} className="text-[#D4AF37]" />
                                                     {t('loanDetails')} ({1 + (viewingLoan.additionalLoans?.length || 0)})
                                                 </h4>
@@ -1749,7 +1749,7 @@ export default function GoldLoanPage() {
                                         {viewingLoan.status !== 'settled' && (
                                             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-visible mb-8 relative z-[40]">
                                                 <div className="px-6 py-4 bg-gray-50 border-b border-gray-100 flex items-center justify-between">
-                                                    <h4 className="text-xs font-black text-gray-600 uppercase tracking-widest flex items-center gap-2">
+                                                    <h4 className="text-xs text-gray-600 uppercase flex items-center gap-2 font-heading">
                                                         <Plus size={16} className="text-[#D4AF37]" />
                                                         {t('addExtraLoan')}
                                                     </h4>
@@ -1906,7 +1906,7 @@ export default function GoldLoanPage() {
                                 <div className="bg-white w-full max-w-3xl rounded-[2rem] shadow-2xl overflow-hidden flex flex-col max-h-[95vh] print:shadow-none print:max-h-none print:rounded-none">
                                     {/* Header with Print Button */}
                                     <div className="p-4 border-b border-gray-100 flex justify-between items-center print:hidden bg-gray-50">
-                                        <h3 className="text-sm font-black text-gray-800 uppercase tracking-widest">
+                                        <h3 className="text-sm text-gray-800 uppercase font-heading">
                                             {printType === 'instant' ? 'Loan Receipt' : 'Settlement Receipt'}
                                         </h3>
                                         <div className="flex gap-2">
@@ -1954,7 +1954,7 @@ export default function GoldLoanPage() {
                                             {/* Customer & Asset Details */}
                                             <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-10 pb-10 border-b border-dashed border-gray-200">
                                                 <div className="space-y-4">
-                                                    <h4 className="text-[11px] font-black text-[#D4AF37] uppercase tracking-[0.2em] border-b border-[#D4AF37]/20 pb-2">Customer Details</h4>
+                                                    <h4 className="text-[11px] text-[#D4AF37] uppercase border-b border-[#D4AF37]/20 pb-2 font-heading">Customer Details</h4>
                                                     <div className="space-y-2.5">
                                                         <div className="flex justify-between text-xs"><span className="text-gray-400 font-bold uppercase tracking-widest">Name:</span> <span className="text-gray-800 font-black uppercase">{printLoan.customerName || 'N/A'}</span></div>
                                                         <div className="flex justify-between text-xs"><span className="text-gray-400 font-bold uppercase tracking-widest">Phone:</span> <span className="text-gray-800 font-black">{printLoan.customerPhone || 'N/A'}</span></div>
@@ -1968,7 +1968,7 @@ export default function GoldLoanPage() {
                                                     </div>
                                                 </div>
                                                 <div className="space-y-4">
-                                                    <h4 className="text-[11px] font-black text-[#D4AF37] uppercase tracking-[0.2em] border-b border-[#D4AF37]/20 pb-2">Asset Details</h4>
+                                                    <h4 className="text-[11px] text-[#D4AF37] uppercase border-b border-[#D4AF37]/20 pb-2 font-heading">Asset Details</h4>
                                                     <div className="space-y-2.5">
                                                         <div className="flex justify-between text-xs"><span className="text-gray-400 font-bold uppercase tracking-widest">Product:</span> <span className="text-gray-800 font-black uppercase">{printLoan.productType}</span></div>
                                                         <div className="flex justify-between text-xs"><span className="text-gray-400 font-bold uppercase tracking-widest">Loan Date:</span> <span className="text-gray-800 font-black">{new Date(printLoan.loanDate).toLocaleDateString('en-GB')}</span></div>
@@ -1980,7 +1980,7 @@ export default function GoldLoanPage() {
 
                                             {/* Entry Breakdown Table */}
                                             <div className="mb-10">
-                                                <h4 className="text-[11px] font-black text-gray-800 uppercase tracking-[0.2em] mb-4">Loan Summary / Settlement</h4>
+                                                <h4 className="text-[11px] text-gray-800 uppercase mb-4 font-heading">Loan Summary / Settlement</h4>
                                                 <table className="w-full text-xs">
                                                     <thead>
                                                         <tr className="bg-gray-50 border-y border-gray-100 uppercase tracking-widest font-black text-gray-500">

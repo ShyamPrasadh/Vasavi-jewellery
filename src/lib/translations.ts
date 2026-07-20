@@ -3,7 +3,7 @@ export type Language = 'en' | 'ta';
 export const translations = {
     en: {
         // Nav
-        goldCalculator: 'GOLD CALCULATOR',
+        goldCalculator: 'GOLD ESTIMATION',
         pawnInterest: 'PAWN INTEREST',
         loanHistory: 'LOAN HISTORY',
 
@@ -151,7 +151,7 @@ export const translations = {
         saveChanges: 'Save Changes',
         receipt: 'Receipt',
         editDetails: 'Edit Details',
-        livePriceWastageCalculator: 'Live Price & Wastage Calculator',
+        livePriceWastageCalculator: 'Live Price & Wastage',
         filter: 'Filter',
         order: 'Order',
         descending: 'Descending',
@@ -173,7 +173,7 @@ export const translations = {
         pawnShop: 'Pawn Shop',
         pawnCalculator: 'Pawn Calculator',
         manageRecordsSettlement: 'Manage Records & Settlement',
-        interestSettlementCalculator: 'Interest & Settlement Calculator',
+        interestSettlementCalculator: 'Interest & Settlement',
         receiptPreview: 'Receipt Preview',
         print: 'Print',
         billNo: 'Bill No',
@@ -200,11 +200,19 @@ export const translations = {
 
         // Common
         sriVasaviJewellery: 'Sri Vasavi Jewellery',
-        syncing: 'Syncing...'
+        syncing: 'Syncing...',
+        settings: 'Settings',
+        changeLanguage: 'Change Language',
+        theme: 'Theme',
+        comingSoon: 'Coming Soon',
+        otherSettings: 'Other Settings',
+        futureOptions: 'Future Options',
+        requestQuote: 'Request Quote',
+        totalVaAmt: 'Total VA Amt'
     },
     ta: {
         // Nav
-        goldCalculator: 'தங்கக் கணக்கீடு',
+        goldCalculator: 'தங்க மதிப்பீடு',
         pawnInterest: 'அடமான வட்டி',
         loanHistory: 'கடன் வரலாறு',
 
@@ -352,7 +360,7 @@ export const translations = {
         saveChanges: 'மாற்றங்களைச் சேமி',
         receipt: 'ரசீது',
         editDetails: 'விவரங்களைத் திருத்து',
-        livePriceWastageCalculator: 'நேரலை விலை மற்றும் சேதாரம் கணக்கீடு',
+        livePriceWastageCalculator: 'நேரலை விலை மற்றும் சேதாரம்',
         filter: 'வடிகட்டு',
         order: 'வரிசை',
         descending: 'இறங்கு வரிசை',
@@ -374,7 +382,7 @@ export const translations = {
         pawnShop: 'அடமான கடை',
         pawnCalculator: 'அடமான கணக்கீடு',
         manageRecordsSettlement: 'பதிவுகள் மற்றும் தீர்வுகளை நிர்வகிக்கவும்',
-        interestSettlementCalculator: 'வட்டி மற்றும் தீர்வு கணக்கீடு',
+        interestSettlementCalculator: 'வட்டி மற்றும் தீர்வு',
         receiptPreview: 'ரசீது முன்னோட்டம்',
         print: 'பிரிண்ட்',
         billNo: 'பில் எண்',
@@ -401,7 +409,15 @@ export const translations = {
 
         // Common
         sriVasaviJewellery: 'ஸ்ரீ வாசவி ஜுவல்லரி',
-        syncing: 'இணைக்கப்படுகிறது...'
+        syncing: 'இணைக்கப்படுகிறது...',
+        settings: 'அமைப்புகள்',
+        changeLanguage: 'மொழியை மாற்றவும்',
+        theme: 'தீம்',
+        comingSoon: 'விரைவில்',
+        otherSettings: 'மற்ற அமைப்புகள்',
+        futureOptions: 'எதிர்கால விருப்பங்கள்',
+        requestQuote: 'மேற்கோள் கேட்கவும்',
+        totalVaAmt: 'மொத்த VA தொகை'
     }
 };
 

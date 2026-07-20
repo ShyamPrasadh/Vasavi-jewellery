@@ -72,14 +72,14 @@ export default function Sidebar() {
 
             {/* Sidebar Container */}
             <aside className={`
-                fixed left-0 z-40 bg-white border-r border-gray-100 shadow-xl shadow-gray-200/50 transform transition-all duration-300 ease-in-out
-                top-[70px] bottom-0 md:top-[90px]
+                fixed left-0 z-40 bg-white border-r border-gray-50 shadow-[2px_0_15px_rgba(0,0,0,0.03)] transform transition-all duration-300 ease-in-out
+                top-[54px] bottom-0 md:top-[60px]
                 ${mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0
-                w-[280px] ${isCollapsed ? 'md:w-[88px]' : 'md:w-[280px]'}
+                w-[280px] ${isCollapsed ? 'md:w-[64px]' : 'md:w-[280px]'}
             `}>
-                <div className="h-full flex flex-col p-4 transition-all duration-300">
+                <div className="h-full flex flex-col p-1.5 md:p-2 transition-all duration-300">
                     {/* Menu Items - starts below header */}
-                    <div className="space-y-2 flex-1 pt-4">
+                    <div className="space-y-1.5 md:space-y-2 flex-1 pt-1.5 md:pt-4">
                         {/* Menu Items */}
 
                         {menuItems.map((item) => {
@@ -92,20 +92,25 @@ export default function Sidebar() {
                                     href={item.mode ? `${item.path}?mode=${item.mode}` : item.path}
                                     onClick={() => setMobileMenuOpen(false)}
                                     className={`
-                                        group flex items-center ${isCollapsed ? 'md:justify-center md:px-0' : 'md:gap-4 md:px-4'} gap-4 px-4 py-3 rounded-xl transition-all duration-200 relative
+                                        group flex items-center transition-all duration-200 relative
+                                        gap-4 px-4 py-3 rounded-xl
+                                        ${isCollapsed
+                                            ? 'md:justify-center md:px-0 md:py-0 md:w-[38px] md:h-[38px] md:mx-auto md:rounded-xl md:gap-0'
+                                            : 'md:gap-4 md:px-4 md:mx-3 md:rounded-xl'
+                                        }
                                         ${active
-                                            ? 'bg-[#8B2332] text-white shadow-md shadow-[#8B2332]/20'
-                                            : 'text-gray-500 hover:bg-gray-50 hover:text-gray-900'
+                                            ? 'bg-[#8B2332] text-white'
+                                            : 'text-gray-500 hover:bg-gray-50 hover:text-[#8B2332]'
                                         }
                                     `}
                                     title={isCollapsed ? item.name : ''}
                                 >
                                     <Icon
-                                        size={20}
+                                        size={isCollapsed ? 22 : 20}
                                         className="flex-shrink-0"
                                         strokeWidth={active ? 2.5 : 2}
                                     />
-                                    <span className={`text-xs font-black uppercase tracking-widest whitespace-nowrap transition-all duration-300 ${isCollapsed ? 'md:hidden' : 'md:w-auto md:opacity-100'}`}>
+                                    <span className={`text-[12px] font-black uppercase tracking-widest whitespace-nowrap transition-all duration-300 ${isCollapsed ? 'md:hidden' : 'md:w-auto md:opacity-100'}`}>
                                         {item.name}
                                     </span>
 
