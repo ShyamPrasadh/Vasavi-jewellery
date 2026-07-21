@@ -1,10 +1,14 @@
+'use client';
+
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { useLanguage } from '@/context/LanguageContext';
+import { useSidebar } from '@/context/SidebarContext';
 import { User, Globe, Moon, Sun, ChevronRight, Settings } from 'lucide-react';
 
 export default function Header({ rates }: { rates?: { k22: number; k24: number } }) {
     const { language, setLanguage, t } = useLanguage();
+    const { isCollapsed } = useSidebar();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const menuRef = useRef<HTMLDivElement>(null);
 
@@ -20,23 +24,36 @@ export default function Header({ rates }: { rates?: { k22: number; k24: number }
     }, []);
 
     return (
-        <header className="h-[54px] md:h-[60px] bg-white shadow-[0_2px_15px_rgba(0,0,0,0.03)] fixed top-0 left-0 right-0 z-[55] flex flex-col justify-center">
-            <div className="w-full px-4 md:px-6 flex items-center justify-between">
-                {/* Left Section: Logo & Title */}
-                <div className="flex items-center gap-3">
-                    <Link href="/" className="flex-shrink-0">
+        <header className="h-[54px] md:h-[60px] bg-white shadow-[0_2px_15px_rgba(0,0,0,0.03)] fixed top-0 left-0 right-0 z-[55] flex items-center">
+            <div className="w-full h-full flex items-center">
+                {/* Logo rail — same width & center line as sidebar icons */}
+                <div
+                    className={`
+                        flex items-center shrink-0 h-full transition-all duration-300
+                        pl-4
+                        ${isCollapsed ? 'md:w-[64px] md:pl-0 md:justify-center' : 'md:w-[280px] md:pl-[28px]'}
+                    `}
+                >
+                    <Link href="/" className="flex-shrink-0 leading-none">
+                        {/* Serve original PNG (no next/image recompression) */}
                         <img
-                            src="/svj-1.png"
+                            src="/svj-logo.png"
                             alt="SVJ Logo"
-                            className="h-[32px] w-[32px] md:h-[36px] md:w-[36px] object-cover rounded-lg shadow-sm border border-gray-100/50"
+                            width={512}
+                            height={512}
+                            decoding="async"
+                            className="h-10 w-10 md:h-11 md:w-11 object-contain"
                         />
                     </Link>
-                    <Link href="/">
-                        <h1 className="text-lg md:text-[20px] font-serif-gold text-[#8B2332] cursor-pointer transition-all hover:opacity-80 tracking-tight leading-none pt-0.5">
+                </div>
+
+                {/* Title + actions */}
+                <div className="flex-1 min-w-0 h-full flex items-center justify-between gap-3 pr-4 md:pr-6">
+                    <Link href="/" className="min-w-0">
+                        <h1 className="text-lg md:text-[20px] font-serif-gold text-[#8B2332] cursor-pointer transition-all hover:opacity-80 tracking-tight leading-none truncate">
                             {t('sriVasaviJewellery')}
                         </h1>
                     </Link>
-                </div>
 
                 {/* Right Section: Rates & Language Toggle */}
                 <div className="flex items-center gap-4 md:gap-8">
@@ -138,6 +155,7 @@ export default function Header({ rates }: { rates?: { k22: number; k24: number }
                             </div>
                         )}
                     </div>
+                </div>
                 </div>
             </div>
         </header>

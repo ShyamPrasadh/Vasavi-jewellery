@@ -26,11 +26,13 @@ export const RATE_DATA: TierData[] = [
         weight: 4,
         "Ring/Earring": { waste: 0.8, lab: 250 },
         "Chain": { waste: 0.5, lab: 250 },
+        "Haram/Necklace": { waste: 0.565, lab: 300 },
     },
     {
         weight: 6,
         "Ring/Earring": { waste: 1.2, lab: 350 },
         "Chain": { waste: 0.7, lab: 400 },
+        "Haram/Necklace": { waste: 0.845, lab: 400 },
     },
     {
         weight: 8,
@@ -41,21 +43,25 @@ export const RATE_DATA: TierData[] = [
     },
     {
         weight: 16,
+        "Chain": { waste: 2, lab: 750 },
         "Haram/Necklace": { waste: 2.15, lab: 750 },
         "Coin": { lab: 1600 }
     },
     {
         weight: 24,
+        "Chain": { waste: 3, lab: 1000 },
         "Haram/Necklace": { waste: 3.375, lab: 1000 },
         "Coin": { lab: 2400 }
     },
     {
         weight: 32,
+        "Chain": { waste: 4, lab: 1500 },
         "Haram/Necklace": { waste: 5.125, lab: 1500 },
         "Coin": { lab: 3200 }
     },
     {
         weight: 40,
+        "Chain": { waste: 5, lab: 2000 },
         "Haram/Necklace": { waste: 6.5, lab: 2000 },
         "Coin": { lab: 4000 }
     },

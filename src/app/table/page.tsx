@@ -22,8 +22,8 @@ export default function ReferenceTablePage() {
 
                 {/* Fixed Title Section */}
                 <div className="bg-white px-4 py-1 md:py-1.5 border-b border-gray-100 flex-shrink-0">
-                    <div className="max-w-7xl px-4 md:px-5 flex flex-col md:flex-row md:justify-between md:items-center gap-1 md:gap-2">
-                        <div className="pt-[10px]">
+                    <div className="max-w-7xl w-full mx-auto flex items-start justify-between gap-3">
+                        <div className="pt-[10px] min-w-0">
                             <h1 className="text-[16px] md:text-[20px] text-gray-900 uppercase font-heading">
                                 {t('referenceRateTable')}
                             </h1>
@@ -31,16 +31,17 @@ export default function ReferenceTablePage() {
                                 {t('standardWastageLabour')}
                             </p>
                         </div>
-                        <Link href="/" className="inline-flex items-center gap-2 text-gray-400 hover:text-[#D4AF37] transition-all font-bold uppercase text-[10px] md:text-xs tracking-widest group w-fit">
-                            <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
-                            {t('backToCalculator')}
+                        <Link href="/" className="inline-flex shrink-0 items-center gap-1.5 md:gap-2 text-gray-400 hover:text-[#D4AF37] transition-all font-bold uppercase text-[10px] md:text-xs tracking-widest group mt-[10px]">
+                            <ArrowLeft size={14} className="group-hover:-translate-x-1 transition-transform" />
+                            <span className="md:hidden">Back</span>
+                            <span className="hidden md:inline">{t('backToCalculator')}</span>
                         </Link>
                     </div>
                 </div>
 
                 {/* Scrollable Content Area */}
                 <div className="flex-1 overflow-y-auto px-4 md:px-5 py-4 md:py-8">
-                    <div className="max-w-7xl space-y-8">
+                    <div className="max-w-7xl w-full mx-auto space-y-8">
 
                         {/* Table Container */}
                         <div className="rounded-2xl md:rounded-3xl border border-gray-100 shadow-xl bg-white overflow-hidden">
@@ -74,11 +75,11 @@ export default function ReferenceTablePage() {
                                                 className={`${index % 2 === 0 ? 'bg-white' : 'bg-gray-50/50'} hover:bg-gray-50 transition-colors group`}
                                             >
                                                 <td
-                                                    className={`p-4 md:p-6 border-b border-gray-100 font-black text-base md:text-lg border-r border-gray-100 sticky left-0 z-20 ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'} transition-colors group-hover:bg-gray-50 shadow-[4px_0_8px_-2px_rgba(0,0,0,0.06)]`}
+                                                    className={`p-4 md:p-6 border-b border-gray-100 font-black text-base md:text-lg text-[#D4AF37] border-r border-gray-100 sticky left-0 z-20 ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'} transition-colors group-hover:bg-gray-50 shadow-[4px_0_8px_-2px_rgba(0,0,0,0.06)]`}
                                                 >
                                                     {row.weight}g
                                                 </td>
-                                                <td className="p-4 md:p-6 border-b border-gray-100 font-bold text-[#D4AF37] border-r border-gray-100">
+                                                <td className="p-4 md:p-6 border-b border-gray-100 font-bold text-gray-900 border-r border-gray-100">
                                                     {row.Coin ? (
                                                         <span className="flex flex-col">
                                                             <span className="text-lg md:text-xl">₹{row.Coin.lab}</span>

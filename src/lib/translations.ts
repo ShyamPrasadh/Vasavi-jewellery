@@ -17,7 +17,7 @@ export const translations = {
         labourCharge: 'Labour Charge',
         totalAmount: 'Total Amount',
         valueAddition: 'Value Addition (VA)',
-        wasteMg: 'Waste (mg)',
+        wasteMg: 'Wastage',
         overallVaPercent: 'Overall VA %',
         totalVaAmount: 'Total VA Amount',
         viewReferenceTable: 'View Reference Rate Table',

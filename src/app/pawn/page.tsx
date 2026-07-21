@@ -125,7 +125,7 @@ function PawnCalculatorContent() {
         <main className="min-h-screen bg-white pb-32 pt-[54px] md:pt-[60px]">
             <Header rates={rates || undefined} />
 
-            <div className="max-w-7xl px-4 md:px-5 mt-0.5 md:mt-1">
+            <div className="max-w-7xl w-full mx-auto px-4 md:px-5 mt-0.5 md:mt-1">
                 <div className="mb-6 pt-[10px]">
                     <h1 className="text-[16px] md:text-[20px] text-gray-900 uppercase font-heading">
                         {isShopMode ? t('pawnShop') : t('pawnCalculator')}

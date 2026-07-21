@@ -202,6 +202,13 @@ export default function DashboardPage() {
         all: t('allTime')
     };
 
+    const periodShortLabels: Record<PeriodType, string> = {
+        week: 'W',
+        month: 'M',
+        year: 'Y',
+        all: 'ALL'
+    };
+
     const openDetailModal = (type: string, data: any) => {
         setDetailModal({ type, data });
     };
@@ -252,10 +259,10 @@ export default function DashboardPage() {
         <main className="min-h-screen bg-white pb-32 pt-[54px] md:pt-[60px]">
             <Header rates={rates || undefined} />
 
-            <div className="max-w-7xl px-4 md:px-5 mt-0.5 md:mt-1">
+            <div className="max-w-7xl w-full mx-auto px-4 md:px-5 mt-0.5 md:mt-1">
                 {/* Page Header */}
-                <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6 md:mb-8">
-                    <div className="pt-[10px]">
+                <div className="flex items-start justify-between gap-3 mb-6 md:mb-8">
+                    <div className="pt-[10px] min-w-0">
                         <h1 className="text-[16px] md:text-[20px] text-gray-900 uppercase font-heading">
                             {t('dashboard')}
                         </h1>
@@ -265,17 +272,18 @@ export default function DashboardPage() {
                     </div>
 
                     {/* Period Selector */}
-                    <div className="flex gap-1 mt-4 md:mt-0 bg-gray-100 p-1 rounded-xl overflow-x-auto">
+                    <div className="flex shrink-0 gap-1 mt-[10px] bg-gray-100 p-1 rounded-xl">
                         {(['week', 'month', 'year', 'all'] as const).map(period => (
                             <button
                                 key={period}
                                 onClick={() => setSelectedPeriod(period)}
-                                className={`px-3 md:px-4 py-2 rounded-lg text-[10px] md:text-xs font-black uppercase tracking-wider transition-all whitespace-nowrap ${selectedPeriod === period
+                                className={`min-w-[2.25rem] px-2.5 md:px-4 py-2 rounded-lg text-[10px] md:text-xs font-black uppercase tracking-wider transition-all whitespace-nowrap ${selectedPeriod === period
                                     ? 'bg-[#8B2332] text-white shadow-md'
                                     : 'text-gray-500 hover:text-gray-800'
                                     }`}
                             >
-                                {periodLabels[period]}
+                                <span className="md:hidden">{periodShortLabels[period]}</span>
+                                <span className="hidden md:inline">{periodLabels[period]}</span>
                             </button>
                         ))}
                     </div>
@@ -288,11 +296,11 @@ export default function DashboardPage() {
                 ) : (
                     <>
                         {/* Main Stats Grid */}
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mb-6 md:mb-8">
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mb-6 md:mb-8 items-stretch">
                             {/* Loans Given (Principal Only) */}
                             <div
                                 onClick={() => openDetailModal('loansGiven', stats.filteredLoans)}
-                                className="bg-white rounded-2xl p-4 md:p-5 shadow-sm border border-gray-100 relative overflow-hidden group hover:shadow-lg transition-all cursor-pointer"
+                                className="h-full bg-white rounded-2xl p-4 md:p-5 shadow-sm border border-gray-100 relative overflow-hidden group hover:shadow-lg transition-all cursor-pointer flex flex-col"
                             >
                                 <div className="absolute top-0 right-0 w-16 md:w-20 h-16 md:h-20 bg-gradient-to-bl from-[#8B2332]/10 to-transparent rounded-bl-full"></div>
                                 <div className="flex items-center gap-2 mb-2 md:mb-3">
@@ -301,15 +309,17 @@ export default function DashboardPage() {
                                     </div>
                                     <span className="text-[9px] md:text-[10px] font-black text-gray-400 uppercase tracking-widest">{t('loansGiven')}</span>
                                 </div>
-                                <p className="text-xl md:text-3xl font-black text-gray-800">{formatCurrency(stats.periodPrincipal)}</p>
-                                <p className="text-[9px] md:text-[10px] text-gray-400 mt-1 font-bold">{stats.totalLoans} {t('transactions')}</p>
-                                <p className="text-[8px] md:text-[9px] text-[#8B2332] font-bold mt-0.5">{t('principalOnly')}</p>
+                                <p className="text-xl md:text-3xl font-black text-gray-800 leading-none">{formatCurrency(stats.periodPrincipal)}</p>
+                                <div className="mt-auto pt-2">
+                                    <p className="text-[9px] md:text-[10px] text-gray-400 font-bold">{stats.totalLoans} {t('transactions')}</p>
+                                    <p className="text-[8px] md:text-[9px] text-[#8B2332] font-bold mt-0.5">{t('principalOnly')}</p>
+                                </div>
                             </div>
 
                             {/* Interest Earned */}
                             <div
                                 onClick={() => openDetailModal('interest', stats.filteredLoans)}
-                                className="bg-white rounded-2xl p-4 md:p-5 shadow-sm border border-gray-100 relative overflow-hidden group hover:shadow-lg transition-all cursor-pointer"
+                                className="h-full bg-white rounded-2xl p-4 md:p-5 shadow-sm border border-gray-100 relative overflow-hidden group hover:shadow-lg transition-all cursor-pointer flex flex-col"
                             >
                                 <div className="absolute top-0 right-0 w-16 md:w-20 h-16 md:h-20 bg-gradient-to-bl from-green-500/10 to-transparent rounded-bl-full"></div>
                                 <div className="flex items-center gap-2 mb-2 md:mb-3">
@@ -318,14 +328,16 @@ export default function DashboardPage() {
                                     </div>
                                     <span className="text-[9px] md:text-[10px] font-black text-gray-400 uppercase tracking-widest">{t('interestEarned')}</span>
                                 </div>
-                                <p className="text-xl md:text-3xl font-black text-green-600">{formatCurrency(stats.periodInterest)}</p>
-                                <p className="text-[9px] md:text-[10px] text-gray-400 mt-1 font-bold">{t('earnedToDate')}</p>
+                                <p className="text-xl md:text-3xl font-black text-green-600 leading-none">{formatCurrency(stats.periodInterest)}</p>
+                                <div className="mt-auto pt-2 min-h-[2.25rem]">
+                                    <p className="text-[9px] md:text-[10px] text-gray-400 font-bold">{t('earnedToDate')}</p>
+                                </div>
                             </div>
 
                             {/* Outstanding */}
                             <div
                                 onClick={() => openDetailModal('outstanding', loans)}
-                                className="bg-white rounded-2xl p-4 md:p-5 shadow-sm border border-gray-100 relative overflow-hidden group hover:shadow-lg transition-all cursor-pointer"
+                                className="h-full bg-white rounded-2xl p-4 md:p-5 shadow-sm border border-gray-100 relative overflow-hidden group hover:shadow-lg transition-all cursor-pointer flex flex-col"
                             >
                                 <div className="absolute top-0 right-0 w-16 md:w-20 h-16 md:h-20 bg-gradient-to-bl from-blue-500/10 to-transparent rounded-bl-full"></div>
                                 <div className="flex items-center gap-2 mb-2 md:mb-3">
@@ -334,14 +346,16 @@ export default function DashboardPage() {
                                     </div>
                                     <span className="text-[9px] md:text-[10px] font-black text-gray-400 uppercase tracking-widest">{t('outstanding')}</span>
                                 </div>
-                                <p className="text-xl md:text-3xl font-black text-blue-600">{formatCurrency(stats.totalOutstanding)}</p>
-                                <p className="text-[9px] md:text-[10px] text-gray-400 mt-1 font-bold">{stats.activeLoans} {t('activeLoans')}</p>
+                                <p className="text-xl md:text-3xl font-black text-blue-600 leading-none">{formatCurrency(stats.totalOutstanding)}</p>
+                                <div className="mt-auto pt-2 min-h-[2.25rem]">
+                                    <p className="text-[9px] md:text-[10px] text-gray-400 font-bold">{stats.activeLoans} {t('activeLoans')}</p>
+                                </div>
                             </div>
 
                             {/* Alerts */}
                             <div
                                 onClick={() => openDetailModal('alerts', { upcoming: stats.upcomingReturnsLoans, overdue: stats.overdueLoansData })}
-                                className="bg-white rounded-2xl p-4 md:p-5 shadow-sm border border-gray-100 relative overflow-hidden group hover:shadow-lg transition-all cursor-pointer"
+                                className="h-full bg-white rounded-2xl p-4 md:p-5 shadow-sm border border-gray-100 relative overflow-hidden group hover:shadow-lg transition-all cursor-pointer flex flex-col"
                             >
                                 <div className="absolute top-0 right-0 w-16 md:w-20 h-16 md:h-20 bg-gradient-to-bl from-red-500/10 to-transparent rounded-bl-full"></div>
                                 <div className="flex items-center gap-2 mb-2 md:mb-3">
@@ -350,15 +364,15 @@ export default function DashboardPage() {
                                     </div>
                                     <span className="text-[9px] md:text-[10px] font-black text-gray-400 uppercase tracking-widest">{t('alerts')}</span>
                                 </div>
-                                <div className="flex items-baseline gap-3">
+                                <div className="flex items-baseline gap-3 flex-1">
                                     <div>
-                                        <p className="text-xl md:text-2xl font-black text-orange-500">{stats.upcomingReturns}</p>
-                                        <p className="text-[8px] md:text-[9px] text-gray-400 font-bold">{t('dueSoon')}</p>
+                                        <p className="text-xl md:text-3xl font-black text-orange-500 leading-none">{stats.upcomingReturns}</p>
+                                        <p className="text-[8px] md:text-[9px] text-gray-400 font-bold mt-1">{t('dueSoon')}</p>
                                     </div>
-                                    <div className="w-px h-6 md:h-8 bg-gray-200"></div>
+                                    <div className="w-px self-stretch min-h-[2rem] bg-gray-200"></div>
                                     <div>
-                                        <p className="text-xl md:text-2xl font-black text-red-500">{stats.overdueLoans}</p>
-                                        <p className="text-[8px] md:text-[9px] text-gray-400 font-bold">{t('overdue')}</p>
+                                        <p className="text-xl md:text-3xl font-black text-red-500 leading-none">{stats.overdueLoans}</p>
+                                        <p className="text-[8px] md:text-[9px] text-gray-400 font-bold mt-1">{t('overdue')}</p>
                                     </div>
                                 </div>
                             </div>
