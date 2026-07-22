@@ -19,7 +19,7 @@ export const translations = {
         valueAddition: 'Value Addition (VA)',
         wasteMg: 'Wastage',
         overallVaPercent: 'Overall VA %',
-        totalVaAmount: 'Total VA Amount',
+        totalVaAmount: 'VA Amount',
         viewReferenceTable: 'View Reference Rate Table',
 
         // Pawn Page
@@ -208,7 +208,7 @@ export const translations = {
         otherSettings: 'Other Settings',
         futureOptions: 'Future Options',
         requestQuote: 'Request Quote',
-        totalVaAmt: 'Total VA Amt'
+        totalVaAmt: 'VA Amt'
     },
     ta: {
         // Nav
@@ -228,7 +228,7 @@ export const translations = {
         valueAddition: 'கூடுதல் மதிப்பு (VA)',
         wasteMg: 'சேதாரம் (mg)',
         overallVaPercent: 'மொத்த VA %',
-        totalVaAmount: 'மொத்த VA தொகை',
+        totalVaAmount: 'VA தொகை',
         viewReferenceTable: 'விலை அட்டவணையை பார்க்க',
 
         // Pawn Page
@@ -417,7 +417,7 @@ export const translations = {
         otherSettings: 'மற்ற அமைப்புகள்',
         futureOptions: 'எதிர்கால விருப்பங்கள்',
         requestQuote: 'மேற்கோள் கேட்கவும்',
-        totalVaAmt: 'மொத்த VA தொகை'
+        totalVaAmt: 'VA தொகை'
     }
 };
 

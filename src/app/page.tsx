@@ -158,7 +158,7 @@ export default function CalculatorPage() {
           {/* Right Column: Results */}
           <div className="lg:col-span-7">
             <div className="bg-white rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.04)] border border-gray-50 overflow-hidden flex flex-col h-full">
-              <div className="pt-5 px-5 pb-4 border-b border-gray-50 flex items-center justify-between">
+              <div className="pt-8 px-8 pb-6 border-b border-gray-50 flex items-center justify-between">
                 <span className="text-[10px] font-black text-gray-800 uppercase tracking-[0.2em]">{t('totalAmount')}</span>
                 <div className="flex items-baseline gap-1 text-[#8B2332]">
                   <span className="text-xl font-bold opacity-80">₹</span>
@@ -168,8 +168,8 @@ export default function CalculatorPage() {
                 </div>
               </div>
 
-              <div className="p-5 pt-4 flex-1 flex flex-col gap-4">
-                <div className="flex flex-col gap-3 border-b border-gray-50 pb-4">
+              <div className="p-8 pt-6 flex-1 flex flex-col gap-6">
+                <div className="flex flex-col gap-4 border-b border-gray-50 pb-6">
                   <div className="flex items-center justify-between">
                     <div className="flex flex-col">
                       <span className="text-[10px] font-black text-gray-800 uppercase tracking-[0.2em]">{t('goldValue')}</span>
@@ -193,7 +193,7 @@ export default function CalculatorPage() {
                 </div>
 
                 {/* VA Info Area */}
-                <div className="px-5 py-3.5 border border-[#D4AF37]/20 rounded-2xl grid grid-cols-3 gap-3 bg-white">
+                <div className="px-6 py-5 border border-[#D4AF37]/20 rounded-2xl grid grid-cols-3 gap-4 bg-white">
                   <div className="min-w-0 text-center">
                     <p className="text-[9px] font-black text-gray-400 uppercase tracking-[0.12em] leading-tight mb-1">
                       {t('wasteMg') || 'Wastage'}
@@ -210,7 +210,7 @@ export default function CalculatorPage() {
                   </div>
                   <div className="min-w-0 text-center">
                     <p className="text-[9px] font-black text-gray-400 uppercase tracking-[0.12em] leading-tight mb-1">
-                      {t('totalVaAmount') || 'Total VA Amt'}
+                      {t('totalVaAmount') || 'VA Amt'}
                     </p>
                     <p className="text-lg font-black text-[#8B2332]">
                       ₹{Math.round(calculations.vaAmount).toLocaleString()}
@@ -218,9 +218,11 @@ export default function CalculatorPage() {
                   </div>
                 </div>
 
-                <button className="mt-auto w-full bg-[#111827] text-white py-4 rounded-2xl text-[12px] font-black uppercase tracking-[0.3em] hover:bg-black transition-all active:scale-[0.98] shadow-2xl shadow-gray-200">
-                  {t('requestQuote') || 'Request Quote'}
-                </button>
+                <div className="mt-auto pt-4">
+                  <button className="w-full bg-[#111827] text-white py-4 rounded-2xl text-[12px] font-black uppercase tracking-[0.3em] hover:bg-black transition-all active:scale-[0.98] shadow-2xl shadow-gray-200">
+                    {t('requestQuote') || 'Request Quote'}
+                  </button>
+                </div>
               </div>
             </div>
           </div>
