@@ -15,9 +15,9 @@ const PRODUCT_LOGOS: Record<string, string> = {
   Necklace: '/logos/necklace.svg',
   Haram: '/logos/necklace.svg',
   Coin: '/logos/gold-coin.svg',
-  Bracelet: '/logos/gold-bar.svg',
-  Pendant: '/logos/gold-bar.svg',
-  Bangle: '/logos/gold-bar.svg',
+  Bracelet: '/logos/bangle.svg',
+  Pendant: '/logos/chain.svg',
+  Bangle: '/logos/bangle.svg',
   Other: '/logos/gold-bar.svg',
 };
 
@@ -99,17 +99,17 @@ export default function CalculatorPage() {
                 />
                 <label className="text-[10px] font-black text-gray-800 uppercase tracking-[0.12em]">{t('productType')}</label>
               </div>
-              <div className="relative flex items-center group w-32 shrink-0">
+              <div className="relative flex items-center group w-24 shrink-0">
                 <select
                   value={product}
                   onChange={(e) => setProduct(e.target.value as ProductType)}
-                  className="w-full min-h-[2.5rem] pr-6 py-1.5 bg-transparent border-b border-gray-100 focus:border-[#8B2332] outline-none transition-all text-base font-bold text-gray-800 appearance-none cursor-pointer text-right"
+                  className="w-full min-h-[2.5rem] pr-5 py-1.5 bg-transparent border-b border-gray-100 focus:border-[#8B2332] outline-none transition-all text-base font-bold text-gray-800 appearance-none cursor-pointer text-right"
                 >
                   {['Ring', 'Earring', 'Chain', 'Haram', 'Necklace', 'Bracelet', 'Pendant', 'Bangle', 'Other', 'Coin'].map((item) => (
                     <option key={item} value={item}>{t(item as any)}</option>
                   ))}
                 </select>
-                <ChevronDown size={16} className="absolute right-0 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400" />
+                <ChevronDown size={14} className="absolute right-0 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400" />
               </div>
             </div>
 
@@ -119,7 +119,7 @@ export default function CalculatorPage() {
                 <Scale size={14} className="text-gray-400 shrink-0" />
                 <label className="text-[10px] font-black text-gray-800 uppercase tracking-[0.12em]">{t('weightGrams')}</label>
               </div>
-              <div className="relative flex items-center group w-32 shrink-0">
+              <div className="relative flex items-center group w-24 shrink-0">
                 <input
                   type="text"
                   inputMode="decimal"
@@ -129,9 +129,9 @@ export default function CalculatorPage() {
                     const val = e.target.value;
                     if (val === '' || /^\d*\.?\d*$/.test(val)) setWeight(val);
                   }}
-                  className="w-full min-h-[2.5rem] pr-5 py-1.5 bg-transparent border-b border-gray-100 focus:border-[#8B2332] outline-none transition-all text-base font-bold text-gray-800 text-right"
+                  className="w-full min-h-[2.5rem] pr-4 py-1.5 bg-transparent border-b border-gray-100 focus:border-[#8B2332] outline-none transition-all text-base font-bold text-gray-800 text-right"
                 />
-                <span className="absolute right-0 text-base font-bold text-gray-400 tracking-normal">g</span>
+                <span className="absolute right-0 text-base font-normal text-gray-400 tracking-normal">g</span>
               </div>
             </div>
 
@@ -146,18 +146,21 @@ export default function CalculatorPage() {
                 <label className="text-[10px] font-black text-gray-800 uppercase tracking-[0.12em]">{t('goldRate22')}</label>
                 {isSyncing && <RefreshCcw size={12} className="animate-spin text-[#D4AF37] shrink-0" />}
               </div>
-              <div className="w-32 shrink-0 flex items-center justify-end gap-0.5 min-h-[2.5rem] border-b border-gray-100 focus-within:border-[#8B2332] transition-all group">
-                <span className="text-base font-bold text-gray-400 shrink-0 leading-none">₹</span>
-                <input
-                  type="text"
-                  inputMode="decimal"
-                  value={goldRate}
-                  onChange={(e) => {
-                    const val = e.target.value;
-                    if (val === '' || /^\d*\.?\d*$/.test(val)) setGoldRate(val);
-                  }}
-                  className="min-w-[3ch] max-w-[7ch] field-sizing-content bg-transparent outline-none text-base font-bold text-gray-800 py-1.5"
-                />
+              <div className="w-24 shrink-0 flex items-center justify-end min-h-[2.5rem] border-b border-gray-100 focus-within:border-[#8B2332] transition-all group">
+                <div className="flex items-center gap-0.5">
+                  <span className="text-base font-bold text-gray-400 shrink-0 leading-none">₹</span>
+                  <input
+                    type="text"
+                    inputMode="decimal"
+                    value={goldRate}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      if (val === '' || /^\d*\.?\d*$/.test(val)) setGoldRate(val);
+                    }}
+                    size={Math.max(String(goldRate).length, 4)}
+                    className="w-auto max-w-[6.5ch] bg-transparent outline-none text-base font-bold text-gray-800 py-1.5"
+                  />
+                </div>
               </div>
             </div>
 
@@ -227,7 +230,7 @@ export default function CalculatorPage() {
                 {/* VA Info Area — full card width */}
                 <div className="w-full px-5 sm:px-8 py-6 border-t border-b border-gray-100 bg-white">
                   <div className="flex items-start w-full">
-                    <div className="flex-1 min-w-0 flex flex-col items-start gap-2.5 pr-3">
+                    <div className="flex-1 min-w-0 flex flex-col items-center gap-2.5 pr-3 text-center">
                       <span className="text-[10px] font-black text-gray-400 uppercase tracking-[0.12em] whitespace-nowrap">
                         {t('wasteMg') || 'Wastage'}
                       </span>
@@ -239,7 +242,7 @@ export default function CalculatorPage() {
 
                     <div className="w-px self-stretch bg-gray-100 shrink-0" aria-hidden />
 
-                    <div className="flex-1 min-w-0 flex flex-col items-start gap-2.5 px-3">
+                    <div className="flex-1 min-w-0 flex flex-col items-center gap-2.5 px-3 text-center">
                       <span className="text-[10px] font-black text-gray-400 uppercase tracking-[0.12em] whitespace-nowrap">
                         {t('overallVaPercent') || 'VA %'}
                       </span>
@@ -250,7 +253,7 @@ export default function CalculatorPage() {
 
                     <div className="w-px self-stretch bg-gray-100 shrink-0" aria-hidden />
 
-                    <div className="flex-1 min-w-0 flex flex-col items-start gap-2.5 pl-3">
+                    <div className="flex-1 min-w-0 flex flex-col items-center gap-2.5 pl-3 text-center">
                       <span className="text-[10px] font-black text-gray-400 uppercase tracking-[0.12em] whitespace-nowrap">
                         {t('totalVaAmount') || 'VA Amt'}
                       </span>
