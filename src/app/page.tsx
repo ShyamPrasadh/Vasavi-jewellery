@@ -78,27 +78,27 @@ export default function CalculatorPage() {
           <div className="lg:col-span-5 space-y-6">
             {/* Product Name Card */}
             <div className="bg-white p-4 rounded-2xl shadow-[0_2px_15px_rgba(0,0,0,0.02)] border border-gray-50 flex flex-col gap-2">
-              <label className="text-[10px] font-black text-gray-800 uppercase tracking-[0.2em]">{t('productName')}</label>
+              <label className="text-[11px] font-black text-gray-800 uppercase tracking-[0.2em]">{t('productName')}</label>
               <div className="relative flex items-center group">
-                <Gem size={16} className="absolute left-0 text-gray-400 transition-colors group-focus-within:text-[#8B2332]" />
+                <Gem size={14} className="absolute left-0 text-gray-400 transition-colors group-focus-within:text-[#8B2332]" />
                 <select
                   value={product}
                   onChange={(e) => setProduct(e.target.value as ProductType)}
-                  className="w-full pl-8 pr-8 py-1.5 bg-transparent border-b border-gray-100 focus:border-[#8B2332] outline-none transition-all font-bold text-xl text-gray-800 appearance-none cursor-pointer"
+                  className="w-full pl-7 pr-7 py-1.5 bg-transparent border-b border-gray-100 focus:border-[#8B2332] outline-none transition-all font-bold text-base md:text-lg text-gray-800 appearance-none cursor-pointer"
                 >
                   {['Ring', 'Earring', 'Chain', 'Haram', 'Necklace', 'Bracelet', 'Pendant', 'Bangle', 'Other', 'Coin'].map((item) => (
                     <option key={item} value={item}>{t(item as any)}</option>
                   ))}
                 </select>
-                <ChevronDown size={18} className="absolute right-0 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400" />
+                <ChevronDown size={16} className="absolute right-0 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400" />
               </div>
             </div>
 
             {/* Weight Card */}
             <div className="bg-white p-4 rounded-2xl shadow-[0_2px_15px_rgba(0,0,0,0.02)] border border-gray-50 flex flex-col gap-2">
-              <label className="text-[10px] font-black text-gray-800 uppercase tracking-[0.2em]">{t('weightGrams')}</label>
+              <label className="text-[11px] font-black text-gray-800 uppercase tracking-[0.2em]">{t('weightGrams')}</label>
               <div className="relative flex items-center group">
-                <Scale size={16} className="absolute left-0 text-gray-400 transition-colors group-focus-within:text-[#8B2332]" />
+                <Scale size={14} className="absolute left-0 text-gray-400 transition-colors group-focus-within:text-[#8B2332]" />
                 <input
                   type="text"
                   inputMode="decimal"
@@ -108,20 +108,20 @@ export default function CalculatorPage() {
                     const val = e.target.value;
                     if (val === '' || /^\d*\.?\d*$/.test(val)) setWeight(val);
                   }}
-                  className="w-full pl-8 pr-8 py-1.5 bg-transparent border-b border-gray-100 focus:border-[#8B2332] outline-none transition-all font-bold text-xl text-gray-800"
+                  className="w-full pl-7 pr-7 py-1.5 bg-transparent border-b border-gray-100 focus:border-[#8B2332] outline-none transition-all font-bold text-base md:text-lg text-gray-800"
                 />
-                <span className="absolute right-0 text-gray-400 font-bold uppercase text-sm tracking-widest">g</span>
+                <span className="absolute right-0 text-gray-400 font-bold uppercase text-xs tracking-widest">g</span>
               </div>
             </div>
 
             {/* Gold Rate Card */}
             <div className="bg-white p-4 rounded-2xl shadow-[0_2px_15px_rgba(0,0,0,0.02)] border border-gray-50 flex flex-col gap-2 relative">
               <div className="flex justify-between items-center">
-                <label className="text-[10px] font-black text-gray-800 uppercase tracking-[0.2em]">{t('goldRate22')}</label>
+                <label className="text-[11px] font-black text-gray-800 uppercase tracking-[0.2em]">{t('goldRate22')}</label>
                 {isSyncing && <RefreshCcw size={12} className="animate-spin text-[#D4AF37]" />}
               </div>
               <div className="relative flex items-center group">
-                <span className="absolute left-0 text-lg font-bold text-gray-400 transition-colors group-focus-within:text-[#8B2332]">₹</span>
+                <span className="absolute left-0 text-base font-bold text-gray-400 transition-colors group-focus-within:text-[#8B2332]">₹</span>
                 <input
                   type="text"
                   inputMode="decimal"
@@ -130,14 +130,14 @@ export default function CalculatorPage() {
                     const val = e.target.value;
                     if (val === '' || /^\d*\.?\d*$/.test(val)) setGoldRate(val);
                   }}
-                  className="w-full pl-6 py-1.5 bg-transparent border-b border-gray-100 focus:border-[#8B2332] outline-none transition-all font-bold text-xl text-gray-800"
+                  className="w-full pl-6 py-1.5 bg-transparent border-b border-gray-100 focus:border-[#8B2332] outline-none transition-all font-bold text-base md:text-lg text-gray-800"
                 />
               </div>
             </div>
 
             {/* Karat Selector */}
             <div className="bg-white p-4 rounded-2xl shadow-[0_2px_15px_rgba(0,0,0,0.02)] border border-gray-50 flex flex-col gap-2">
-              <label className="text-[10px] font-black text-gray-800 uppercase tracking-[0.2em]">Gold Karat</label>
+              <label className="text-[11px] font-black text-gray-800 uppercase tracking-[0.2em]">Gold Karat</label>
               <div className="grid grid-cols-3 gap-2">
                 {(['18KT', '22KT', '24KT'] as const).map((k) => (
                   <button
@@ -193,23 +193,23 @@ export default function CalculatorPage() {
                 </div>
 
                 {/* VA Info Area */}
-                <div className="px-6 py-5 border border-[#D4AF37]/20 rounded-2xl grid grid-cols-3 gap-4 bg-white">
-                  <div className="min-w-0 text-center">
-                    <p className="text-[9px] font-black text-gray-400 uppercase tracking-[0.12em] leading-tight mb-1">
+                <div className="overflow-visible px-4 sm:px-5 md:px-6 py-5 sm:py-6 border border-[#D4AF37]/20 rounded-2xl grid grid-cols-3 bg-white">
+                  <div className="min-w-0 text-center px-2 sm:px-3">
+                    <p className="text-[9px] font-black text-gray-400 uppercase tracking-[0.08em] leading-tight mb-1.5 whitespace-nowrap">
                       {t('wasteMg') || 'Wastage'}
                     </p>
                     <p className="text-lg font-black text-gray-800">
                       {calculations.wasteGrams.toFixed(3)}<span className="ml-0.5">g</span>
                     </p>
                   </div>
-                  <div className="min-w-0 text-center border-x border-gray-100">
-                    <p className="text-[9px] font-black text-gray-400 uppercase tracking-[0.12em] leading-tight mb-1">
-                      {t('overallVaPercent') || 'Overall VA %'}
+                  <div className="min-w-0 text-center px-2.5 sm:px-3 border-x border-gray-100">
+                    <p className="text-[9px] font-black text-gray-400 uppercase tracking-[0.08em] leading-tight mb-1.5 whitespace-nowrap">
+                      {t('overallVaPercent') || 'VA %'}
                     </p>
-                    <p className="text-lg font-black text-[#D4AF37]">{calculations.vaPercent.toFixed(2)}%</p>
+                    <p className="text-base sm:text-lg font-black text-[#D4AF37]">{calculations.vaPercent.toFixed(2)}%</p>
                   </div>
-                  <div className="min-w-0 text-center">
-                    <p className="text-[9px] font-black text-gray-400 uppercase tracking-[0.12em] leading-tight mb-1">
+                  <div className="min-w-0 text-center px-2 sm:px-3">
+                    <p className="text-[9px] font-black text-gray-400 uppercase tracking-[0.08em] leading-tight mb-1.5 whitespace-nowrap">
                       {t('totalVaAmount') || 'VA Amt'}
                     </p>
                     <p className="text-lg font-black text-[#8B2332]">

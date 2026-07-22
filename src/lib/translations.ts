@@ -18,7 +18,7 @@ export const translations = {
         totalAmount: 'Total Amount',
         valueAddition: 'Value Addition (VA)',
         wasteMg: 'Wastage',
-        overallVaPercent: 'Overall VA %',
+        overallVaPercent: 'VA %',
         totalVaAmount: 'VA Amount',
         viewReferenceTable: 'View Reference Rate Table',
 
@@ -227,7 +227,7 @@ export const translations = {
         totalAmount: 'மொத்த தொகை',
         valueAddition: 'கூடுதல் மதிப்பு (VA)',
         wasteMg: 'சேதாரம் (mg)',
-        overallVaPercent: 'மொத்த VA %',
+        overallVaPercent: 'VA %',
         totalVaAmount: 'VA தொகை',
         viewReferenceTable: 'விலை அட்டவணையை பார்க்க',
 
