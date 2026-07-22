@@ -44,15 +44,39 @@ export default function ReferenceTablePage() {
                   Inner scroll (inside card): vertical sticky header + horizontal scroll.
                   Side margins stay on the outer padded column so nothing clips the viewport edge.
                 */}
-                <div className="no-scrollbar flex-1 min-h-0 overflow-y-auto overflow-x-hidden px-4 md:px-5 py-4 md:py-5">
-                    <div className="w-full flex flex-col gap-4 md:gap-5 pb-6">
+                <div className="flex-1 min-h-0 overflow-hidden px-4 md:px-5 py-4 md:py-5">
+                    <div
+                        className="no-scrollbar h-full w-full overflow-y-auto overflow-x-hidden overscroll-contain"
+                        style={{
+                            width: 'calc(100% + 24px)',
+                            height: 'calc(100% + 24px)',
+                            paddingRight: 24,
+                            paddingBottom: 24,
+                            marginRight: -24,
+                            marginBottom: -24,
+                            WebkitOverflowScrolling: 'touch',
+                        }}
+                    >
+                    <div className="w-full flex flex-col gap-4 md:gap-5 pb-6" style={{ width: 'calc(100% - 24px)' }}>
 
-                        {/* Table card fills first screen; scrolls internally */}
+                        {/* Table card — clip scrollbars on mobile (CSS hide alone is unreliable there) */}
                         <div
                             className="rounded-2xl md:rounded-3xl border border-gray-100 shadow-xl bg-white overflow-hidden w-full"
                             style={{ height: 'calc(100dvh - 11rem)' }}
                         >
-                            <div className="no-scrollbar h-full w-full overflow-auto overscroll-contain">
+                            <div
+                                className="no-scrollbar h-full w-full overflow-auto overscroll-contain"
+                                style={{
+                                    // Push native scrollbars outside the clipped rounded card
+                                    width: 'calc(100% + 24px)',
+                                    height: 'calc(100% + 24px)',
+                                    paddingRight: 24,
+                                    paddingBottom: 24,
+                                    marginRight: -24,
+                                    marginBottom: -24,
+                                    WebkitOverflowScrolling: 'touch',
+                                }}
+                            >
                                 <table className="border-separate border-spacing-0 w-full min-w-[52rem]">
                                     <thead>
                                         <tr className="bg-[#333333] text-white">
@@ -151,6 +175,7 @@ export default function ReferenceTablePage() {
                                 </Link>
                             </div>
                         </div>
+                    </div>
                     </div>
                 </div>
             </div>

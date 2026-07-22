@@ -151,4 +151,14 @@ body::-webkit-scrollbar,
   display: none !important;
   width: 0 !important;
   height: 0 !important;
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  background: transparent !important;
+}
+
+@supports (-webkit-touch-callout: none) {
+  /* iOS Safari: force zero-size scrollbars */
+  .no-scrollbar {
+    scrollbar-gutter: auto;
+  }
 }
