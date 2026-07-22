@@ -1,5 +1,12 @@
 export type ProductType = 'Ring' | 'Earring' | 'Chain' | 'Haram' | 'Necklace' | 'Coin';
 
+export type RateCategory = 'Ring/Earring' | 'Chain' | 'Haram/Necklace' | 'Coin';
+
+export interface WasteLab {
+    waste: number;
+    lab: number;
+}
+
 export interface TierData {
     weight: number;
     "Ring/Earring"?: { waste: number; lab: number };
@@ -67,21 +74,77 @@ export const RATE_DATA: TierData[] = [
     },
 ];
 
-export const getTierData = (weight: number, product: ProductType) => {
+function getCategory(product: ProductType): RateCategory {
+    if (product === 'Ring' || product === 'Earring') return 'Ring/Earring';
+    if (product === 'Chain') return 'Chain';
+    if (product === 'Haram' || product === 'Necklace') return 'Haram/Necklace';
+    return 'Coin';
+}
+
+function scaleFromEdge(weight: number, edgeWeight: number, edge: WasteLab): WasteLab {
+    if (edgeWeight <= 0) return { waste: 0, lab: 0 };
+    const ratio = weight / edgeWeight;
+    return {
+        waste: edge.waste * ratio,
+        lab: edge.lab * ratio,
+    };
+}
+
+/** Resolve wastage grams + labour for a product weight from the reference table. */
+export const getTierData = (weight: number, product: ProductType): WasteLab => {
+    if (!Number.isFinite(weight) || weight <= 0) {
+        return { waste: 0, lab: 0 };
+    }
+
     if (product === 'Coin') {
-        // For coins, Labour = weight * 100 based on the provided logic
         return { waste: 0, lab: weight * 100 };
     }
 
-    // Find closest lower tier
-    const tiers = [...RATE_DATA].sort((a, b) => b.weight - a.weight);
-    const tier = tiers.find(t => t.weight <= weight) || RATE_DATA[0];
+    const category = getCategory(product);
+    const tiers = RATE_DATA
+        .filter((row) => row[category] != null)
+        .map((row) => {
+            const entry = row[category] as { waste?: number; lab: number };
+            return {
+                weight: row.weight,
+                waste: entry.waste ?? 0,
+                lab: entry.lab,
+            };
+        })
+        .sort((a, b) => a.weight - b.weight);
 
-    let category: "Ring/Earring" | "Chain" | "Haram/Necklace" | "Coin" = "Ring/Earring";
-    if (product === 'Ring' || product === 'Earring') category = "Ring/Earring";
-    else if (product === 'Chain') category = "Chain";
-    else if (product === 'Haram' || product === 'Necklace') category = "Haram/Necklace";
-    else if (product === 'Coin') category = "Coin";
+    if (tiers.length === 0) {
+        return { waste: 0, lab: 0 };
+    }
 
-    return tier[category];
+    const exact = tiers.find((t) => t.weight === weight);
+    if (exact) {
+        return { waste: exact.waste, lab: exact.lab };
+    }
+
+    if (weight < tiers[0].weight) {
+        return scaleFromEdge(weight, tiers[0].weight, tiers[0]);
+    }
+
+    if (weight > tiers[tiers.length - 1].weight) {
+        const last = tiers[tiers.length - 1];
+        return scaleFromEdge(weight, last.weight, last);
+    }
+
+    let low = tiers[0];
+    let high = tiers[tiers.length - 1];
+    for (let i = 0; i < tiers.length - 1; i++) {
+        if (tiers[i].weight < weight && weight < tiers[i + 1].weight) {
+            low = tiers[i];
+            high = tiers[i + 1];
+            break;
+        }
+    }
+
+    const span = high.weight - low.weight;
+    const t = span === 0 ? 0 : (weight - low.weight) / span;
+    return {
+        waste: low.waste + t * (high.waste - low.waste),
+        lab: low.lab + t * (high.lab - low.lab),
+    };
 };

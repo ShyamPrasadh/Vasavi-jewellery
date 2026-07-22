@@ -34,8 +34,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className="antialiased" suppressHydrationWarning>
+    <html lang="en" className="no-scrollbar" suppressHydrationWarning>
+      <head>
+        <style
+          dangerouslySetInnerHTML={{
+            __html: `
+              html, body, * { scrollbar-width: none !important; -ms-overflow-style: none !important; }
+              html::-webkit-scrollbar, body::-webkit-scrollbar, *::-webkit-scrollbar { display: none !important; width: 0 !important; height: 0 !important; }
+            `,
+          }}
+        />
+      </head>
+      <body className="antialiased no-scrollbar" suppressHydrationWarning>
         <ClientLayout>
           {children}
         </ClientLayout>

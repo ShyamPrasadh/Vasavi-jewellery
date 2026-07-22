@@ -64,12 +64,12 @@ export default function Header({ rates }: { rates?: { k22: number; k24: number }
                                 <div className="flex items-center gap-2">
                                     <div className="w-1.5 h-1.5 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)]"></div>
                                     <p className="text-[11px] font-black text-gray-400 uppercase tracking-widest leading-none pt-0.5">
-                                        22K: <span className="text-[#D4AF37] ml-1">₹{rates.k22.toLocaleString()}</span>
+                                        22K: <span className="text-[#D4AF37] ml-1">₹{rates.k22.toLocaleString('en-IN')}</span>
                                     </p>
                                 </div>
                                 <div className="flex items-center gap-2">
                                     <p className="text-[11px] font-black text-gray-400 uppercase tracking-widest leading-none pt-0.5">
-                                        24K: <span className="text-[#D4AF37] ml-1">₹{rates.k24.toLocaleString()}</span>
+                                        24K: <span className="text-[#D4AF37] ml-1">₹{rates.k24.toLocaleString('en-IN')}</span>
                                     </p>
                                 </div>
                             </div>

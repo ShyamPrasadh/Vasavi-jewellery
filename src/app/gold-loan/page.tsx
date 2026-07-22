@@ -1127,7 +1127,7 @@ export default function GoldLoanPage() {
                                                             {loan.status === 'settled' ? t('closed') : t('active')}
                                                         </p>
                                                         <p className={`text-xs font-black ${loan.status === 'settled' ? 'text-gray-500' : 'text-[#B8860B]'}`}>
-                                                            ₹{summary.totalInterest.toLocaleString()}
+                                                            ₹{summary.totalInterest.toLocaleString('en-IN')}
                                                         </p>
                                                     </div>
                                                 </div>
@@ -1202,7 +1202,7 @@ export default function GoldLoanPage() {
                                                         </td>
                                                         <td className="px-6 py-4 text-right">
                                                             <span className={`text-sm font-black ${loan.status === 'settled' ? 'text-gray-400' : 'text-[#B8860B]'}`}>
-                                                                ₹{summary.totalInterest.toLocaleString()}
+                                                                ₹{summary.totalInterest.toLocaleString('en-IN')}
                                                             </span>
                                                         </td>
                                                         <td className="px-6 py-4 text-center">
@@ -1276,17 +1276,17 @@ export default function GoldLoanPage() {
                                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
                                             <div className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 text-center flex flex-col justify-center h-full">
                                                 <p className="text-[10px] md:text-xs font-black text-gray-400 uppercase tracking-widest mb-1">{t('principal')}</p>
-                                                <p className="text-3xl md:text-4xl font-black text-gray-800">₹{summary.totalPrincipal.toLocaleString()}</p>
+                                                <p className="text-3xl md:text-4xl font-black text-gray-800">₹{summary.totalPrincipal.toLocaleString('en-IN')}</p>
                                             </div>
                                             <div className={`p-4 rounded-2xl text-center border flex flex-col justify-center h-full ${viewingLoan.status === 'settled' ? 'bg-gray-50 border-gray-200' : 'bg-gradient-to-br from-orange-50 to-orange-100 border-orange-200'}`}>
                                                 <p className={`text-[10px] md:text-xs font-black uppercase tracking-widest mb-1 ${viewingLoan.status === 'settled' ? 'text-gray-500' : 'text-orange-600'}`}>
                                                     {viewingLoan.status === 'settled' ? t('closed') : t('active')}
                                                 </p>
-                                                <p className={`text-3xl md:text-4xl font-black ${viewingLoan.status === 'settled' ? 'text-gray-700' : 'text-orange-600'}`}>₹{summary.totalInterest.toLocaleString()}</p>
+                                                <p className={`text-3xl md:text-4xl font-black ${viewingLoan.status === 'settled' ? 'text-gray-700' : 'text-orange-600'}`}>₹{summary.totalInterest.toLocaleString('en-IN')}</p>
                                             </div>
                                             <div className="bg-gradient-to-br from-[#D4AF37]/20 to-[#D4AF37]/30 p-4 rounded-2xl text-center border border-[#D4AF37]/40 flex flex-col justify-center h-full">
                                                 <p className="text-[10px] md:text-xs font-black text-[#B8860B] uppercase tracking-widest mb-1">{viewingLoan.status === 'settled' ? t('closed') : t('totalPayable')}</p>
-                                                <p className="text-3xl md:text-4xl font-black text-[#B8860B]">₹{summary.totalPayable.toLocaleString()}</p>
+                                                <p className="text-3xl md:text-4xl font-black text-[#B8860B]">₹{summary.totalPayable.toLocaleString('en-IN')}</p>
                                             </div>
                                             <div className={`p-4 rounded-2xl text-center border flex flex-col justify-center h-full ${viewingLoan.status === 'settled' ? 'bg-emerald-50 border-emerald-200' : 'bg-blue-50 border-blue-200'}`}>
                                                 <p className={`text-[10px] md:text-xs font-black uppercase tracking-widest mb-1 ${viewingLoan.status === 'settled' ? 'text-emerald-600' : 'text-blue-600'}`}>{t('status')}</p>
@@ -1505,13 +1505,13 @@ export default function GoldLoanPage() {
                                                                                 />
                                                                             </div>
                                                                         ) : (
-                                                                            <p className="text-lg font-black text-gray-800">₹{viewingLoan.loanAmount.toLocaleString()}</p>
+                                                                            <p className="text-lg font-black text-gray-800">₹{viewingLoan.loanAmount.toLocaleString('en-IN')}</p>
                                                                         )}
                                                                     </div>
                                                                 </div>
                                                                 <div className="text-right">
                                                                     <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Interest</p>
-                                                                    <p className="text-base font-black text-amber-600">₹{Math.round(Number(viewingLoan.loanAmount) * (Number(editForm.interestRate || viewingLoan.interestRate) / 100) * Number(summary.baseMonths)).toLocaleString()}</p>
+                                                                    <p className="text-base font-black text-amber-600">₹{Math.round(Number(viewingLoan.loanAmount) * (Number(editForm.interestRate || viewingLoan.interestRate) / 100) * Number(summary.baseMonths)).toLocaleString('en-IN')}</p>
                                                                 </div>
                                                             </div>
                                                             <div className="flex items-center gap-2 pl-[44px]">
@@ -1550,7 +1550,7 @@ export default function GoldLoanPage() {
                                                                         />
                                                                     </div>
                                                                 ) : (
-                                                                    <div className="text-sm font-black text-gray-800">₹{viewingLoan.loanAmount.toLocaleString()}</div>
+                                                                    <div className="text-sm font-black text-gray-800">₹{viewingLoan.loanAmount.toLocaleString('en-IN')}</div>
                                                                 )}
                                                             </div>
 
@@ -1576,7 +1576,7 @@ export default function GoldLoanPage() {
 
                                                             {/* Interest */}
                                                             <div className="col-span-2 text-right">
-                                                                <div className="text-sm font-black text-amber-600">₹{Math.round(Number(viewingLoan.loanAmount) * (Number(editForm.interestRate || viewingLoan.interestRate) / 100) * Number(summary.baseMonths)).toLocaleString()}</div>
+                                                                <div className="text-sm font-black text-amber-600">₹{Math.round(Number(viewingLoan.loanAmount) * (Number(editForm.interestRate || viewingLoan.interestRate) / 100) * Number(summary.baseMonths)).toLocaleString('en-IN')}</div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -1613,13 +1613,13 @@ export default function GoldLoanPage() {
                                                                                         />
                                                                                     </div>
                                                                                 ) : (
-                                                                                    <p className="text-lg font-black text-gray-800">₹{add.amount.toLocaleString()}</p>
+                                                                                    <p className="text-lg font-black text-gray-800">₹{add.amount.toLocaleString('en-IN')}</p>
                                                                                 )}
                                                                             </div>
                                                                         </div>
                                                                         <div className="text-right">
                                                                             <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Interest</p>
-                                                                            <p className="text-base font-black text-amber-600">₹{Math.round(addInterest).toLocaleString()}</p>
+                                                                            <p className="text-base font-black text-amber-600">₹{Math.round(addInterest).toLocaleString('en-IN')}</p>
                                                                         </div>
                                                                     </div>
                                                                     <div className="flex items-center gap-2 pl-[44px]">
@@ -1669,7 +1669,7 @@ export default function GoldLoanPage() {
                                                                                 />
                                                                             </div>
                                                                         ) : (
-                                                                            <div className="text-sm font-black text-gray-800">₹{add.amount.toLocaleString()}</div>
+                                                                            <div className="text-sm font-black text-gray-800">₹{add.amount.toLocaleString('en-IN')}</div>
                                                                         )}
                                                                     </div>
 
@@ -1700,7 +1700,7 @@ export default function GoldLoanPage() {
 
                                                                     {/* Interest */}
                                                                     <div className="col-span-2 text-right">
-                                                                        <div className="text-sm font-black text-amber-600">₹{Math.round(addInterest).toLocaleString()}</div>
+                                                                        <div className="text-sm font-black text-amber-600">₹{Math.round(addInterest).toLocaleString('en-IN')}</div>
                                                                     </div>
                                                                 </div>
 
@@ -1729,17 +1729,17 @@ export default function GoldLoanPage() {
                                                     <div className="flex items-center gap-6">
                                                         <div className="flex flex-col">
                                                             <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">{t('totalPrincipal')}</span>
-                                                            <span className="text-lg font-black text-gray-800">₹{summary.totalPrincipal.toLocaleString()}</span>
+                                                            <span className="text-lg font-black text-gray-800">₹{summary.totalPrincipal.toLocaleString('en-IN')}</span>
                                                         </div>
                                                         <div className="w-px h-8 bg-gray-200"></div>
                                                         <div className="flex flex-col">
                                                             <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">{viewingLoan.status === 'settled' ? t('closed') : t('totalInterest')}</span>
-                                                            <span className={`text-lg font-black ${viewingLoan.status === 'settled' ? 'text-gray-800' : 'text-amber-600'}`}>₹{summary.totalInterest.toLocaleString()}</span>
+                                                            <span className={`text-lg font-black ${viewingLoan.status === 'settled' ? 'text-gray-800' : 'text-amber-600'}`}>₹{summary.totalInterest.toLocaleString('en-IN')}</span>
                                                         </div>
                                                     </div>
                                                     <div className="flex items-center gap-3 bg-white px-4 py-2 rounded-xl shadow-sm border border-gray-200">
                                                         <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">{viewingLoan.status === 'settled' ? t('closed') : t('totalPayable')}</span>
-                                                        <span className="text-xl font-black text-[#D4AF37]">₹{summary.totalPayable.toLocaleString()}</span>
+                                                        <span className="text-xl font-black text-[#D4AF37]">₹{summary.totalPayable.toLocaleString('en-IN')}</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -1993,10 +1993,10 @@ export default function GoldLoanPage() {
                                                     <tbody className="divide-y divide-gray-50">
                                                         {/* Base Loan Entry */}
                                                         <tr className="font-bold text-gray-800">
-                                                            <td className="py-4 px-2 text-left text-gray-800">₹{printLoan.loanAmount.toLocaleString()}</td>
+                                                            <td className="py-4 px-2 text-left text-gray-800">₹{printLoan.loanAmount.toLocaleString('en-IN')}</td>
                                                             <td className="py-4 px-2 text-center text-gray-500">{new Date(printLoan.loanDate).toLocaleDateString('en-GB')}</td>
                                                             <td className="py-4 px-2 text-center text-gray-500">{summary.baseMonths}m</td>
-                                                            <td className="py-4 px-2 text-right text-[#D4AF37]">₹{Math.round(printLoan.loanAmount * (printLoan.interestRate / 100) * parseFloat(summary.baseMonths)).toLocaleString()}</td>
+                                                            <td className="py-4 px-2 text-right text-[#D4AF37]">₹{Math.round(printLoan.loanAmount * (printLoan.interestRate / 100) * parseFloat(summary.baseMonths)).toLocaleString('en-IN')}</td>
                                                         </tr>
                                                         {/* Additional Loans */}
                                                         {printLoan.additionalLoans?.map((add, idx) => {
@@ -2006,10 +2006,10 @@ export default function GoldLoanPage() {
                                                             const addInterest = add.amount * (printLoan.interestRate / 100) * addMonths;
                                                             return (
                                                                 <tr key={idx} className="font-bold text-gray-800">
-                                                                    <td className="py-4 px-2 text-left text-gray-800">₹{add.amount.toLocaleString()}</td>
+                                                                    <td className="py-4 px-2 text-left text-gray-800">₹{add.amount.toLocaleString('en-IN')}</td>
                                                                     <td className="py-4 px-2 text-center text-gray-500">{addDate.toLocaleDateString('en-GB')}</td>
                                                                     <td className="py-4 px-2 text-center text-gray-500">{addMonths.toFixed(2)}m</td>
-                                                                    <td className="py-4 px-2 text-right text-[#D4AF37]">₹{Math.round(addInterest).toLocaleString()}</td>
+                                                                    <td className="py-4 px-2 text-right text-[#D4AF37]">₹{Math.round(addInterest).toLocaleString('en-IN')}</td>
                                                                 </tr>
                                                             );
                                                         })}
@@ -2022,15 +2022,15 @@ export default function GoldLoanPage() {
                                                 <div className="grid grid-cols-3 gap-4 text-center">
                                                     <div>
                                                         <p className="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-1">Total Principal</p>
-                                                        <p className="text-xl font-black text-gray-800">₹{summary.totalPrincipal.toLocaleString()}</p>
+                                                        <p className="text-xl font-black text-gray-800">₹{summary.totalPrincipal.toLocaleString('en-IN')}</p>
                                                     </div>
                                                     <div>
                                                         <p className="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-1">Total Interest</p>
-                                                        <p className="text-xl font-black text-orange-500">₹{summary.totalInterest.toLocaleString()}</p>
+                                                        <p className="text-xl font-black text-orange-500">₹{summary.totalInterest.toLocaleString('en-IN')}</p>
                                                     </div>
                                                     <div className="bg-[#D4AF37]/10 rounded-xl p-3 -m-3">
                                                         <p className="text-[9px] font-black text-[#D4AF37] uppercase tracking-widest mb-1">Grand Total</p>
-                                                        <p className="text-2xl font-black text-[#D4AF37]">₹{summary.totalPayable.toLocaleString()}</p>
+                                                        <p className="text-2xl font-black text-[#D4AF37]">₹{summary.totalPayable.toLocaleString('en-IN')}</p>
                                                     </div>
                                                 </div>
                                             </div>

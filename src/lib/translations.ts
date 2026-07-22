@@ -20,7 +20,7 @@ export const translations = {
         wasteMg: 'Wastage',
         overallVaPercent: 'VA %',
         totalVaAmount: 'VA Amt',
-        viewReferenceTable: 'View Reference Rate Table',
+        viewReferenceTable: 'Reference Rate Table',
 
         // Pawn Page
         loanAmount: 'Loan Amount',
@@ -115,7 +115,7 @@ export const translations = {
         haramNecklaceWL: 'Haram/Necklace (W/L)',
         fixedLab: 'Fixed Lab',
         policyNote: 'Policy Note',
-        policyNoteDescription: 'For weights not explicitly listed above, the system automatically uses the parameters from the closest lower weight tier to ensure fair valuation. All calculations are real-time and based on market rates.',
+        policyNoteDescription: 'For weights not listed above, wastage and labour are calculated from the surrounding reference-table rows for that product (linear interpolation). Values below the lowest or above the highest listed weight are scaled from the nearest edge row. All calculations are real-time and based on market rates.',
         launchCalculator: 'Launch Calculator',
 
         // Dashboard
@@ -324,7 +324,7 @@ export const translations = {
         haramNecklaceWL: 'ஹாரம்/நெக்லஸ் (W/L)',
         fixedLab: 'நிலையான கூலி',
         policyNote: 'கொள்கை குறிப்பு',
-        policyNoteDescription: 'மேலே தெளிவாக பட்டியலிடப்படாத எடைகளுக்கு, நியாயமான மதிப்பீட்டை உறுதி செய்ய கணினி தானாகவே அடுத்த கீழ்நிலை எடை அடுக்கிலிருந்து அளவுருக்களைப் பயன்படுத்துகிறது. அனைத்து கணக்கீடுகளும் நேரலை நேரத்தின் அடிப்படையிலானவை.',
+        policyNoteDescription: 'மேலே பட்டியலிடப்படாத எடைகளுக்கு, அந்த பொருளுக்கான அருகிலுள்ள குறிப்பு அட்டவணை வரிசைகளிலிருந்து சேதாரம் மற்றும் கூலி கணக்கிடப்படும் (நேரியல் இடைச்செருகல்). குறைந்தபட்ச எடைக்குக் கீழே அல்லது அதிகபட்ச எடைக்கு மேலே உள்ள மதிப்புகள் அருகிலுள்ள விளிம்பு வரிசையிலிருந்து விகிதப்படி கணக்கிடப்படும். அனைத்து கணக்கீடுகளும் நேரலை சந்தை விகிதங்களை அடிப்படையாகக் கொண்டவை.',
         launchCalculator: 'கணக்கீட்டைத் தொடங்கு',
 
         // Dashboard

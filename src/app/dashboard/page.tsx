@@ -192,7 +192,7 @@ export default function DashboardPage() {
         if (num >= 10000000) return `₹${(num / 10000000).toFixed(1)}Cr`;
         if (num >= 100000) return `₹${(num / 100000).toFixed(1)}L`;
         if (num >= 1000) return `₹${(num / 1000).toFixed(1)}K`;
-        return `₹${num.toLocaleString()}`;
+        return `₹${num.toLocaleString('en-IN')}`;
     };
 
     const periodLabels: Record<PeriodType, string> = {
@@ -611,7 +611,7 @@ export default function DashboardPage() {
                                             </div>
                                         </div>
                                         <div className="text-right">
-                                            <p className="font-black text-[#D4AF37] text-lg md:text-xl">₹{loan.loanAmount.toLocaleString()}</p>
+                                            <p className="font-black text-[#D4AF37] text-lg md:text-xl">₹{loan.loanAmount.toLocaleString('en-IN')}</p>
                                             <p className="text-[10px] text-gray-400 font-bold mt-1">
                                                 {loan.interestRate}{t('perMonth')}
                                             </p>
@@ -665,7 +665,7 @@ export default function DashboardPage() {
                                                 <p className="text-[10px] text-gray-400 font-bold">{loan.billNumber} • {loan.productType}</p>
                                             </div>
                                             <div className="text-right">
-                                                <p className="font-black text-[#D4AF37]">₹{loan.loanAmount.toLocaleString()}</p>
+                                                <p className="font-black text-[#D4AF37]">₹{loan.loanAmount.toLocaleString('en-IN')}</p>
                                                 <p className="text-[10px] text-gray-400 font-bold">
                                                     {new Date(loan.loanDate).toLocaleDateString(language === 'ta' ? 'ta-IN' : 'en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
                                                 </p>
@@ -689,7 +689,7 @@ export default function DashboardPage() {
                                                         <p className="text-[10px] text-gray-500 font-bold">{loan.billNumber}</p>
                                                     </div>
                                                     <div className="text-right">
-                                                        <p className="font-black text-orange-500">₹{loan.loanAmount.toLocaleString()}</p>
+                                                        <p className="font-black text-orange-500">₹{loan.loanAmount.toLocaleString('en-IN')}</p>
                                                         <p className="text-[10px] text-orange-400 font-bold">
                                                             Due: {new Date(loan.returnDate).toLocaleDateString(language === 'ta' ? 'ta-IN' : 'en-IN', { day: '2-digit', month: 'short' })}
                                                         </p>
@@ -709,7 +709,7 @@ export default function DashboardPage() {
                                                         <p className="text-[10px] text-gray-500 font-bold">{loan.billNumber}</p>
                                                     </div>
                                                     <div className="text-right">
-                                                        <p className="font-black text-red-500">₹{loan.loanAmount.toLocaleString()}</p>
+                                                        <p className="font-black text-red-500">₹{loan.loanAmount.toLocaleString('en-IN')}</p>
                                                         <p className="text-[10px] text-red-400 font-bold">
                                                             Was due: {new Date(loan.returnDate).toLocaleDateString(language === 'ta' ? 'ta-IN' : 'en-IN', { day: '2-digit', month: 'short' })}
                                                         </p>
@@ -734,7 +734,7 @@ export default function DashboardPage() {
                                         </div>
                                         <div className="p-4 bg-gray-50 rounded-xl">
                                             <p className="text-[10px] text-gray-400 font-bold uppercase">{t('amount')}</p>
-                                            <p className="font-black text-[#D4AF37] text-lg">₹{detailModal.data.loanAmount.toLocaleString()}</p>
+                                            <p className="font-black text-[#D4AF37] text-lg">₹{detailModal.data.loanAmount.toLocaleString('en-IN')}</p>
                                         </div>
                                         <div className="p-4 bg-gray-50 rounded-xl">
                                             <p className="text-[10px] text-gray-400 font-bold uppercase">{t('date')}</p>

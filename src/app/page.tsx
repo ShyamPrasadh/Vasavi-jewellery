@@ -7,6 +7,7 @@ import { useGoldRates } from '@/hooks/useGoldRates';
 import Link from 'next/link';
 import { Table, RefreshCcw, Scale, ChevronDown } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
+import { formatInr, formatInrDigits } from '@/lib/format';
 
 const PRODUCT_LOGOS: Record<string, string> = {
   Ring: '/logos/ring.svg',
@@ -43,8 +44,8 @@ export default function CalculatorPage() {
     const numGoldRate = parseFloat(goldRate) || 0;
 
     const data = getTierData(numWeight, product);
-    const wasteGrams = (data as any)?.waste ?? 0;
-    const labCharge = (data as any)?.lab ?? 0;
+    const wasteGrams = data.waste;
+    const labCharge = data.lab;
 
     const goldValue = numWeight * numGoldRate;
     const wastageCost = wasteGrams * numGoldRate;
@@ -80,7 +81,7 @@ export default function CalculatorPage() {
             </p>
           </div>
           <Link href="/table" className="inline-flex shrink-0 items-center gap-2 bg-white border border-gray-100 px-3 md:px-4 py-2 md:py-2.5 rounded-xl hover:border-[#D4AF37]/30 transition-all shadow-[0_2px_15px_rgba(0,0,0,0.03)] group mt-[10px]">
-            <Table size={14} className="text-[#D4AF37]" />
+            <Table size={14} className="text-[#8B2332]" />
             <span className="text-[10px] font-black text-gray-500 uppercase tracking-normal md:hidden">Table</span>
             <span className="hidden md:inline text-[10px] font-black text-gray-500 uppercase tracking-normal">{t('viewReferenceTable')}</span>
           </Link>
@@ -116,15 +117,16 @@ export default function CalculatorPage() {
             {/* Weight Card */}
             <div className="bg-white px-4 py-3 rounded-2xl shadow-[0_2px_15px_rgba(0,0,0,0.02)] border border-gray-50 flex items-center justify-between gap-3">
               <div className="flex items-center gap-2 shrink-0 min-w-0">
-                <Scale size={14} className="text-gray-400 shrink-0" />
+                <Scale size={16} strokeWidth={1.6} className="text-black opacity-70 shrink-0" />
                 <label className="text-[10px] font-black text-gray-800 uppercase tracking-[0.12em]">{t('weightGrams')}</label>
               </div>
               <div className="relative flex items-center group w-24 shrink-0">
                 <input
                   type="text"
                   inputMode="decimal"
-                  placeholder="0"
+                  placeholder=""
                   value={weight}
+                  onFocus={() => setWeight('')}
                   onChange={(e) => {
                     const val = e.target.value;
                     if (val === '' || /^\d*\.?\d*$/.test(val)) setWeight(val);
@@ -152,13 +154,13 @@ export default function CalculatorPage() {
                   <input
                     type="text"
                     inputMode="decimal"
-                    value={goldRate}
+                    value={formatInrDigits(goldRate)}
                     onChange={(e) => {
-                      const val = e.target.value;
-                      if (val === '' || /^\d*\.?\d*$/.test(val)) setGoldRate(val);
+                      const raw = e.target.value.replace(/,/g, '');
+                      if (raw === '' || /^\d*\.?\d*$/.test(raw)) setGoldRate(raw);
                     }}
-                    size={Math.max(String(goldRate).length, 4)}
-                    className="w-auto max-w-[6.5ch] bg-transparent outline-none text-base font-bold text-gray-800 py-1.5"
+                    size={Math.max(formatInrDigits(goldRate).length, 4)}
+                    className="w-auto max-w-[10ch] bg-transparent outline-none text-base font-bold text-gray-800 py-1.5"
                   />
                 </div>
               </div>
@@ -192,7 +194,7 @@ export default function CalculatorPage() {
                 <div className="flex items-center gap-1 text-[#8B2332]">
                   <span className="text-4xl font-black tracking-tighter">₹</span>
                   <span className="text-4xl font-black tracking-tighter">
-                    {Math.round(calculations.totalAmount).toLocaleString()}
+                    {formatInr(Math.round(calculations.totalAmount))}
                   </span>
                 </div>
               </div>
@@ -202,27 +204,27 @@ export default function CalculatorPage() {
                   <div className="flex items-center justify-between py-3.5 first:pt-0">
                     <div className="flex flex-col">
                       <span className="text-[10px] font-black text-gray-800 uppercase tracking-[0.12em]">{t('goldValue')}</span>
-                      <span className="text-[10px] text-gray-400 font-bold uppercase tracking-tight">({weight}g × ₹{calculations.numGoldRate.toLocaleString()})</span>
+                      <span className="text-[10px] text-gray-400 font-bold uppercase tracking-tight">({weight}g × ₹{formatInr(calculations.numGoldRate)})</span>
                     </div>
                     <span className="text-lg font-bold text-gray-800">
-                      ₹{calculations.goldValue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                      ₹{formatInr(calculations.goldValue, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                     </span>
                   </div>
 
                   <div className="flex items-center justify-between py-3.5">
                     <div className="flex flex-col">
                       <span className="text-[10px] font-black text-gray-800 uppercase tracking-[0.12em]">{t('wastageCost')}</span>
-                      <span className="text-[10px] text-gray-400 font-bold uppercase tracking-tight">({calculations.wasteGrams}g × ₹{calculations.numGoldRate.toLocaleString()})</span>
+                      <span className="text-[10px] text-gray-400 font-bold uppercase tracking-tight">({calculations.wasteGrams}g × ₹{formatInr(calculations.numGoldRate)})</span>
                     </div>
                     <span className="text-lg font-bold text-gray-800">
-                      ₹{calculations.wastageCost.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                      ₹{formatInr(calculations.wastageCost, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                     </span>
                   </div>
 
                   <div className="flex items-center justify-between py-3.5">
                     <span className="text-[10px] font-black text-gray-800 uppercase tracking-[0.12em]">{t('labourCharge')}</span>
                     <span className="text-lg font-bold text-gray-800">
-                      ₹{calculations.labCharge.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                      ₹{formatInr(calculations.labCharge, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                     </span>
                   </div>
                 </div>
@@ -258,7 +260,7 @@ export default function CalculatorPage() {
                         {t('totalVaAmount') || 'VA Amt'}
                       </span>
                       <span className="text-sm sm:text-base font-bold text-[#8B2332] leading-none whitespace-nowrap">
-                        ₹{calculations.vaAmount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                        ₹{formatInr(calculations.vaAmount, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                       </span>
                     </div>
                   </div>

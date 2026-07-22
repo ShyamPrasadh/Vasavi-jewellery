@@ -437,7 +437,7 @@ function PawnCalculatorContent() {
                                                             <div className="flex items-center gap-2">
                                                                 <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{t('interest')}:</span>
                                                                 <span className="text-sm font-black text-[#8B2332]">
-                                                                    ₹{Math.round(calculations.extraBreakdown.find(b => b.id === cash.id)?.interest || 0).toLocaleString()}
+                                                                    ₹{Math.round(calculations.extraBreakdown.find(b => b.id === cash.id)?.interest || 0).toLocaleString('en-IN')}
                                                                 </span>
                                                             </div>
                                                             <button
@@ -462,7 +462,7 @@ function PawnCalculatorContent() {
                                     <div className="flex items-baseline gap-1 text-[#8B2332]">
                                         <span className="text-xl font-bold opacity-80">₹</span>
                                         <span className="text-4xl font-black tracking-tighter">
-                                            {Math.round(calculations.totalAmount).toLocaleString()}
+                                            {Math.round(calculations.totalAmount).toLocaleString('en-IN')}
                                         </span>
                                     </div>
                                 </div>
@@ -471,11 +471,11 @@ function PawnCalculatorContent() {
                                     <div className="flex flex-col gap-4 border-b border-gray-50 pb-6">
                                         <div className="flex items-center justify-between">
                                             <span className="text-[10px] font-black text-gray-800 uppercase tracking-[0.2em]">{t('totalPrincipal')}</span>
-                                            <span className="text-lg font-bold text-gray-800">₹{calculations.totalPrincipal.toLocaleString()}</span>
+                                            <span className="text-lg font-bold text-gray-800">₹{calculations.totalPrincipal.toLocaleString('en-IN')}</span>
                                         </div>
                                         <div className="flex items-center justify-between">
                                             <span className="text-[10px] font-black text-gray-800 uppercase tracking-[0.2em]">{t('totalInterest')}</span>
-                                            <span className="text-lg font-bold text-gray-800">₹{Math.round(calculations.interestAmount).toLocaleString()}</span>
+                                            <span className="text-lg font-bold text-gray-800">₹{Math.round(calculations.interestAmount).toLocaleString('en-IN')}</span>
                                         </div>
                                     </div>
 
@@ -494,7 +494,7 @@ function PawnCalculatorContent() {
                                                 {calculations.allEntries.map((entry, idx) => (
                                                     <tr key={idx} className="group hover:bg-gray-50/50 transition-colors">
                                                         <td className="py-5 px-4 text-sm font-black text-gray-900 tracking-tight truncate">
-                                                            ₹{entry.amount.toLocaleString()}
+                                                            ₹{entry.amount.toLocaleString('en-IN')}
                                                         </td>
                                                         <td className="py-5 px-2 text-sm font-bold text-gray-500 text-center">
                                                             {entry.rate}%
@@ -503,7 +503,7 @@ function PawnCalculatorContent() {
                                                             {entry.months.toFixed(2)}m
                                                         </td>
                                                         <td className="py-5 px-4 text-sm font-black text-[#A67C00] text-right">
-                                                            ₹{Math.round(entry.interest).toLocaleString()}
+                                                            ₹{Math.round(entry.interest).toLocaleString('en-IN')}
                                                         </td>
                                                     </tr>
                                                 ))}
@@ -626,19 +626,19 @@ function PawnCalculatorContent() {
                                             <tbody className="divide-y divide-gray-50">
                                                 {calculations.allEntries.map((entry, idx) => (
                                                     <tr key={idx} className="font-bold text-gray-800">
-                                                        <td className="py-4 px-2 text-left text-gray-800">₹{entry.amount.toLocaleString()}</td>
+                                                        <td className="py-4 px-2 text-left text-gray-800">₹{entry.amount.toLocaleString('en-IN')}</td>
                                                         <td className="py-4 px-2 text-center text-gray-500">
                                                             {new Date(entry.date).toLocaleDateString('en-GB')}
                                                         </td>
                                                         <td className="py-4 px-2 text-center text-gray-500">{entry.months.toFixed(2)}m</td>
-                                                        <td className="py-4 px-2 text-right text-[#D4AF37]">₹{Math.round(entry.interest).toLocaleString()}</td>
+                                                        <td className="py-4 px-2 text-right text-[#D4AF37]">₹{Math.round(entry.interest).toLocaleString('en-IN')}</td>
                                                     </tr>
                                                 ))}
                                             </tbody>
                                             <tfoot>
                                                 <tr className="border-t-2 border-gray-100 font-black bg-gray-50/50">
                                                     <td colSpan={3} className="py-4 px-2 text-gray-800 uppercase tracking-widest text-[10px]">{t('grandTotalPayable')}</td>
-                                                    <td className="py-4 px-2 text-right text-[#D4AF37] text-sm">₹{Math.round(calculations.totalAmount).toLocaleString()}</td>
+                                                    <td className="py-4 px-2 text-right text-[#D4AF37] text-sm">₹{Math.round(calculations.totalAmount).toLocaleString('en-IN')}</td>
                                                 </tr>
                                             </tfoot>
                                         </table>
