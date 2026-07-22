@@ -77,9 +77,9 @@ export default function Sidebar() {
                 ${mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0
                 w-[280px] ${isCollapsed ? 'md:w-[64px]' : 'md:w-[280px]'}
             `}>
-                <div className="h-full flex flex-col p-1.5 md:p-2 transition-all duration-300">
-                    {/* Menu Items - starts below header */}
-                    <div className="space-y-1.5 md:space-y-2 flex-1 pt-1.5 md:pt-4">
+                <div className="h-full flex flex-col px-1.5 pb-1.5 md:px-2 md:pb-2 transition-all duration-300">
+                    {/* Menu top matches page title: mt-0.5/mt-1 + pt-[10px] → 12px / 14px */}
+                    <div className="space-y-1.5 md:space-y-2 flex-1 pt-[12px] md:pt-[14px]">
                         {/* Menu Items */}
 
                         {menuItems.map((item) => {
@@ -108,7 +108,7 @@ export default function Sidebar() {
                                     <Icon
                                         size={isCollapsed ? 22 : 20}
                                         className="flex-shrink-0"
-                                        strokeWidth={active ? 2.5 : 2}
+                                        strokeWidth={2}
                                     />
                                     <span className={`text-[12px] font-black uppercase tracking-widest whitespace-nowrap transition-all duration-300 ${isCollapsed ? 'md:hidden' : 'md:w-auto md:opacity-100'}`}>
                                         {item.name}

@@ -25,7 +25,7 @@ export default function Header({ rates }: { rates?: { k22: number; k24: number }
 
     return (
         <header className="h-[54px] md:h-[60px] bg-white shadow-[0_2px_15px_rgba(0,0,0,0.03)] fixed top-0 left-0 right-0 z-[55] flex items-center">
-            <div className="w-full h-full flex items-center">
+            <div className="w-full h-full flex items-center gap-3 md:gap-0">
                 {/* Logo rail — same width & center line as sidebar icons */}
                 <div
                     className={`
@@ -42,7 +42,7 @@ export default function Header({ rates }: { rates?: { k22: number; k24: number }
                             width={512}
                             height={512}
                             decoding="async"
-                            className="h-10 w-10 md:h-11 md:w-11 object-contain"
+                            className="h-[38px] w-[38px] object-contain"
                         />
                     </Link>
                 </div>
