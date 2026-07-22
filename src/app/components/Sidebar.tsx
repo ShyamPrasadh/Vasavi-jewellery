@@ -110,13 +110,13 @@ export default function Sidebar() {
                                         className="flex-shrink-0"
                                         strokeWidth={2}
                                     />
-                                    <span className={`text-[12px] font-black uppercase tracking-widest whitespace-nowrap transition-all duration-300 ${isCollapsed ? 'md:hidden' : 'md:w-auto md:opacity-100'}`}>
+                                    <span className={`text-[12px] font-black uppercase tracking-normal whitespace-nowrap transition-all duration-300 ${isCollapsed ? 'md:hidden' : 'md:w-auto md:opacity-100'}`}>
                                         {item.name}
                                     </span>
 
                                     {/* Tooltip for collapsed mode */}
                                     {isCollapsed && (
-                                        <div className="absolute left-full ml-4 px-3 py-2 bg-[#333333] text-white text-[10px] font-bold uppercase tracking-widest rounded-lg opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200 pointer-events-none whitespace-nowrap z-50 shadow-xl border border-gray-700">
+                                        <div className="absolute left-full ml-4 px-3 py-2 bg-[#333333] text-white text-[10px] font-bold uppercase tracking-normal rounded-lg opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200 pointer-events-none whitespace-nowrap z-50 shadow-xl border border-gray-700">
                                             {item.name}
                                             {/* Little arrow */}
                                             <div className="absolute top-1/2 -left-1 -translate-y-1/2 border-4 border-transparent border-r-[#333333]"></div>

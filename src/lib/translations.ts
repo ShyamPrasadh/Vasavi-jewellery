@@ -8,7 +8,7 @@ export const translations = {
         loanHistory: 'LOAN HISTORY',
 
         // Gold Calculator Page
-        productName: 'Product Name',
+        productName: 'Product Type',
         weightGrams: 'Weight (Grams)',
         goldRate22: 'Gold Rate (22KT)',
         detailedBreakup: 'Detailed Breakup',
@@ -217,7 +217,7 @@ export const translations = {
         loanHistory: 'கடன் வரலாறு',
 
         // Gold Calculator Page
-        productName: 'பொருள் பெயர்',
+        productName: 'பொருள் வகை',
         weightGrams: 'எடை (கிராம்)',
         goldRate22: 'தங்க விலை (22KT)',
         detailedBreakup: 'விரிவான கணக்கு',
