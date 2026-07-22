@@ -98,7 +98,7 @@ export default function ReferenceTablePage() {
                             WebkitOverflowScrolling: 'touch',
                         }}
                     >
-                    <div className="w-full flex flex-col gap-4 md:gap-5 pb-6" style={{ width: 'calc(100% - 24px)' }}>
+                    <div className="w-full flex flex-col gap-4 md:gap-5 pb-6">
 
                         {/* Table card — clip scrollbars on mobile (CSS hide alone is unreliable there) */}
                         <div
