@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect } from 'react';
 import Header from '../components/Header';
 import { RATE_DATA } from '../data';
 import Link from 'next/link';
@@ -14,11 +15,52 @@ export default function ReferenceTablePage() {
     const { t } = useLanguage();
     const { isCollapsed } = useSidebar();
 
+    // Lock the document so rubber-band / overscroll never reveals body background
+    // behind the fixed table layout (especially iOS Safari).
+    useEffect(() => {
+        const html = document.documentElement;
+        const { body } = document;
+        const prev = {
+            htmlOverflow: html.style.overflow,
+            htmlOverscroll: html.style.overscrollBehavior,
+            htmlHeight: html.style.height,
+            bodyOverflow: body.style.overflow,
+            bodyOverscroll: body.style.overscrollBehavior,
+            bodyHeight: body.style.height,
+            bodyPosition: body.style.position,
+            bodyWidth: body.style.width,
+            bodyTop: body.style.top,
+        };
+
+        html.style.overflow = 'hidden';
+        html.style.overscrollBehavior = 'none';
+        html.style.height = '100%';
+        body.style.overflow = 'hidden';
+        body.style.overscrollBehavior = 'none';
+        body.style.height = '100%';
+        // iOS: fixed body stops the viewport itself from bouncing
+        body.style.position = 'fixed';
+        body.style.width = '100%';
+        body.style.top = '0';
+
+        return () => {
+            html.style.overflow = prev.htmlOverflow;
+            html.style.overscrollBehavior = prev.htmlOverscroll;
+            html.style.height = prev.htmlHeight;
+            body.style.overflow = prev.bodyOverflow;
+            body.style.overscrollBehavior = prev.bodyOverscroll;
+            body.style.height = prev.bodyHeight;
+            body.style.position = prev.bodyPosition;
+            body.style.width = prev.bodyWidth;
+            body.style.top = prev.bodyTop;
+        };
+    }, []);
+
     return (
-        <main className={`fixed top-0 left-0 right-0 bottom-0 bg-white flex flex-col overflow-hidden transition-all duration-300 ${isCollapsed ? 'md:left-[64px]' : 'md:left-[280px]'}`}>
+        <main className={`fixed inset-0 bg-white flex flex-col overflow-hidden overscroll-none transition-all duration-300 ${isCollapsed ? 'md:left-[64px]' : 'md:left-[280px]'}`}>
             <Header rates={rates || undefined} />
 
-            <div className="flex-1 flex flex-col pt-[54px] md:pt-[60px] min-h-0">
+            <div className="flex-1 flex flex-col pt-[54px] md:pt-[60px] min-h-0 overflow-hidden overscroll-none">
 
                 {/* Title */}
                 <div className="bg-white px-4 md:px-5 py-1.5 border-b border-gray-100 flex-shrink-0">
@@ -43,17 +85,16 @@ export default function ReferenceTablePage() {
                   Outer scroll: reveals policy after the tall table card.
                   Inner scroll (inside card): vertical sticky header + horizontal scroll.
                   Side margins stay on the outer padded column so nothing clips the viewport edge.
+                  Width-only scrollbar clip on the outer (vertical-only) scroller — no height
+                  expansion, so overscroll cannot open empty white space below content.
                 */}
-                <div className="flex-1 min-h-0 overflow-hidden px-4 md:px-5 py-4 md:py-5">
+                <div className="flex-1 min-h-0 overflow-hidden overscroll-none px-4 md:px-5 py-4 md:py-5">
                     <div
-                        className="no-scrollbar h-full w-full overflow-y-auto overflow-x-hidden overscroll-contain"
+                        className="no-scrollbar h-full w-full overflow-y-auto overflow-x-hidden overscroll-none"
                         style={{
                             width: 'calc(100% + 24px)',
-                            height: 'calc(100% + 24px)',
                             paddingRight: 24,
-                            paddingBottom: 24,
                             marginRight: -24,
-                            marginBottom: -24,
                             WebkitOverflowScrolling: 'touch',
                         }}
                     >
@@ -61,13 +102,14 @@ export default function ReferenceTablePage() {
 
                         {/* Table card — clip scrollbars on mobile (CSS hide alone is unreliable there) */}
                         <div
-                            className="rounded-2xl md:rounded-3xl border border-gray-100 shadow-xl bg-white overflow-hidden w-full"
+                            className="rounded-2xl md:rounded-3xl border border-gray-100 shadow-xl bg-white overflow-hidden overscroll-none w-full"
                             style={{ height: 'calc(100dvh - 11rem)' }}
                         >
                             <div
-                                className="no-scrollbar h-full w-full overflow-auto overscroll-contain"
+                                className="no-scrollbar h-full w-full overflow-auto overscroll-none"
                                 style={{
-                                    // Push native scrollbars outside the clipped rounded card
+                                    // Push native scrollbars outside the clipped rounded card.
+                                    // Keep height expansion only here (needs horizontal scroll).
                                     width: 'calc(100% + 24px)',
                                     height: 'calc(100% + 24px)',
                                     paddingRight: 24,
