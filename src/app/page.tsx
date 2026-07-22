@@ -97,13 +97,13 @@ export default function CalculatorPage() {
                   alt=""
                   className="w-4 h-4 object-contain opacity-70"
                 />
-                <label className="text-[12px] md:text-[13px] font-black text-gray-800 uppercase tracking-normal">{t('productType')}</label>
+                <label className="text-[10px] font-black text-gray-800 uppercase tracking-[0.12em]">{t('productType')}</label>
               </div>
-              <div className="relative flex items-center group flex-1 min-w-0 max-w-[55%]">
+              <div className="relative flex items-center group w-32 shrink-0">
                 <select
                   value={product}
                   onChange={(e) => setProduct(e.target.value as ProductType)}
-                  className="w-full min-h-[2.5rem] pr-6 py-1.5 bg-transparent border-b border-gray-100 focus:border-[#8B2332] outline-none transition-all text-lg font-bold text-gray-800 appearance-none cursor-pointer text-right"
+                  className="w-full min-h-[2.5rem] pr-6 py-1.5 bg-transparent border-b border-gray-100 focus:border-[#8B2332] outline-none transition-all text-base font-bold text-gray-800 appearance-none cursor-pointer text-right"
                 >
                   {['Ring', 'Earring', 'Chain', 'Haram', 'Necklace', 'Bracelet', 'Pendant', 'Bangle', 'Other', 'Coin'].map((item) => (
                     <option key={item} value={item}>{t(item as any)}</option>
@@ -117,9 +117,9 @@ export default function CalculatorPage() {
             <div className="bg-white px-4 py-3 rounded-2xl shadow-[0_2px_15px_rgba(0,0,0,0.02)] border border-gray-50 flex items-center justify-between gap-3">
               <div className="flex items-center gap-2 shrink-0 min-w-0">
                 <Scale size={14} className="text-gray-400 shrink-0" />
-                <label className="text-[12px] md:text-[13px] font-black text-gray-800 uppercase tracking-normal">{t('weightGrams')}</label>
+                <label className="text-[10px] font-black text-gray-800 uppercase tracking-[0.12em]">{t('weightGrams')}</label>
               </div>
-              <div className="relative flex items-center group flex-1 min-w-0 max-w-[55%]">
+              <div className="relative flex items-center group w-32 shrink-0">
                 <input
                   type="text"
                   inputMode="decimal"
@@ -129,9 +129,9 @@ export default function CalculatorPage() {
                     const val = e.target.value;
                     if (val === '' || /^\d*\.?\d*$/.test(val)) setWeight(val);
                   }}
-                  className="w-full min-h-[2.5rem] pr-6 py-1.5 bg-transparent border-b border-gray-100 focus:border-[#8B2332] outline-none transition-all text-lg font-bold text-gray-800 text-right"
+                  className="w-full min-h-[2.5rem] pr-5 py-1.5 bg-transparent border-b border-gray-100 focus:border-[#8B2332] outline-none transition-all text-base font-bold text-gray-800 text-right"
                 />
-                <span className="absolute right-0 text-lg font-bold text-gray-400 uppercase tracking-normal">g</span>
+                <span className="absolute right-0 text-base font-bold text-gray-400 tracking-normal">g</span>
               </div>
             </div>
 
@@ -143,11 +143,11 @@ export default function CalculatorPage() {
                   alt=""
                   className="w-4 h-4 object-contain opacity-70 shrink-0"
                 />
-                <label className="text-[12px] md:text-[13px] font-black text-gray-800 uppercase tracking-normal">{t('goldRate22')}</label>
+                <label className="text-[10px] font-black text-gray-800 uppercase tracking-[0.12em]">{t('goldRate22')}</label>
                 {isSyncing && <RefreshCcw size={12} className="animate-spin text-[#D4AF37] shrink-0" />}
               </div>
-              <div className="relative flex items-center group flex-1 min-w-0 max-w-[55%]">
-                <span className="absolute left-0 text-lg font-bold text-gray-800 shrink-0">₹</span>
+              <div className="w-32 shrink-0 flex items-center justify-end gap-0.5 min-h-[2.5rem] border-b border-gray-100 focus-within:border-[#8B2332] transition-all group">
+                <span className="text-base font-bold text-gray-400 shrink-0 leading-none">₹</span>
                 <input
                   type="text"
                   inputMode="decimal"
@@ -156,14 +156,14 @@ export default function CalculatorPage() {
                     const val = e.target.value;
                     if (val === '' || /^\d*\.?\d*$/.test(val)) setGoldRate(val);
                   }}
-                  className="w-full min-h-[2.5rem] pl-5 py-1.5 bg-transparent border-b border-gray-100 focus:border-[#8B2332] outline-none transition-all text-lg font-bold text-gray-800 text-right"
+                  className="min-w-[3ch] max-w-[7ch] field-sizing-content bg-transparent outline-none text-base font-bold text-gray-800 py-1.5"
                 />
               </div>
             </div>
 
             {/* Karat Selector */}
             <div className="bg-white px-4 py-3 rounded-2xl shadow-[0_2px_15px_rgba(0,0,0,0.02)] border border-gray-50 flex items-center justify-between gap-3">
-              <label className="shrink-0 text-[12px] md:text-[13px] font-black text-gray-800 uppercase tracking-normal">Gold Karat</label>
+              <label className="shrink-0 text-[10px] font-black text-gray-800 uppercase tracking-[0.12em]">Gold Karat</label>
               <div className="grid grid-cols-3 gap-1.5 flex-1 min-w-0 max-w-[65%]">
                 {(['18KT', '22KT', '24KT'] as const).map((k) => (
                   <button
@@ -185,7 +185,7 @@ export default function CalculatorPage() {
           <div className="lg:col-span-7">
             <div className="bg-white rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.04)] border border-gray-50 overflow-hidden flex flex-col h-full">
               <div className="pt-8 px-8 pb-6 border-b border-gray-50 flex items-center justify-between">
-                <span className="text-xs font-black text-gray-800 uppercase tracking-normal">{t('totalAmount')}</span>
+                <span className="text-[10px] font-black text-gray-800 uppercase tracking-[0.12em]">{t('totalAmount')}</span>
                 <div className="flex items-center gap-1 text-[#8B2332]">
                   <span className="text-4xl font-black tracking-tighter">₹</span>
                   <span className="text-4xl font-black tracking-tighter">
@@ -194,57 +194,74 @@ export default function CalculatorPage() {
                 </div>
               </div>
 
-              <div className="p-8 pt-6 flex-1 flex flex-col gap-6">
-                <div className="flex flex-col gap-4 border-b border-gray-50 pb-6">
-                  <div className="flex items-center justify-between">
+              <div className="pt-6 flex-1 flex flex-col gap-6">
+                <div className="px-8 flex flex-col divide-y divide-gray-100">
+                  <div className="flex items-center justify-between py-3.5 first:pt-0">
                     <div className="flex flex-col">
-                      <span className="text-xs font-black text-gray-800 uppercase tracking-normal">{t('goldValue')}</span>
-                      <span className="text-xs text-gray-400 font-bold uppercase tracking-tight">({weight}g × ₹{calculations.numGoldRate.toLocaleString()})</span>
+                      <span className="text-[10px] font-black text-gray-800 uppercase tracking-[0.12em]">{t('goldValue')}</span>
+                      <span className="text-[10px] text-gray-400 font-bold uppercase tracking-tight">({weight}g × ₹{calculations.numGoldRate.toLocaleString()})</span>
                     </div>
-                    <span className="text-lg font-bold text-gray-800">₹{calculations.goldValue.toLocaleString()}</span>
+                    <span className="text-lg font-bold text-gray-800">
+                      ₹{calculations.goldValue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                    </span>
                   </div>
 
-                  <div className="flex items-center justify-between">
+                  <div className="flex items-center justify-between py-3.5">
                     <div className="flex flex-col">
-                      <span className="text-xs font-black text-gray-800 uppercase tracking-normal">{t('wastageCost')}</span>
-                      <span className="text-xs text-gray-400 font-bold uppercase tracking-tight">({calculations.wasteGrams}g × ₹{calculations.numGoldRate.toLocaleString()})</span>
+                      <span className="text-[10px] font-black text-gray-800 uppercase tracking-[0.12em]">{t('wastageCost')}</span>
+                      <span className="text-[10px] text-gray-400 font-bold uppercase tracking-tight">({calculations.wasteGrams}g × ₹{calculations.numGoldRate.toLocaleString()})</span>
                     </div>
-                    <span className="text-lg font-bold text-gray-800">₹{calculations.wastageCost.toLocaleString()}</span>
+                    <span className="text-lg font-bold text-gray-800">
+                      ₹{calculations.wastageCost.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                    </span>
                   </div>
 
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-black text-gray-800 uppercase tracking-normal">{t('labourCharge')}</span>
-                    <span className="text-lg font-bold text-gray-800">₹{calculations.labCharge.toLocaleString()}</span>
+                  <div className="flex items-center justify-between py-3.5">
+                    <span className="text-[10px] font-black text-gray-800 uppercase tracking-[0.12em]">{t('labourCharge')}</span>
+                    <span className="text-lg font-bold text-gray-800">
+                      ₹{calculations.labCharge.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                    </span>
                   </div>
                 </div>
 
-                {/* VA Info Area */}
-                <div className="overflow-visible px-4 sm:px-5 md:px-6 py-5 sm:py-6 border border-[#D4AF37]/20 rounded-2xl grid grid-cols-3 bg-white">
-                  <div className="min-w-0 text-center px-2 sm:px-3">
-                    <p className="text-[10px] font-black text-gray-400 uppercase tracking-normal leading-tight mb-1.5 whitespace-nowrap">
-                      {t('wasteMg') || 'Wastage'}
-                    </p>
-                    <p className="text-lg font-black text-gray-800">
-                      {calculations.wasteGrams.toFixed(3)}<span className="ml-0.5">g</span>
-                    </p>
-                  </div>
-                  <div className="min-w-0 text-center px-2.5 sm:px-3 border-x border-gray-100">
-                    <p className="text-[10px] font-black text-gray-400 uppercase tracking-normal leading-tight mb-1.5 whitespace-nowrap">
-                      {t('overallVaPercent') || 'VA %'}
-                    </p>
-                    <p className="text-base sm:text-lg font-black text-[#D4AF37]">{calculations.vaPercent.toFixed(2)}%</p>
-                  </div>
-                  <div className="min-w-0 text-center px-2 sm:px-3">
-                    <p className="text-[10px] font-black text-gray-400 uppercase tracking-normal leading-tight mb-1.5 whitespace-nowrap">
-                      {t('totalVaAmount') || 'VA Amt'}
-                    </p>
-                    <p className="text-lg font-black text-[#8B2332]">
-                      ₹{Math.round(calculations.vaAmount).toLocaleString()}
-                    </p>
+                {/* VA Info Area — full card width */}
+                <div className="w-full px-5 sm:px-8 py-6 border-t border-b border-gray-100 bg-white">
+                  <div className="flex items-start w-full">
+                    <div className="flex-1 min-w-0 flex flex-col items-start gap-2.5 pr-3">
+                      <span className="text-[10px] font-black text-gray-400 uppercase tracking-[0.12em] whitespace-nowrap">
+                        {t('wasteMg') || 'Wastage'}
+                      </span>
+                      <span className="text-sm sm:text-base font-bold text-gray-800 leading-none whitespace-nowrap">
+                        {calculations.wasteGrams.toFixed(3)}
+                        <span className="ml-0.5 text-gray-400 font-semibold">g</span>
+                      </span>
+                    </div>
+
+                    <div className="w-px self-stretch bg-gray-100 shrink-0" aria-hidden />
+
+                    <div className="flex-1 min-w-0 flex flex-col items-start gap-2.5 px-3">
+                      <span className="text-[10px] font-black text-gray-400 uppercase tracking-[0.12em] whitespace-nowrap">
+                        {t('overallVaPercent') || 'VA %'}
+                      </span>
+                      <span className="text-sm sm:text-base font-bold text-[#D4AF37] leading-none whitespace-nowrap">
+                        {calculations.vaPercent.toFixed(2)}%
+                      </span>
+                    </div>
+
+                    <div className="w-px self-stretch bg-gray-100 shrink-0" aria-hidden />
+
+                    <div className="flex-1 min-w-0 flex flex-col items-start gap-2.5 pl-3">
+                      <span className="text-[10px] font-black text-gray-400 uppercase tracking-[0.12em] whitespace-nowrap">
+                        {t('totalVaAmount') || 'VA Amt'}
+                      </span>
+                      <span className="text-sm sm:text-base font-bold text-[#8B2332] leading-none whitespace-nowrap">
+                        ₹{calculations.vaAmount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                      </span>
+                    </div>
                   </div>
                 </div>
 
-                <div className="mt-auto pt-4">
+                <div className="mt-auto px-8 pt-4 pb-8">
                   <button className="w-full bg-[#111827] text-white py-4 rounded-2xl text-[12px] font-black uppercase tracking-normal hover:bg-black transition-all active:scale-[0.98] shadow-2xl shadow-gray-200">
                     {t('requestQuote') || 'Request Quote'}
                   </button>

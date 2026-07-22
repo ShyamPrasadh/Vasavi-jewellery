@@ -19,7 +19,7 @@ export const translations = {
         valueAddition: 'Value Addition (VA)',
         wasteMg: 'Wastage',
         overallVaPercent: 'VA %',
-        totalVaAmount: 'VA Amount',
+        totalVaAmount: 'VA Amt',
         viewReferenceTable: 'View Reference Rate Table',
 
         // Pawn Page
